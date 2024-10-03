@@ -1,0 +1,104 @@
+[12-Mar-2024 06:37:59 UTC] PHP Warning:  include(include/header.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 2
+[12-Mar-2024 06:37:59 UTC] PHP Warning:  include(): Failed opening 'include/header.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 2
+[12-Mar-2024 06:37:59 UTC] PHP Warning:  include(include/container.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 12
+[12-Mar-2024 06:37:59 UTC] PHP Warning:  include(): Failed opening 'include/container.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 12
+[12-Mar-2024 06:37:59 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:37:59 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:38:04 UTC] PHP Warning:  include(include/header.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 2
+[12-Mar-2024 06:38:04 UTC] PHP Warning:  include(): Failed opening 'include/header.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 2
+[12-Mar-2024 06:38:04 UTC] PHP Warning:  include(include/container.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 12
+[12-Mar-2024 06:38:04 UTC] PHP Warning:  include(): Failed opening 'include/container.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 12
+[12-Mar-2024 06:38:04 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:38:04 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:38:04 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', 'ert', '20', 'horizontal', 'code128', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:38:08 UTC] PHP Warning:  include(include/header.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 2
+[12-Mar-2024 06:38:08 UTC] PHP Warning:  include(): Failed opening 'include/header.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 2
+[12-Mar-2024 06:38:08 UTC] PHP Warning:  include(include/container.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 12
+[12-Mar-2024 06:38:08 UTC] PHP Warning:  include(): Failed opening 'include/container.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 12
+[12-Mar-2024 06:38:08 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:38:08 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:38:08 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', 'ert', '20', 'horizontal', 'code128', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:39:18 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:18 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', 'ert', '20', 'horizontal', 'code128', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:39:35 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:35 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:35 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'horizontal', 'code128', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:39:42 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:42 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:42 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'horizontal', 'code39', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:39:46 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:46 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:46 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'horizontal', 'codabar', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:39:49 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:49 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:39:49 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'vertical', 'codabar', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:40:04 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'vertical', 'codabar', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:40:10 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'vertical', 'codabar', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:43:36 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:43:36 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:43:36 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'vertical', 'codabar', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:44:00 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'vertical', 'codabar', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:44:24 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:44:24 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:44:24 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'horizontal', 'code128', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:44:25 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'horizontal', 'code128', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
+[12-Mar-2024 06:48:46 UTC] PHP Warning:  include(include/footer.php): failed to open stream: No such file or directory in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:48:46 UTC] PHP Warning:  include(): Failed opening 'include/footer.php' for inclusion (include_path='.:/opt/alt/php73/usr/share/pear') in /home/benso/public_html/barcode1/nbar/index.php on line 80
+[12-Mar-2024 06:48:46 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function imagecreate() in /home/benso/public_html/barcode1/nbar/barcode.php:123
+Stack trace:
+#0 /home/benso/public_html/barcode1/nbar/barcode.php(21): barcode('', '43545', '20', 'horizontal', 'code128', true, '1')
+#1 {main}
+  thrown in /home/benso/public_html/barcode1/nbar/barcode.php on line 123
