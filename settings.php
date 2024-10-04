@@ -671,6 +671,8 @@ if(isset($_POST['img_btn'])) {
                                                                                                         while($brnd = mysqli_fetch_array($bnd)) {
                                                                                                             $bndd[$x][] = $brnd['brand_name'];
                                                                                                         }
+
+                                                                                                    $zx = $result['id'];
                                                                                                 ?>
                                                                                                     <tr>
                                                                                                         <td><?= $x; ?></td>
@@ -678,14 +680,14 @@ if(isset($_POST['img_btn'])) {
                                                                                                         <td><?= $result['total_day']; ?></td>
                                                                                                         <td><?= implode('<br>', $bndd[$x]); ?></td>
                                                                                                         <td>
-                                                                                                            <!--<a class="border border-secondary rounded text-secondary" onclick="viewTimeTemplate(<?= $result['id']; ?>, 'view')"><i class="fa fa-eye"></i></a>-->
+                                                                                                            <!--<a class="border border-secondary rounded text-secondary" onclick="viewTimeTemplate(<?= $zx; ?>, 'view')"><i class="fa fa-eye"></i></a>-->
                                                                                                             <?php if(SET_TIMETEMP_EDIT==1) { ?>
-                                                                                                                <a class="border border-secondary rounded text-secondary" onclick="editTimeTemplate(<?= $result['id']; ?>, 'edit')"><i class="icon-copy dw dw-edit-1"></i></a>
+                                                                                                                <a class="border border-secondary rounded text-secondary" onclick="editTimeTemplate(<?= $zx; ?>, 'edit')"><i class="icon-copy dw dw-edit-1"></i></a>
                                                                                                             <?php } if(SET_TIMETEMP_DELETE==1) { ?>
-                                                                                                                <a class="border border-secondary rounded text-secondary" onclick="delete_data(<?= $result['id']; ?>, 'time_management_template')"><i class="fa fa-trash"></i></a>
+                                                                                                                <a class="border border-secondary rounded text-secondary" onclick="delete_data(<?= $zx; ?>, 'time_management_template')"><i class="fa fa-trash"></i></a>
                                                                                                             <?php } ?>
                                                                                                             
-                                                                                                            <div class="modal fade bs-example-modal-lg" id="tempEditModal<?= $result['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                                                                                            <div class="modal fade bs-example-modal-lg" id="tempEditModal<?= $zx; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                                                                         						<div class="modal-dialog modal-lg">
                                                                                         							<div class="modal-content">
                                                                                         								<div class="modal-header">
@@ -693,12 +695,12 @@ if(isset($_POST['img_btn'])) {
                                                                                         									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                                                         								</div>
                                                                                         								<div class="modal-body">
-                                                                                    								        <form method="POST" id="templateFormUpdate<?= $result['id']; ?>">
+                                                                                    								        <form method="POST" id="templateFormUpdate<?= $zx; ?>">
                                                                                     								            <div class="row">
                                                                                             									    <div class="col-md-3">
                                                                                                                                         <label class="fieldrequired">Template Name</label>
                                                                                                                                         <input type="text" name="temp_name" id="temp_name" placeholder="Template Name" class="form-control" value="<?= $result['temp_name'] ?>" required>
-                                                                                                                                        <input type="hidden" name="tempId" id="tempId" value="<?= $result['id'] ?>" required>
+                                                                                                                                        <input type="hidden" name="tempId" id="tempId" value="<?= $zx ?>" required>
                                                                                                                                     </div>
                                                                                             									    <div class="col-md-3">
                                                                                                                                         <label class="fieldrequired">Total Days</label>
@@ -706,7 +708,7 @@ if(isset($_POST['img_btn'])) {
                                                                                                                                     </div>
                                                                                             									    <div class="col-md-6">
                                                                                                                                         <label class="fieldrequired">Brand</label><br>
-                                                                                                                                        <select class="form-control custom-select2" name="brand[]" id="brand<?= $result['id']; ?>" style="width:100%" required multiple>
+                                                                                                                                        <select class="form-control custom-select2" name="brand[]" id="brand<?= $zx; ?>" style="width:100%" required multiple>
                                                                                                                                             <?= select_dropdown_multiple('brand', array('id', 'brand_name'), 'brand_name ASC', $result['brand'], '', '1'); ?>
                                                                                                                                         </select>
                                                                                                                                     </div>
@@ -735,10 +737,12 @@ if(isset($_POST['img_btn'])) {
                                                                                                                                             </tr>
                                                                                                                                             
                                                                                                                                             <?php
-                                                                                                                                            $fbPcs = mysqli_query($mysqli, "SELECT * FROM time_management_template_det WHERE table_name = 'mas_approval' AND temp_id = '". $result['id'] ."'");    
+                                                                                                                                            $fbPcs = mysqli_query($mysqli, "SELECT * FROM time_management_template_det WHERE table_name = 'mas_approval' AND temp_id = '". $zx ."'");    
                                                                                                                                             while($rowFab = mysqli_fetch_array($fbPcs)) {
                                                                                                                                                 $act = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM ". $rowFab['table_name'] ." WHERE id = '". $rowFab['activity'] ."'"));
                                                                                                                                             $p=$rowFab['id'];
+                                                                                                                                            
+                                                                                                                                            $iid = $zx.$p;
                                                                                                                                             ?>
                                                                                                                                                 <tr id="trId<?= $p.'edit'; ?>">
                                                                                                                                                     <td>
@@ -746,30 +750,33 @@ if(isset($_POST['img_btn'])) {
                                                                                                                                                         <input type="hidden" value="<?= $p.'edit'; ?>" name="nameId[]" id="">
                                                                                                                                                         <?= $act['name']; ?></td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2" name="calculation_type_<?= $p.'edit'; ?>" id="FP_calculation_type<?= $p.'edit'; ?>" style="width:100%" required>
+                                                                                                                                                        <select class="form-control custom-select2 day_calc<?= $zx; ?>" data-iid="<?= $iid; ?>" name="calculation_type_<?= $p.'edit'; ?>" id="FP_calculation_type<?= $p.'edit'; ?>" style="width:100%" required>
                                                                                                                                                             <option value="asc">Order Date</option>
                                                                                                                                                             <option value="desc" <?= ($rowFab['calculation_type'] == 'desc') ? 'selected' : ''; ?>>Delivery Date</option>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
-                                                                                                                                                    <td><input type="number" class="form-control e_start<?= $result['id']; ?>" name="start_day_<?= $p.'edit'; ?>" id="" placeholder="Day Start" value="<?= $rowFab['start_day']; ?>"></td>
-                                                                                                                                                    <td><input type="number" class="form-control e_end<?= $result['id']; ?>" name="end_day_<?= $p.'edit'; ?>" id="" placeholder="Day End" value="<?= $rowFab['end_day']; ?>"></td>
+
+                                                                                                                                                    <td><input type="number" class="form-control e_start<?= $zx; ?>" name="start_day_<?= $p.'edit'; ?>" id="start_day_<?= $iid; ?>" placeholder="Day Start" value="<?= $rowFab['start_day']; ?>"></td>
+
+                                                                                                                                                    <td><input type="number" class="form-control e_end<?= $zx; ?>" name="end_day_<?= $p.'edit'; ?>" id="end_day_<?= $iid; ?>" placeholder="Day End" value="<?= $rowFab['end_day']; ?>"></td>
+                                                                                                                                                    
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2 rA<?= $result['id']; ?>" name="resp_A_<?= $p.'edit'; ?>[]" id="FP_res_dept<?= $p.'edit'; ?>" style="width:100%" multiple required>
+                                                                                                                                                        <select class="form-control custom-select2 rA<?= $zx; ?>" name="resp_A_<?= $p.'edit'; ?>[]" id="FP_res_dept<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_A'], ' WHERE is_active="active"', ''); ?>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2 rB<?= $result['id']; ?>" name="resp_B_<?= $p.'edit'; ?>[]" id="FP_resp_B<?= $p.'edit'; ?>" style="width:100%" multiple required>
+                                                                                                                                                        <select class="form-control custom-select2 rB<?= $zx; ?>" name="resp_B_<?= $p.'edit'; ?>[]" id="FP_resp_B<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_B'], ' WHERE is_active="active"', ''); ?>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2 rC<?= $result['id']; ?>" name="resp_C_<?= $p.'edit'; ?>[]" id="FP_resp_C<?= $p.'edit'; ?>" style="width:100%" multiple required>
+                                                                                                                                                        <select class="form-control custom-select2 rC<?= $zx; ?>" name="resp_C_<?= $p.'edit'; ?>[]" id="FP_resp_C<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_C'], ' WHERE is_active="active"', ''); ?>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2 rD<?= $result['id']; ?>" name="resp_D_<?= $p.'edit'; ?>[]" id="FP_resp_D<?= $p.'edit'; ?>" style="width:100%" multiple required>
+                                                                                                                                                        <select class="form-control custom-select2 rD<?= $zx; ?>" name="resp_D_<?= $p.'edit'; ?>[]" id="FP_resp_D<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_D'], ' WHERE is_active="active"', ''); ?>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
@@ -792,7 +799,7 @@ if(isset($_POST['img_btn'])) {
                                                                                                                                                 'budget_approval' => 'Budget Approval',
                                                                                                                                             );
                                                                                                                                             
-                                                                                                                                            $fbPcs = mysqli_query($mysqli, "SELECT * FROM time_management_template_det WHERE table_name = 'manual' AND temp_id = '". $result['id'] ."'");    
+                                                                                                                                            $fbPcs = mysqli_query($mysqli, "SELECT * FROM time_management_template_det WHERE table_name = 'manual' AND temp_id = '". $zx ."'");    
                                                                                                                                             while($rowFab = mysqli_fetch_array($fbPcs)) {
                                                                                                                                                 
                                                                                                                                             $p=$rowFab['id'];
@@ -803,30 +810,30 @@ if(isset($_POST['img_btn'])) {
                                                                                                                                                         <input type="hidden" value="<?= $p.'edit'; ?>" name="nameId[]" id="">
                                                                                                                                                         <?= $arr[$rowFab['activity']]; ?></td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2" name="calculation_type_<?= $p.'edit'; ?>" id="calculation_type<?= $p.'edit'; ?>" style="width:100%" required>
+                                                                                                                                                        <select class="form-control custom-select2 day_calc<?= $zx; ?>" name="calculation_type_<?= $p.'edit'; ?>" id="calculation_type<?= $p.'edit'; ?>" style="width:100%" required>
                                                                                                                                                             <option value="asc">Order Date</option>
                                                                                                                                                             <option value="desc" <?= ($rowFab['calculation_type'] == 'desc') ? 'selected' : ''; ?>>Delivery Date</option>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
-                                                                                                                                                    <td><input type="number" class="form-control e_start<?= $result['id']; ?>" name="start_day_<?= $p.'edit'; ?>" id="" placeholder="Day Start" value="<?= $rowFab['start_day']; ?>"></td>
-                                                                                                                                                    <td><input type="number" class="form-control e_end<?= $result['id']; ?>" name="end_day_<?= $p.'edit'; ?>" id="" placeholder="Day End" value="<?= $rowFab['end_day']; ?>"></td>
+                                                                                                                                                    <td><input type="number" class="form-control e_start<?= $zx; ?>" name="start_day_<?= $p.'edit'; ?>" id="start_day_<?= $iid; ?>" placeholder="Day Start" value="<?= $rowFab['start_day']; ?>"></td>
+                                                                                                                                                    <td><input type="number" class="form-control e_end<?= $zx; ?>" name="end_day_<?= $p.'edit'; ?>" id="end_day_<?= $iid; ?>" placeholder="Day End" value="<?= $rowFab['end_day']; ?>"></td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2 rA<?= $result['id']; ?>" name="resp_A_<?= $p.'edit'; ?>[]" id="res_dept<?= $p.'edit'; ?>" style="width:100%" multiple required>
+                                                                                                                                                        <select class="form-control custom-select2 rA<?= $zx; ?>" name="resp_A_<?= $p.'edit'; ?>[]" id="res_dept<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_A'], ' WHERE is_active="active"', ''); ?>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2 rB<?= $result['id']; ?>" name="resp_B_<?= $p.'edit'; ?>[]" id="resp_B<?= $p.'edit'; ?>" style="width:100%" multiple required>
+                                                                                                                                                        <select class="form-control custom-select2 rB<?= $zx; ?>" name="resp_B_<?= $p.'edit'; ?>[]" id="resp_B<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_B'], ' WHERE is_active="active"', ''); ?>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2 rC<?= $result['id']; ?>" name="resp_C_<?= $p.'edit'; ?>[]" id="resp_C<?= $p.'edit'; ?>" style="width:100%" multiple required>
+                                                                                                                                                        <select class="form-control custom-select2 rC<?= $zx; ?>" name="resp_C_<?= $p.'edit'; ?>[]" id="resp_C<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_C'], ' WHERE is_active="active"', ''); ?>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
                                                                                                                                                     <td>
-                                                                                                                                                        <select class="form-control custom-select2 rD<?= $result['id']; ?>" name="resp_D_<?= $p.'edit'; ?>[]" id="resp_D<?= $p.'edit'; ?>" style="width:100%" multiple required>
+                                                                                                                                                        <select class="form-control custom-select2 rD<?= $zx; ?>" name="resp_D_<?= $p.'edit'; ?>[]" id="resp_D<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_D'], ' WHERE is_active="active"', ''); ?>
                                                                                                                                                         </select>
                                                                                                                                                     </td>
@@ -840,7 +847,7 @@ if(isset($_POST['img_btn'])) {
                                                                                         								</div>
                                                                                         								<div class="modal-footer">
                                                                                         									<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                                                                                        									<button type="button" class="btn btn-outline-primary" onclick="UpdateTimeTemplate('<?= $result['id']; ?>', '<?= $p.'edit'; ?>')">Update</button>
+                                                                                        									<button type="button" class="btn btn-outline-primary" onclick="UpdateTimeTemplate('<?= $zx; ?>', '<?= $p.'edit'; ?>')">Update</button>
                                                                                         								</div>
                                                                                         							</div>
                                                                                         						</div>
@@ -1746,45 +1753,73 @@ if(isset($_POST['img_btn'])) {
                 });
             }
             
-            if(ab == 0) {
-                $(".rA" + formId).each(function() {
-                    if($(this).val() == "") {
-                        $(this).focus();
-                        message_noload('warning', 'Responsible (A) Required!', 1500);
-                        ab++;
-                    }
-                });
-            }
+            // if(ab == 0) {
+            //     $(".day_calc" + formId).each(function() {
+
+            //         var iid = $(this).data('iid');
+
+            //         var std = $("#start_day_" + iid).val();
+            //         var end = $("#end_day_" + iid).val();
+
+            //         if($(this).val() == "asc") {
+
+            //             if(std>end) {
+            //                 $("#end_day_" + iid).focus();
+            //                 message_noload('warning', 'End Day Should Less-than Start Date!', 2000);
+            //                 ab++;
+            //             }                        
+            //         } else if($(this).val() == "desc") {
+
+            //             if(std<end) {
+            //                 $("#end_day_" + iid).focus();
+            //                 message_noload('warning', 'End Day Should Greater-than Start Date!', 2000);
+            //                 ab++;
+            //             }                        
+            //         }
+            //     });
+            // }
+
+
             
-            if(ab == 0) {
-                $(".rB" + formId).each(function() {
-                    if($(this).val() == "") {
-                        $(this).focus();
-                        message_noload('warning', 'Responsible (B) Required!', 1500);
-                        ab++;
-                    }
-                });
-            }
+            // if(ab == 0) {
+            //     $(".rA" + formId).each(function() {
+            //         if($(this).val() == "") {
+            //             $(this).focus();
+            //             message_noload('warning', 'Responsible (A) Required!', 1500);
+            //             ab++;
+            //         }
+            //     });
+            // }
             
-            if(ab == 0) {
-                $(".rC" + formId).each(function() {
-                    if($(this).val() == "") {
-                        $(this).focus();
-                        message_noload('warning', 'Responsible (C) Required!', 1500);
-                        ab++;
-                    }
-                });
-            }
+            // if(ab == 0) {
+            //     $(".rB" + formId).each(function() {
+            //         if($(this).val() == "") {
+            //             $(this).focus();
+            //             message_noload('warning', 'Responsible (B) Required!', 1500);
+            //             ab++;
+            //         }
+            //     });
+            // }
             
-            if(ab == 0) {
-                $(".rD" + formId).each(function() {
-                    if($(this).val() == "") {
-                        $(this).focus();
-                        message_noload('warning', 'Responsible (D) Required!', 1500);
-                        ab++;
-                    }
-                });
-            }
+            // if(ab == 0) {
+            //     $(".rC" + formId).each(function() {
+            //         if($(this).val() == "") {
+            //             $(this).focus();
+            //             message_noload('warning', 'Responsible (C) Required!', 1500);
+            //             ab++;
+            //         }
+            //     });
+            // }
+            
+            // if(ab == 0) {
+            //     $(".rD" + formId).each(function() {
+            //         if($(this).val() == "") {
+            //             $(this).focus();
+            //             message_noload('warning', 'Responsible (D) Required!', 1500);
+            //             ab++;
+            //         }
+            //     });
+            // }
             
             
             if(ab!=0) {
@@ -1795,7 +1830,7 @@ if(isset($_POST['img_btn'])) {
             
             $.ajax({
                 type : 'POST',
-                url : 'ajax_action.php?updateTimeTemplate=1',
+                url : 'ajax_action.php?updateTimeTemplate',
                 data : form,
                 
                 success: function(msg) {
@@ -1853,45 +1888,45 @@ if(isset($_POST['img_btn'])) {
                     });
                 }
                 
-                if(ab==0) {
-                    $(".respA").each(function() {
-                        if($(this).val() == "") {
-                            $(this).focus();
-                            message_noload('warning', 'Responsible (A) Missing!', 1500);
-                            ab++;
-                        }
-                    });
-                }
+                // if(ab==0) {
+                //     $(".respA").each(function() {
+                //         if($(this).val() == "") {
+                //             $(this).focus();
+                //             message_noload('warning', 'Responsible (A) Missing!', 1500);
+                //             ab++;
+                //         }
+                //     });
+                // }
                 
-                if(ab==0) {
-                    $(".respB").each(function() {
-                        if($(this).val() == "") {
-                            $(this).focus();
-                            message_noload('warning', 'Responsible (B) Missing!', 1500);
-                            ab++;
-                        }
-                    });
-                }
+                // if(ab==0) {
+                //     $(".respB").each(function() {
+                //         if($(this).val() == "") {
+                //             $(this).focus();
+                //             message_noload('warning', 'Responsible (B) Missing!', 1500);
+                //             ab++;
+                //         }
+                //     });
+                // }
                 
-                if(ab==0) {
-                    $(".respC").each(function() {
-                        if($(this).val() == "") {
-                            $(this).focus();
-                            message_noload('warning', 'Responsible (C) Missing!', 1500);
-                            ab++;
-                        }
-                    });
-                }
+                // if(ab==0) {
+                //     $(".respC").each(function() {
+                //         if($(this).val() == "") {
+                //             $(this).focus();
+                //             message_noload('warning', 'Responsible (C) Missing!', 1500);
+                //             ab++;
+                //         }
+                //     });
+                // }
                 
-                if(ab==0) {
-                    $(".respD").each(function() {
-                        if($(this).val() == "") {
-                            $(this).focus();
-                            message_noload('warning', 'Responsible (D) Missing!', 1500);
-                            ab++;
-                        }
-                    });
-                }
+                // if(ab==0) {
+                //     $(".respD").each(function() {
+                //         if($(this).val() == "") {
+                //             $(this).focus();
+                //             message_noload('warning', 'Responsible (D) Missing!', 1500);
+                //             ab++;
+                //         }
+                //     });
+                // }
                 
                 if(ab!=0) {
                     return false;
@@ -1899,7 +1934,7 @@ if(isset($_POST['img_btn'])) {
                 
                 $.ajax({
                     type : 'POST',
-                    url : 'ajax_action.php?saveTimeTemplate=1',
+                    url : 'ajax_action.php?saveTimeTemplate',
                     data : form,
                     
                     success: function(msg) {

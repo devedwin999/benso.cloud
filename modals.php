@@ -1473,6 +1473,42 @@ if (in_array('employeeNew-add-modal', $modals)) { ?>
     </div>
 
 <?php }
+if (in_array('scanned_pcs-modal', $modals)) { ?>
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="scanned_pcs-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title" id="myLargeModalLabel">Scanned pcs detailed list</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <form method="post" id="colorForm" autocomplete="off" enctype="multipart/form-data">
+                    
+                    <div class="modal-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Sl.No</th>
+                                    <th>Bundle Number</th>
+                                    <th>Scanned Count</th>
+                                    <th>Scanned Pcs</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scanned_pcs-tbody">
+                                <tr>
+                                    <td colspan="4" class="text-center"><i class="fa-spinner fa"></i> Loading</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<?php }
 if (in_array('color-add-modal', $modals)) { ?>
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
         id="color-add-modal">

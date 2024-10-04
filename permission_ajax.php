@@ -140,10 +140,10 @@ if ($search_type == 'getPermissionList') {
                             <td>-</td>
                         </tr> -->
 
-                        <?php $main = 'M0110'; $sub = $main.'01'; ?>
                         <!--time Management Start-->
+                        <?php $main = 'M0110'; $sub = $main.'01'; ?>
                         <tr>
-                            <td>
+                            <td rowspan="2">
                                 <input type="checkbox" name="permission_cbox[]" class="all_cbox cbox mod_<?= $main; ?>" onclick="modClick('<?= $main; ?>')" value="MOD_TIME_MANAGEMENT" <?= check_perm('MOD_TIME_MANAGEMENT', $groupId); ?>> Time Management
                             </td>
                             <td>
@@ -152,7 +152,18 @@ if ($search_type == 'getPermissionList') {
                             <td>
                                 <input type="checkbox" name="permission_cbox[]" class="all_cbox cbox mod_cs<?= $main; ?> sub_cs<?= $sub; ?>" value="TEAM_TASK_LIST" <?= check_perm('TEAM_TASK_LIST', $groupId); ?>> Team Task Report
                             </td>
+                        </tr>                        
+                        
+                        <?php $sub = $main.'02'; ?>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="permission_cbox[]" class="all_cbox cbox mod_cs<?= $main; ?> sub_<?= $sub; ?>" onclick="menuClick('<?= $sub; ?>')"  value="TIME_SHEET_CREATION" <?= check_perm('TIME_SHEET_CREATION', $groupId); ?>> Time Sheet
+                            </td>
+                            <td>-</td>
                         </tr>
+                        <!--time Management End-->
+
+
                         
                         <?php $main = 'M011'; $sub = $main.'01'; ?>
                         <!--approvals Start-->

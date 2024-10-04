@@ -356,6 +356,18 @@ function sales_order_style($value)
 }
 
 // table mas_yarn
+function approval_name($value)
+{
+    global $mysqli;
+    
+    $asd = "SELECT name FROM mas_approval WHERE id = '". $value ."'";
+    $sdd = mysqli_query($mysqli, $asd);
+    $sadf = mysqli_fetch_array($sdd);
+    
+    return $sadf['name'];
+}
+
+// table mas_yarn
 function mas_yarn_name($value)
 {
     global $mysqli;
@@ -755,8 +767,10 @@ function inr_number_format($number) {
 
 function viewImage($path, $width) {
     
-    $path1 = "'$path'";
-    $img = '<a class="showImagePopup"><img src="'. $path .'" width="'. $width .'" style="border-radius: 50%;"></i></a>';
+    $not_found = 'src/logo/not-found.jpg';
+    $image = file_exists($path) ? $path : $not_found;
+
+    $img = '<a class="showImagePopup"><img src="'. $image .'" width="'. $width .'" style="border-radius: 50%;"></i></a>';
     
     return $img;
 }

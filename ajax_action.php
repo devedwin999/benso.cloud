@@ -2276,11 +2276,10 @@ if (isset($_REQUEST['delete_salesOrder'])) {
     );
 
     $ins = Insert('time_management_template', $data2);
-
     $inId = mysqli_insert_id($mysqli);
 
     timeline_history('Insert', 'time_management_template', $inId, 'Time Management Template Added.');
-
+    
     for ($o = 0; $o < count($_REQUEST['activity']); $o++) {
 
         $name = $_REQUEST['nameId'][$o];
@@ -2293,12 +2292,12 @@ if (isset($_REQUEST['delete_salesOrder'])) {
             'calculation_type' => $_REQUEST['calculation_type_' . $name],
             'start_day' => $_REQUEST['start_day_' . $name],
             'end_day' => $_REQUEST['end_day_' . $name],
-            'resp_A' => implode(',', $_REQUEST['resp_A_' . $name]),
-            'resp_B' => implode(',', $_REQUEST['resp_B_' . $name]),
-            'resp_C' => implode(',', $_REQUEST['resp_C_' . $name]),
-            'resp_D' => implode(',', $_REQUEST['resp_D_' . $name]),
+            'resp_A' => (($_REQUEST['resp_A_' . $name] != '') ? implode(',', $_REQUEST['resp_A_' . $name]) : ''),
+            'resp_B' => (($_REQUEST['resp_B_' . $name] != '') ? implode(',', $_REQUEST['resp_B_' . $name]) : ''),
+            'resp_C' => (($_REQUEST['resp_C_' . $name] != '') ? implode(',', $_REQUEST['resp_C_' . $name]) : ''),
+            'resp_D' => (($_REQUEST['resp_D_' . $name] != '') ? implode(',', $_REQUEST['resp_D_' . $name]) : ''),
         );
-
+        
         $ins = Insert('time_management_template_det', $ndta);
     }
 
@@ -2331,10 +2330,10 @@ if (isset($_REQUEST['delete_salesOrder'])) {
             'calculation_type' => $_REQUEST['calculation_type_' . $name],
             'start_day' => $_REQUEST['start_day_' . $name],
             'end_day' => $_REQUEST['end_day_' . $name],
-            'resp_A' => implode(',', $_REQUEST['resp_A_' . $name]),
-            'resp_B' => implode(',', $_REQUEST['resp_B_' . $name]),
-            'resp_C' => implode(',', $_REQUEST['resp_C_' . $name]),
-            'resp_D' => implode(',', $_REQUEST['resp_D_' . $name]),
+            'resp_A' => (($_REQUEST['resp_A_' . $name] != '') ? implode(',', $_REQUEST['resp_A_' . $name]) : ''),
+            'resp_B' => (($_REQUEST['resp_B_' . $name] != '') ? implode(',', $_REQUEST['resp_B_' . $name]) : ''),
+            'resp_C' => (($_REQUEST['resp_C_' . $name] != '') ? implode(',', $_REQUEST['resp_C_' . $name]) : ''),
+            'resp_D' => (($_REQUEST['resp_D_' . $name] != '') ? implode(',', $_REQUEST['resp_D_' . $name]) : ''),
         );
 
         $inss = Update('time_management_template_det', $ndta, " WHERE id = '" . $_REQUEST['insId'][$o] . "'");
@@ -2376,10 +2375,14 @@ if (isset($_REQUEST['delete_salesOrder'])) {
 
     $bklm = mysqli_query($mysqli, "SELECT * FROM time_management_template_det WHERE table_name='manual' AND temp_id = '" . $_REQUEST['temp_id'] . "'");
 
-    while ($res = mysqli_fetch_array($bklm)) {
+    while ($res = mysqli_fetch_assoc($bklm)) {
 
+        $ord_date = $order['order_date'];
+        $del_date = $order['delivery_date'];
+        
         if ($res['calculation_type'] == 'asc') {
-            // $stdate = 
+            $task_start_date = date('Y-m-d', strtotime($ord_date . ' +' . $res['start_day'] . ' days'));
+            $task_end_date = date('Y-m-d', strtotime($ord_date . ' +' . $res['end_day'] . ' days'));
         }
 
         $data = array(

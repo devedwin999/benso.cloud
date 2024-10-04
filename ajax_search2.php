@@ -1813,6 +1813,41 @@ $emp = mysqli_fetch_array($emp_query);
     }
 
     echo json_encode($data);
+
+} else if(isset($_REQUEST['scanned_pcs_list'])) {
+    
+    $id = $_POST['id'];
+    $from = $_POST['from'];
+
+    $table = ($from == 'sewing') ? 'orbidx_sewingout' : (($from == 'checking') ? 'orbidx_checking' : 'orbidx_component_process');
+
+    $row = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM $table WHERE id = '". $id ."'"));
+    $array = json_decode($row['qr_code']);
+
+    $grouped = [];
+
+    foreach ($array as $item) {
+        
+        list($prefix, $suffix) = explode('-', $item);
+        
+        if (!isset($grouped[$prefix])) {
+            $grouped[$prefix] = [];
+        }
+        $grouped[$prefix][] = $suffix;
+    }
+
+    $q = 1;
+    foreach ($grouped as $prefix => $suffixes) {
+
+        $bnum = mysqli_fetch_array(mysqli_query($mysqli, "SELECT bundle_number FROM bundle_details WHERE id = ". $prefix));
+        sort($suffixes);
+        $suffixes_count = count($suffixes);
+        $suffixesString = implode(', ', $suffixes);
+        $data['tbody'][] = "<tr><td>{$q}</td><td>{$bnum['bundle_number']}</td><td>{$suffixes_count}</td><td>{$suffixesString}</td></tr>";
+        $q++;
+    }
+
+    echo json_encode($data);
 }
 
 

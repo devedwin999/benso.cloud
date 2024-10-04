@@ -125,10 +125,16 @@ if (isset($_GET['id'])) {
                     <?php page_spinner(); if(SALES_ORDER_ADD!=1) { action_denied(); exit; } ?>
                     
                     <div class="pd-20">
-                        <h4 class="text-blue h4">Sales Order
-                            <!-- <span>85</span> -->
+                        
+                        <div class="btn-group mr-2" role="group" aria-label="First group" style="float: right;">
+                            <?php if(isset($_GET['id'])) { ?>
+                            <a href="time_sheet.php?id=<?= $_GET['id']; ?>" class="btn btn-outline-info timesheerBtn">Time Sheet</a>
+                            <!-- <a onclick="openTimeSheet()" class="btn btn-outline-info timesheerBtn">Create Time Sheet</a> -->
+                            <?php } ?>
                             <a class="btn btn-outline-primary" href="sales_order_list.php" style="float: right;"><i class="fa fa-list" aria-hidden="true"></i> Order List</a>
-                        </h4>
+                        </div>
+
+                        <h4 class="text-blue h4">Sales Order</h4>                            
                         <p class="mb-30 text-danger">(*) Fields are Mandatory</p>
                         <button onclick="topFunction()" id="tot_countBtn" title="Go to top">0</button>
                     </div>
@@ -520,9 +526,6 @@ if (isset($_GET['id'])) {
                                 <?php if ($numm == 0) { ?>
                                     <input type="button" onclick="return additem()" value="Save BO" class="btn btn-outline-primary">
                                 <?php } else { ?>
-                                <?php if(DEVELOPING==1) { ?>
-                                    <a onclick="openTimeSheet()" class="btn btn-outline-info timesheerBtn">Create Time Sheet</a>
-                                    <?php } ?>
                                     <input type="button" onclick=" return save_orderuiuu()" value="Save" class="btn btn-outline-primary">
                                 <?php } ?>
                             </div>
@@ -880,10 +883,18 @@ if (isset($_GET['id'])) {
             } else {
                 
                 $(".timesheerBtn").text('Creating...');
+
+                var data = {
+                    temp_id: temp,
+                    approvals: app,
+                    order_id: order_id
+                }
                 
                 $.ajax({
                     type:'POST',
-                    url:'ajax_action.php?createTimeSheet=1&temp_id='+ temp +'&approvals=' + app +'&order_id=' + order_id,
+                    url:'ajax_action.php?createTimeSheet',
+                    data: data,
+
                     success : function(msg) {
                         alert(msg);
                     }

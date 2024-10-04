@@ -141,7 +141,7 @@ include("includes/perm.php");
                                     <td><?= color_name($result['color']); ?></td>
                                     <td><?= variation_value($result['variation_value']); ?></td>
                                     <td><?= process_name($result['process']); ?></td>
-                                    <td><?= $result['scanned_count']; ?></td>
+                                    <td><a onclick="show_total_scanned(this)" class="" data-id="<?= $result['id']; ?>" data-from="componenet" style="color:blue; text-decoration: underline;"><?= $result['scanned_count']; ?></a></td>
                                     <td><?= employee_name($result['device_user']); ?></td>
                                     <td><?= company_code($result['logUnit']); ?></td>
                                 </tr>
