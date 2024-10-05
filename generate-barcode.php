@@ -23,7 +23,8 @@ if (isset($_POST['saveBarcode1'])) {
         
         $range = range(1, $sel['pcs_per_bundle']);
         
-        $mk = mysqli_query($mysqli, "UPDATE bundle_details SET boundle_qr='" . $item . "', boundle_qrImage='" . $item . ".png', tot_checking = '". implode(',', $range) ."', tot_ironing = '". implode(',', $range) ."', tot_packing = '". implode(',', $range) ."' WHERE id=" . $_REQUEST['bundle_id'][$k]);
+        $mk = mysqli_query($mysqli, "UPDATE bundle_details SET boundle_qr='" . $item . "', boundle_qrImage='" . $item . ".png' WHERE id=" . $_REQUEST['bundle_id'][$k]);
+        // $mk = mysqli_query($mysqli, "UPDATE bundle_details SET boundle_qr='" . $item . "', boundle_qrImage='" . $item . ".png', tot_checking = '". implode(',', $range) ."', tot_ironing = '". implode(',', $range) ."', tot_packing = '". implode(',', $range) ."' WHERE id=" . $_REQUEST['bundle_id'][$k]);
     }
 
 

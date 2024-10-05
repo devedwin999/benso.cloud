@@ -31,12 +31,6 @@ if (isset($_REQUEST['SaveBtnff'])) {
             'complete_processing_date' => date('Y-m-d H:i:s')
             );
         Update('bundle_details', $ndta, " WHERE id = '" . $_REQUEST['bundle_id'][$i] . "'");
-
-        // mysqli_query($mysqli, "UPDATE bundle_details SET complete_processing = 'yes' WHERE id='" . $_REQUEST['bundle_id'][$i] . "'");
-
-        // for ($q = 0; $q <= count($_REQUEST[$_REQUEST['box_value'][$i]]); $q++) {
-        //     mysqli_query($mysqli, "UPDATE bundle_piece_details SET is_inwarded='yes' WHERE piece_qr='" . $_REQUEST[$_REQUEST['box_value'][$i]][$q] . "'");
-        // }
     }
 
     $dta2 = array(

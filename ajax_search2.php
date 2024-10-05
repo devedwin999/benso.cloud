@@ -1258,31 +1258,75 @@ if(isset($_REQUEST['validate_Duplication'])) {
     $filter_date = $_REQUEST['filter_date'];
     
     if($type == 'cutting') {
-        $fetch = mysqli_query($mysqli, "SELECT * FROM cutting_barcode WHERE created_date LIKE '%". $filter_date ."%' GROUP BY style");
-        if(mysqli_num_rows($fetch)>0) {
-            while($row = mysqli_fetch_array($fetch)) {
-                
-                $ord_q = mysqli_fetch_array(mysqli_query($mysqli, "SELECT total_excess, item_image FROM sales_order_detalis WHERE id = ". $row['style']));
-                $tdy_ctng = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(pcs_per_bundle) as pcs_per_bundle FROM bundle_details WHERE date = '". $filter_date ."' AND sod_part = ". $row['sod_part']));
-                $tot_ctng = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(pcs_per_bundle) as pcs_per_bundle FROM bundle_details WHERE sod_part = ". $row['sod_part']));
-                $data['tbody'][] = '
-                    <tr>
-                        <td>'. sales_order_code($row['order_id']) .'</td>
-                        <td>'. sales_order_style($row['style']) .'</td>
-                        <td>'. viewImage($ord_q['item_image'], 30) .'</td>
-                        <td>'. color_name($row['combo_id']) .'</td>
-                        <td>'. part_name($row['part_id']) .'</td>
-                        <td>'. color_name($row['color_id']) .'</td>
-                        <td>'. company_code($row['created_unit']) .'</td>
-                        <td>'. $ord_q['total_excess'] .'</td>
-                        <td>'. $tdy_ctng['pcs_per_bundle'] .'</td>
-                        <td>'. $tot_ctng['pcs_per_bundle'] .'</td>
-                        <td>'. round(($tot_ctng['pcs_per_bundle']/($ord_q['total_excess'] ? $ord_q['total_excess'] : 1))*100) .'%</td>
-                    </tr>
-                ';
+
+        $cutting_based = $_POST['cutting_based'];
+
+        if($cutting_based == 'order') {
+
+            $data['thead'][] = '<tr><th>BO NO</th><th>Style</th><th>Style Image</th><th>Combo</th><th>Part</th><th>Color</th><th>Unit</th><th>Order Qty</th><th>Today Cutting Qty</th><th>Total Cutting Qty</th><th>Cutting Percentage</th></tr>';
+
+            $fetch = mysqli_query($mysqli, "SELECT * FROM cutting_barcode WHERE created_date LIKE '%". $filter_date ."%' GROUP BY style");
+            if(mysqli_num_rows($fetch)>0) {
+                while($row = mysqli_fetch_array($fetch)) {
+                    
+                    $ord_q = mysqli_fetch_array(mysqli_query($mysqli, "SELECT total_excess, item_image FROM sales_order_detalis WHERE id = ". $row['style']));
+                    $tdy_ctng = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(pcs_per_bundle) as pcs_per_bundle FROM bundle_details WHERE date = '". $filter_date ."' AND sod_part = ". $row['sod_part']));
+                    $tot_ctng = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(pcs_per_bundle) as pcs_per_bundle FROM bundle_details WHERE sod_part = ". $row['sod_part']));
+                    $data['tbody'][] = '
+                        <tr>
+                            <td>'. sales_order_code($row['order_id']) .'</td>
+                            <td>'. sales_order_style($row['style']) .'</td>
+                            <td>'. viewImage($ord_q['item_image'], 30) .'</td>
+                            <td>'. color_name($row['combo_id']) .'</td>
+                            <td>'. part_name($row['part_id']) .'</td>
+                            <td>'. color_name($row['color_id']) .'</td>
+                            <td>'. company_code($row['created_unit']) .'</td>
+                            <td>'. $ord_q['total_excess'] .'</td>
+                            <td>'. $tdy_ctng['pcs_per_bundle'] .'</td>
+                            <td>'. $tot_ctng['pcs_per_bundle'] .'</td>
+                            <td>'. round(($tot_ctng['pcs_per_bundle']/($ord_q['total_excess'] ? $ord_q['total_excess'] : 1))*100) .'%</td>
+                        </tr>
+                    ';
+                }
+            } else {
+                $data['tbody'][] = '<tr><td class="text-center" colspan="11">-- No Data Found --</td></tr>';
             }
-        } else {
-            $data['tbody'][] = '<tr><td class="text-center" colspan="11">-- No Data Found --</td></tr>';
+        } else if($cutting_based == 'unit') {
+            $data['thead'][] = '<tr><td>Unit</td><td>Cutting Qty</td><td>Detail</td></tr>';
+            
+            $fetch = mysqli_query($mysqli, "SELECT created_unit FROM cutting_barcode WHERE created_date LIKE '%". $filter_date ."%' GROUP BY created_unit");
+            if(mysqli_num_rows($fetch)>0) {
+                while($row = mysqli_fetch_array($fetch)) {
+
+                    $thead = '<table class="table table-bordered"><tr><th>BO</th><th>Style</th><th>Style Image</th><th>Combo</th><th>Part</th><th>Color</th><th>Cutting Qty</th></tr>';
+                    $tbody = '';
+                    $fetch_new = mysqli_query($mysqli, "SELECT * FROM cutting_barcode WHERE created_date LIKE '%". $filter_date ."%'  AND created_unit = '". $row['created_unit'] ."' GROUP BY sod_part");
+                    while($row_new = mysqli_fetch_array($fetch_new)) {
+                        $tdy__ = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(pcs_per_bundle) as pcs_per_bundle FROM bundle_details WHERE date = '". $filter_date ."' AND sod_part = ". $row_new['sod_part']));
+                        $ord_q__ = mysqli_fetch_array(mysqli_query($mysqli, "SELECT total_excess, item_image FROM sales_order_detalis WHERE id = ". $row_new['style']));
+                        $tbody .= '<tr>
+                                    <td>'. sales_order_code($row_new['order_id']) .'</td>
+                                    <td>'. sales_order_style($row_new['style']) .'</td>
+                                    <td>'. viewImage($ord_q__['item_image'], 30) .'</td>
+                                    <td>'. color_name($row_new['combo_id']) .'</td>
+                                    <td>'. part_name($row_new['part_id']) .'</td>
+                                    <td>'. color_name($row_new['color_id']) .'</td>
+                                    <td>'. $tdy__['pcs_per_bundle'] .'</td>
+                                </tr>';
+                    }
+                    $tfoot = '</table>';
+                    $tdy_ctng = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(pcs_per_bundle) as pcs_per_bundle FROM bundle_details WHERE date = '". $filter_date ."' AND created_unit = ". $row['created_unit']));
+                    $data['tbody'][] = '
+                        <tr>
+                            <td>'. company_code($row['created_unit']) .'</td>
+                            <td>'. $tdy_ctng['pcs_per_bundle'] .'</td>
+                            <td>'. $thead.$tbody.$tfoot .'</td>
+                        </tr>
+                    ';
+                }
+            } else {
+                $data['tbody'][] = '<tr><td class="text-center" colspan="11">-- No Data Found --</td></tr>';
+            }
         }
         
     } else if($type == 'printing') {
@@ -1810,6 +1854,41 @@ $emp = mysqli_fetch_array($emp_query);
         $data['found'] = $fetch;
     } else {
         $data['found'] = 0;
+    }
+
+    echo json_encode($data);
+
+} else if(isset($_REQUEST['scanned_pcs_list'])) {
+    
+    $id = $_POST['id'];
+    $from = $_POST['from'];
+
+    $table = ($from == 'sewing') ? 'orbidx_sewingout' : (($from == 'checking') ? 'orbidx_checking' : 'orbidx_component_process');
+
+    $row = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM $table WHERE id = '". $id ."'"));
+    $array = json_decode($row['qr_code']);
+
+    $grouped = [];
+
+    foreach ($array as $item) {
+        
+        list($prefix, $suffix) = explode('-', $item);
+        
+        if (!isset($grouped[$prefix])) {
+            $grouped[$prefix] = [];
+        }
+        $grouped[$prefix][] = $suffix;
+    }
+
+    $q = 1;
+    foreach ($grouped as $prefix => $suffixes) {
+
+        $bnum = mysqli_fetch_array(mysqli_query($mysqli, "SELECT bundle_number FROM bundle_details WHERE id = ". $prefix));
+        sort($suffixes);
+        $suffixes_count = count($suffixes);
+        $suffixesString = implode(', ', $suffixes);
+        $data['tbody'][] = "<tr><td>{$q}</td><td>{$bnum['bundle_number']}</td><td>{$suffixes_count}</td><td>{$suffixesString}</td></tr>";
+        $q++;
     }
 
     echo json_encode($data);

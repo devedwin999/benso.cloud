@@ -2415,22 +2415,6 @@ if (isset($_REQUEST['get_city'])) {
         if(!empty($bnl)) {
             for ($m = 0; $m < count($bnl); $m++) {
                 mysqli_query($mysqli, "UPDATE bundle_details SET `in_proseccing`='yes', `complete_processing`= NULL, in_proseccing_id='". $inid ."', `in_proseccing_date`='".date('Y-m-d H:i:s')."' WHERE `id`='" . $bnl[$m] . "'");
-        
-                // $nfd = array(
-                //     'complete_processing' => NULL,
-                //     'in_proseccing' => 'yes',
-                //     'in_proseccing_id' => $inid,
-                //     'in_proseccing_date' => $bnl[$m],
-                //     );
-                    
-                // Update('bundle_details', $nfd, " WHERE id='" . $bnl[$m] . "'");
-                    
-                // $bnd = mysqli_fetch_array(mysqli_query($mysqli, "SELECT boundle_qr,pcs_per_bundle FROM bundle_details WHERE id='" . $bnl[$m] . "'"));
-        
-                // for ($q = 1; $q <= $bnd["pcs_per_bundle"]; $q++) {
-        
-                    // mysqli_query($mysqli, "UPDATE bundle_piece_details SET in_proseccing='yes' WHERE piece_qr='" . $bnd['boundle_qr'] . $q . "'");
-                // }
             }
         }
     } else if($_REQUEST['process_type'] == "sewing_input") {
@@ -2724,26 +2708,6 @@ if($sql['boundle_qr']!="") {
             print '</div> </td> </tr>';
         }
     }
-} else if(isset($_REQUEST['pieceQrNum'])) {
-
-    $qry = "SELECT a.*, d.style_no, e.color_name, f.type, b.bundle_number ";
-    $qry .= "FROM bundle_piece_details a ";
-    $qry .= "LEFT JOIN bundle_details b ON a.bundle_detail_id=b.id ";
-    $qry .= "LEFT JOIN cutting_barcode c ON b.cutting_barcode_id=c.id ";
-    $qry .= "LEFT JOIN sales_order_detalis d ON c.style=d.id ";
-    $qry .= "LEFT JOIN color e ON c.color=d.id ";
-    $qry .= "LEFT JOIN variation_value f ON b.variation_value=f.id ";
-
-
-    $qry .= "WHERE a.id='" . $_REQUEST['id'] . "' ";
-
-    $res = mysqli_query($mysqli, $qry);
-
-    $sql = mysqli_fetch_array($res);
-
-    $data['table'][] = '<tr id="tbTr' . $_REQUEST['id'] . '"><td> <input type="hidden" id="" name="piece_id[]" value="' . $sql['id'] . '"> ' . $sql['piece_qr'] . '</td> <td>' . $sql['style_no'] . '</td> <td>' . $sql['color_name'] . '</td> <td>' . $sql['type'] . '</td> <td>' . $sql['bundle_number'] . '</td> <td><i class="icon-copy fa fa-trash-o" aria-hidden="true" onclick="removeRow(' . $_REQUEST['id'] . ')" title="Remove"></i></td></tr>';
-    echo json_encode($data);
-
 } else if(isset($_REQUEST['getSubprocessDet'])) {
 
     $myqs = mysqli_query($mysqli, "SELECT a.*, b.process_name FROM sub_process a LEFT JOIN process b ON a.process_id=b.id WHERE a.process_id=" . $_REQUEST['id']);

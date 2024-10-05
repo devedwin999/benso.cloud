@@ -418,6 +418,12 @@ $modals = array();
       -moz-appearance: none;
       margin: 0; /* Optional */
     }
+
+    .tab-content {
+        border-right: 1px solid #dee2e6;
+        border-left: 1px solid #dee2e6;
+        border-bottom: 1px solid #dee2e6;
+    }
 </style>
 
 <style>

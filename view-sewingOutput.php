@@ -120,7 +120,7 @@ include("includes/perm.php");
                     <h4 class="text-blue h4">Sewing Output List</h4>
                 </div>
                 <div class="pb-20">
-                    <table class="table hover multiple-select-row data-table-export nowrap">
+                    <table class="table hover data-table-export nowrap">
                         <thead>
                             <tr>
                                 <th class="table-plus datatable-nosort">S.No</th>
@@ -159,7 +159,7 @@ include("includes/perm.php");
                                     <td><?= color_name($result['color']); ?></td>
                                     <td><?= variation_value($result['variation_value']); ?></td>
                                     <td><?= process_name($result['process']); ?></td>
-                                    <td><?= $result['scanned_count']; ?></td>
+                                    <td><a onclick="show_total_scanned(this)" class="" data-id="<?= $result['id']; ?>" data-from="sewing" style="color:blue; text-decoration: underline;"><?= $result['scanned_count']; ?></a></td>
                                     <td><?= employee_name($result['device_user']); ?></td>
                                     <td><?= company_code($result['logUnit']); ?></td>
                                 </tr>
@@ -169,55 +169,9 @@ include("includes/perm.php");
                 </div>
             </div>
                 
-            <?php include('includes/footer.php'); ?>
+            <?php $modals = ['scanned_pcs-modal']; include('modals.php'); include('includes/footer.php'); ?>
         </div>
     </div>
-
-    <div class="modal fade bs-example-modal-lg" id="viewModal" tabindex="-1" role="dialog"
-        aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-top ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myLargeModalLabel">Sewing Output List</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <th>Sl.No</th>
-                                <th>So.No</th>
-                                <th>Style No</th>
-                                <th>Color</th>
-                                <th>Size</th>
-                                <th>Boundle No</th>
-                                <th>Boundle Qty</th>
-                                <th>Boundle QR</th>
-                            </tr>
-                        </tbody>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function getProcessingDet(id) {
-
-            $.ajax({
-                type: 'POST',
-                url: 'ajax_search.php?getProcessingDet=1&id=' + id,
-                success: function (msg) {
-                    $("#tableBody").html(msg);
-                }
-            })
-            $("#viewModal").modal('show');
-        }
-    </script>
 
     <!-- js -->
     <?php include('includes/end_scripts.php'); ?>

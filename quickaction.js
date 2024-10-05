@@ -1377,6 +1377,34 @@ $(document).ready(function() {
     });
 });
 
+function show_total_scanned(element) {
+    
+    var data = {
+        id: $(element).data('id'),
+        from: $(element).data('from')
+    }
+
+    $.post('ajax_search2.php?scanned_pcs_list', data, function(msg) {
+        var j = $.parseJSON(msg);
+        $("#scanned_pcs-tbody").html(j.tbody)
+        $("#scanned_pcs-modal").modal('show');
+    });
+}
+
+
+function swal_processing(title) {
+
+    swal({
+        title: title,
+        width: 200,
+        padding: 85,
+        closeOnClickOutside: false, 
+        background: '#fff url(src/logo/processing-gif.gif)'
+    });
+
+    $(".swal2-confirm").addClass('d-none');
+}
+
 
 
 

@@ -722,6 +722,8 @@ if(isset($_POST['img_btn'])) {
                                                                                                                                                 <th class="fieldrequired">Day Calculation</th>
                                                                                                                                                 <th class="fieldrequired">Day Start</th>
                                                                                                                                                 <th class="fieldrequired">Day End</th>
+                                                                                                                                                <th>Daily Work Time</th>
+                                                                                                                                                <th>Closing Day Time</th>
                                                                                                                                                 <th>Responsible (A)</th>
                                                                                                                                                 <th>Responsible (B)</th>
                                                                                                                                                 <th>Responsible (C)</th>
@@ -752,7 +754,13 @@ if(isset($_POST['img_btn'])) {
                                                                                                                                                         </select>
                                                                                                                                                     </td>
                                                                                                                                                     <td><input type="number" class="form-control e_start<?= $result['id']; ?>" name="start_day_<?= $p.'edit'; ?>" id="" placeholder="Day Start" value="<?= $rowFab['start_day']; ?>"></td>
+
                                                                                                                                                     <td><input type="number" class="form-control e_end<?= $result['id']; ?>" name="end_day_<?= $p.'edit'; ?>" id="" placeholder="Day End" value="<?= $rowFab['end_day']; ?>"></td>
+                                                                                                                                                    
+                                                                                                                                                    <td><input type="number" class="form-control e_daily_time<?= $result['id']; ?>" name="daily_time_<?= $p.'edit'; ?>" id="" placeholder="Daily Work Time" value="<?= ($rowFab['daily_time']/60); ?>"></td>
+                                                                                                                                                    
+                                                                                                                                                    <td><input type="number" class="form-control e_endday_time<?= $result['id']; ?>" name="endday_time_<?= $p.'edit'; ?>" id="" placeholder="Daily Work Time" value="<?= ($rowFab['endday_time']/60); ?>"></td>
+
                                                                                                                                                     <td>
                                                                                                                                                         <select class="form-control custom-select2 rA<?= $result['id']; ?>" name="resp_A_<?= $p.'edit'; ?>[]" id="FP_res_dept<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_A'], ' WHERE is_active="active"', ''); ?>
@@ -809,7 +817,13 @@ if(isset($_POST['img_btn'])) {
                                                                                                                                                         </select>
                                                                                                                                                     </td>
                                                                                                                                                     <td><input type="number" class="form-control e_start<?= $result['id']; ?>" name="start_day_<?= $p.'edit'; ?>" id="" placeholder="Day Start" value="<?= $rowFab['start_day']; ?>"></td>
+
                                                                                                                                                     <td><input type="number" class="form-control e_end<?= $result['id']; ?>" name="end_day_<?= $p.'edit'; ?>" id="" placeholder="Day End" value="<?= $rowFab['end_day']; ?>"></td>
+                                                                                                                                                    
+                                                                                                                                                    <td><input type="number" class="form-control e_daily_time<?= $result['id']; ?>" name="daily_time_<?= $p.'edit'; ?>" id="" placeholder="Daily Work Time" value="<?= ($rowFab['daily_time']/60); ?>"></td>
+                                                                                                                                                    
+                                                                                                                                                    <td><input type="number" class="form-control e_endday_time<?= $result['id']; ?>" name="endday_time_<?= $p.'edit'; ?>" id="" placeholder="Daily Work Time" value="<?= ($rowFab['endday_time']/60); ?>"></td>
+
                                                                                                                                                     <td>
                                                                                                                                                         <select class="form-control custom-select2 rA<?= $result['id']; ?>" name="resp_A_<?= $p.'edit'; ?>[]" id="res_dept<?= $p.'edit'; ?>" style="width:100%" multiple required>
                                                                                                                                                             <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $rowFab['resp_A'], ' WHERE is_active="active"', ''); ?>
@@ -888,8 +902,18 @@ if(isset($_POST['img_btn'])) {
                                                                                                             <tr>
                                                                                                                 <th>Activity</th>
                                                                                                                 <th class="fieldrequired">Day Calculation</th>
-                                                                                                                <th style="width:5%;"><span class="fieldrequired">Day Start</span> <input class="form-control theadInput" id="mainstartDt" onkeyup="changeAllInp('startDt')"></th>
-                                                                                                                <th style="width:5%;"><span class="fieldrequired">Day End</span> <input class="form-control theadInput" id="mainendDt" onkeyup="changeAllInp('endDt')"></th>
+                                                                                                                <th style="width:5%;">
+                                                                                                                    <span class="fieldrequired">Day Start</span> <input type="number" class="form-control theadInput" id="mainstartDt" onkeyup="changeAllInp('startDt')">
+                                                                                                                </th>
+                                                                                                                <th style="width:5%;">
+                                                                                                                    <span class="fieldrequired">Day End</span> <input type="number" class="form-control theadInput" id="mainendDt" onkeyup="changeAllInp('endDt')">
+                                                                                                                </th>
+                                                                                                                <th>
+                                                                                                                    <span class="fieldrequired">Daily Work Time</span> <input type="number" class="form-control theadInput" id="maindaily_time" onkeyup="changeAllInp('daily_time')">
+                                                                                                                </th>
+                                                                                                                <th>
+                                                                                                                    <span class="fieldrequired">Closing Day Time</span> <input type="number" class="form-control theadInput" id="mainendday_time" onkeyup="changeAllInp('endday_time')">
+                                                                                                                </th>
                                                                                                                 <th>Responsible (A)</th>
                                                                                                                 <th>Responsible (B)</th>
                                                                                                                 <th>Responsible (C)</th>
@@ -922,24 +946,26 @@ if(isset($_POST['img_btn'])) {
                                                                                                                     </td>
                                                                                                                     <td><input type="number" class="form-control startDt" name="start_day_<?= $p; ?>" id="" placeholder="Day Start"></td>
                                                                                                                     <td><input type="number" class="form-control endDt" name="end_day_<?= $p; ?>" id="" placeholder="Day End"></td>
+                                                                                                                    <td><input type="number" class="form-control daily_time" name="daily_time_<?= $p; ?>" id="" placeholder="Daily Work Time"></td>
+                                                                                                                    <td><input type="number" class="form-control endday_time" name="endday_time_<?= $p; ?>" id="" placeholder="Closing Day Time"></td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respA" name="resp_A_<?= $p; ?>[]" id="FP_res_dept<?= $rowFab['id'].'APP'; ?>" style="width:100%" multiple required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respB" name="resp_B_<?= $p; ?>[]" id="FP_resp_B<?= $rowFab['id'].'APP'; ?>" style="width:100%" multiple required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respC" name="resp_C_<?= $p; ?>[]" id="FP_resp_C<?= $rowFab['id'].'APP'; ?>" style="width:100%" multiple required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respD" name="resp_D_<?= $p; ?>[]" id="FP_resp_D<?= $rowFab['id'].'APP'; ?>" style="width:100%" multiple required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
@@ -978,24 +1004,26 @@ if(isset($_POST['img_btn'])) {
                                                                                                                     </td>
                                                                                                                     <td><input type="number" class="form-control startDt" name="start_day_<?= $p; ?>" id="" placeholder="Day Start"></td>
                                                                                                                     <td><input type="number" class="form-control endDt" name="end_day_<?= $p; ?>" id="" placeholder="Day End"></td>
+                                                                                                                    <td><input type="number" class="form-control daily_time" name="daily_time_<?= $p; ?>" id="" placeholder="Daily Work Time"></td>
+                                                                                                                    <td><input type="number" class="form-control endday_time" name="endday_time_<?= $p; ?>" id="" placeholder="Closing Day Time"></td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respDept" name="resp_A_<?= $p; ?>[]" id="res_dept<?= $p; ?>" style="width:100%" multiple required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respDept" name="resp_B_<?= $p; ?>[]" id="resp_B<?= $p; ?>" style="width:100%" multiple required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respDept" name="resp_C_<?= $p; ?>[]" id="resp_C<?= $p; ?>" style="width:100%" multiple required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respDept" name="resp_D_<?= $p; ?>[]" id="resp_D<?= $p; ?>" style="width:100%" multiple required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>-</td>
@@ -1746,45 +1774,65 @@ if(isset($_POST['img_btn'])) {
                 });
             }
             
-            if(ab == 0) {
-                $(".rA" + formId).each(function() {
+            if(ab==0) {
+                $(".e_daily_time" + formId).each(function() {
                     if($(this).val() == "") {
                         $(this).focus();
-                        message_noload('warning', 'Responsible (A) Required!', 1500);
+                        message_noload('warning', 'Daily Working time Required in Minutes!', 1500);
                         ab++;
                     }
                 });
             }
             
-            if(ab == 0) {
-                $(".rB" + formId).each(function() {
+            if(ab==0) {
+                $(".e_endday_time" + formId).each(function() {
                     if($(this).val() == "") {
                         $(this).focus();
-                        message_noload('warning', 'Responsible (B) Required!', 1500);
+                        message_noload('warning', 'Closing day Working time Required in Minutes!', 1500);
                         ab++;
                     }
                 });
             }
             
-            if(ab == 0) {
-                $(".rC" + formId).each(function() {
-                    if($(this).val() == "") {
-                        $(this).focus();
-                        message_noload('warning', 'Responsible (C) Required!', 1500);
-                        ab++;
-                    }
-                });
-            }
+            // if(ab == 0) {
+            //     $(".rA" + formId).each(function() {
+            //         if($(this).val() == "") {
+            //             $(this).focus();
+            //             message_noload('warning', 'Responsible (A) Required!', 1500);
+            //             ab++;
+            //         }
+            //     });
+            // }
             
-            if(ab == 0) {
-                $(".rD" + formId).each(function() {
-                    if($(this).val() == "") {
-                        $(this).focus();
-                        message_noload('warning', 'Responsible (D) Required!', 1500);
-                        ab++;
-                    }
-                });
-            }
+            // if(ab == 0) {
+            //     $(".rB" + formId).each(function() {
+            //         if($(this).val() == "") {
+            //             $(this).focus();
+            //             message_noload('warning', 'Responsible (B) Required!', 1500);
+            //             ab++;
+            //         }
+            //     });
+            // }
+            
+            // if(ab == 0) {
+            //     $(".rC" + formId).each(function() {
+            //         if($(this).val() == "") {
+            //             $(this).focus();
+            //             message_noload('warning', 'Responsible (C) Required!', 1500);
+            //             ab++;
+            //         }
+            //     });
+            // }
+            
+            // if(ab == 0) {
+            //     $(".rD" + formId).each(function() {
+            //         if($(this).val() == "") {
+            //             $(this).focus();
+            //             message_noload('warning', 'Responsible (D) Required!', 1500);
+            //             ab++;
+            //         }
+            //     });
+            // }
             
             
             if(ab!=0) {
@@ -1795,7 +1843,7 @@ if(isset($_POST['img_btn'])) {
             
             $.ajax({
                 type : 'POST',
-                url : 'ajax_action.php?updateTimeTemplate=1',
+                url : 'ajax_action.php?updateTimeTemplate',
                 data : form,
                 
                 success: function(msg) {
@@ -1854,44 +1902,64 @@ if(isset($_POST['img_btn'])) {
                 }
                 
                 if(ab==0) {
-                    $(".respA").each(function() {
+                    $(".daily_time").each(function() {
                         if($(this).val() == "") {
                             $(this).focus();
-                            message_noload('warning', 'Responsible (A) Missing!', 1500);
+                            message_noload('warning', 'Daily Working time Required in Minutes!', 1500);
                             ab++;
                         }
                     });
                 }
                 
                 if(ab==0) {
-                    $(".respB").each(function() {
+                    $(".endday_time").each(function() {
                         if($(this).val() == "") {
                             $(this).focus();
-                            message_noload('warning', 'Responsible (B) Missing!', 1500);
+                            message_noload('warning', 'Closing day Working time Required in Minutes!', 1500);
                             ab++;
                         }
                     });
                 }
                 
-                if(ab==0) {
-                    $(".respC").each(function() {
-                        if($(this).val() == "") {
-                            $(this).focus();
-                            message_noload('warning', 'Responsible (C) Missing!', 1500);
-                            ab++;
-                        }
-                    });
-                }
+                // if(ab==0) {
+                //     $(".respA").each(function() {
+                //         if($(this).val() == "") {
+                //             $(this).focus();
+                //             message_noload('warning', 'Responsible (A) Missing!', 1500);
+                //             ab++;
+                //         }
+                //     });
+                // }
                 
-                if(ab==0) {
-                    $(".respD").each(function() {
-                        if($(this).val() == "") {
-                            $(this).focus();
-                            message_noload('warning', 'Responsible (D) Missing!', 1500);
-                            ab++;
-                        }
-                    });
-                }
+                // if(ab==0) {
+                //     $(".respB").each(function() {
+                //         if($(this).val() == "") {
+                //             $(this).focus();
+                //             message_noload('warning', 'Responsible (B) Missing!', 1500);
+                //             ab++;
+                //         }
+                //     });
+                // }
+                
+                // if(ab==0) {
+                //     $(".respC").each(function() {
+                //         if($(this).val() == "") {
+                //             $(this).focus();
+                //             message_noload('warning', 'Responsible (C) Missing!', 1500);
+                //             ab++;
+                //         }
+                //     });
+                // }
+                
+                // if(ab==0) {
+                //     $(".respD").each(function() {
+                //         if($(this).val() == "") {
+                //             $(this).focus();
+                //             message_noload('warning', 'Responsible (D) Missing!', 1500);
+                //             ab++;
+                //         }
+                //     });
+                // }
                 
                 if(ab!=0) {
                     return false;
@@ -1899,7 +1967,7 @@ if(isset($_POST['img_btn'])) {
                 
                 $.ajax({
                     type : 'POST',
-                    url : 'ajax_action.php?saveTimeTemplate=1',
+                    url : 'ajax_action.php?saveTimeTemplate',
                     data : form,
                     
                     success: function(msg) {
