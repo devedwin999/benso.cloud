@@ -1982,14 +1982,7 @@ if (isset($_REQUEST['delete_salesOrder'])) {
         }
         // Update('bundle_details', $nfd, " WHERE id = '" . $_REQUEST['id'] . "'");
         mysqli_query($mysqli, "UPDATE bundle_details SET $fild = NULL WHERE id='" . $_REQUEST['id'] . "'");
-
-        // $bnd = mysqli_fetch_array(mysqli_query($mysqli, "SELECT boundle_qr,pcs_per_bundle FROM bundle_details WHERE id='" . $_REQUEST['id'] . "'"));
-
-        // for ($q = 1; $q <= $bnd["pcs_per_bundle"]; $q++) {
-
-        // mysqli_query($mysqli, "UPDATE bundle_piece_details SET in_proseccing = NULL WHERE piece_qr='" . $bnd['boundle_qr'] . $q . "'");
-        // }
-
+        
         $asdf = mysqli_fetch_array(mysqli_query($mysqli, "SELECT boundle_id FROM processing_list WHERE id=" . $_REQUEST['pid']));
 
         $dta['boundle_id'] = $asdf['boundle_id'];
@@ -2022,13 +2015,7 @@ if (isset($_REQUEST['delete_salesOrder'])) {
         }
 
         mysqli_query($mysqli, "UPDATE bundle_details SET $fild = NULL WHERE id='" . $bnl[$m] . "'");
-
-        // $bnd = mysqli_fetch_array(mysqli_query($mysqli, "SELECT boundle_qr,pcs_per_bundle FROM bundle_details WHERE id='" . $bnl[$m] . "'"));
-
-        // for ($q = 1; $q <= $bnd["pcs_per_bundle"]; $q++) {
-
-        // mysqli_query($mysqli, "UPDATE bundle_piece_details SET in_proseccing=NULL WHERE piece_qr='" . $bnd['boundle_qr'] . $q . "'");
-        // }
+        
     }
 
     $vhn = mysqli_query($mysqli, "DELETE FROM processing_list WHERE id= '" . $_REQUEST['id'] . "'");
@@ -2260,12 +2247,12 @@ if (isset($_REQUEST['delete_salesOrder'])) {
         $resp['result'][] = 0;
     } else {
         $resp['result'][] = 1;
+        
     }
-
     echo json_encode($resp);
 
 } else if (isset($_REQUEST['saveTimeTemplate'])) {
-    
+
     // echo '<pre>', print_r($_POST, 1); exit;
     $data2 = array(
         'temp_name' => $_REQUEST['temp_name'],
@@ -2276,10 +2263,11 @@ if (isset($_REQUEST['delete_salesOrder'])) {
     );
 
     $ins = Insert('time_management_template', $data2);
+
     $inId = mysqli_insert_id($mysqli);
 
-    timeline_history('Insert', 'time_management_template', $inId, 'Time Management Template Added.');
-    
+    timeline_history('Insert', 'time_management_template', $inId, 'Time Management Template Created. Template: "'. $_REQUEST['temp_name'] .'"');
+
     for ($o = 0; $o < count($_REQUEST['activity']); $o++) {
 
         $name = $_REQUEST['nameId'][$o];
@@ -2292,12 +2280,14 @@ if (isset($_REQUEST['delete_salesOrder'])) {
             'calculation_type' => $_REQUEST['calculation_type_' . $name],
             'start_day' => $_REQUEST['start_day_' . $name],
             'end_day' => $_REQUEST['end_day_' . $name],
-            'resp_A' => (($_REQUEST['resp_A_' . $name] != '') ? implode(',', $_REQUEST['resp_A_' . $name]) : ''),
-            'resp_B' => (($_REQUEST['resp_B_' . $name] != '') ? implode(',', $_REQUEST['resp_B_' . $name]) : ''),
-            'resp_C' => (($_REQUEST['resp_C_' . $name] != '') ? implode(',', $_REQUEST['resp_C_' . $name]) : ''),
-            'resp_D' => (($_REQUEST['resp_D_' . $name] != '') ? implode(',', $_REQUEST['resp_D_' . $name]) : ''),
+            'daily_time' => ($_REQUEST['daily_time_' . $name] * 60),
+            'endday_time' => ($_REQUEST['endday_time_' . $name] * 60),
+            'resp_A' => implode(',', $_REQUEST['resp_A_' . $name]),
+            'resp_B' => implode(',', $_REQUEST['resp_B_' . $name]),
+            'resp_C' => implode(',', $_REQUEST['resp_C_' . $name]),
+            'resp_D' => implode(',', $_REQUEST['resp_D_' . $name]),
         );
-        
+
         $ins = Insert('time_management_template_det', $ndta);
     }
 
@@ -2320,7 +2310,7 @@ if (isset($_REQUEST['delete_salesOrder'])) {
 
     Update('time_management_template', $data2, " WHERE id = '" . $_REQUEST['tempId'] . "'");
 
-    timeline_history('Update', 'time_management_template', $_REQUEST['tempId'], 'Time Management Template details Updated.');
+    timeline_history('Update', 'time_management_template', $_REQUEST['tempId'], 'Time Management Template details Updated. Template: "'. $_REQUEST['temp_name'] .'"');
 
     for ($o = 0; $o < count($_REQUEST['insId']); $o++) {
 
@@ -2330,10 +2320,12 @@ if (isset($_REQUEST['delete_salesOrder'])) {
             'calculation_type' => $_REQUEST['calculation_type_' . $name],
             'start_day' => $_REQUEST['start_day_' . $name],
             'end_day' => $_REQUEST['end_day_' . $name],
-            'resp_A' => (($_REQUEST['resp_A_' . $name] != '') ? implode(',', $_REQUEST['resp_A_' . $name]) : ''),
-            'resp_B' => (($_REQUEST['resp_B_' . $name] != '') ? implode(',', $_REQUEST['resp_B_' . $name]) : ''),
-            'resp_C' => (($_REQUEST['resp_C_' . $name] != '') ? implode(',', $_REQUEST['resp_C_' . $name]) : ''),
-            'resp_D' => (($_REQUEST['resp_D_' . $name] != '') ? implode(',', $_REQUEST['resp_D_' . $name]) : ''),
+            'daily_time' => ($_REQUEST['daily_time_' . $name] * 60),
+            'endday_time' => ($_REQUEST['endday_time_' . $name] * 60),
+            'resp_A' => implode(',', $_REQUEST['resp_A_' . $name]),
+            'resp_B' => implode(',', $_REQUEST['resp_B_' . $name]),
+            'resp_C' => implode(',', $_REQUEST['resp_C_' . $name]),
+            'resp_D' => implode(',', $_REQUEST['resp_D_' . $name]),
         );
 
         $inss = Update('time_management_template_det', $ndta, " WHERE id = '" . $_REQUEST['insId'][$o] . "'");
@@ -2365,34 +2357,44 @@ if (isset($_REQUEST['delete_salesOrder'])) {
 } else if (isset($_REQUEST['validateMobile'])) {
 
     $nm = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail_temp WHERE is_approved != 'no' AND mobile = '" . $_REQUEST['mobile'] . "'"));
-
+    
     $data['numm'][] = $nm;
-
+    
     echo json_encode($data);
 } else if (isset($_REQUEST['createTimeSheet'])) {
-
-    $order = mysqli_query($mysqli, "SELECT order_date, delivery_date FROM sales_order WHERE id = '" . $_REQUEST['order_id'] . "'");
-
-    $bklm = mysqli_query($mysqli, "SELECT * FROM time_management_template_det WHERE table_name='manual' AND temp_id = '" . $_REQUEST['temp_id'] . "'");
-
-    while ($res = mysqli_fetch_assoc($bklm)) {
-
-        $ord_date = $order['order_date'];
-        $del_date = $order['delivery_date'];
+    
+    for($p=0; $p<count($_POST['activity_id']); $p++) {
         
-        if ($res['calculation_type'] == 'asc') {
-            $task_start_date = date('Y-m-d', strtotime($ord_date . ' +' . $res['start_day'] . ' days'));
-            $task_end_date = date('Y-m-d', strtotime($ord_date . ' +' . $res['end_day'] . ' days'));
-        }
+        $aid = $_POST['activity_id'][$p];
 
-        $data = array(
-            'sales_order_id' => $_REQUEST['order_id'],
-            'template_id' => $_REQUEST['temp_id'],
-            'task_type' => 'manual',
-            'activity' => $res['activity'],
-            'start_date' => $res['activity'],
+        $ddt = mysqli_fetch_array(mysqli_query($mysqli, "SELECT daily_time, endday_time FROM time_management_template_det WHERE id = '" . $aid . "'"));
+
+        $activity = array(
+            'time_management_template_det' => $aid,
+            'sales_order_id' => $_POST['sales_order_id'],
+            'activity' => $_POST['activity'][$p],
+            'start_date' => $_POST['start_date_'. $aid],
+            'end_date' => $_POST['end_date_'. $aid],
+            'daily_time' => $ddt['daily_time'],
+            'endday_time' => $ddt['endday_time'],
+            'resp_a' => !empty($_POST['resp_a_' . $aid]) ? implode(',', $_POST['resp_a_' . $aid]) : '',
+            'resp_b' => !empty($_POST['resp_b_' . $aid]) ? implode(',', $_POST['resp_b_' . $aid]) : '',
+            'created_by' => $logUser,
+            'created_unit' => $logUnit
         );
+
+        $ins = Insert('sod_time_sheet', $activity);
     }
+    timeline_history('Insert', 'sod_time_sheet', $_POST['sales_order_id'], 'Time Sheet Created. Ref:'. sales_order_code($_POST['sales_order_id']) .'');
+
+
+    if($ins) {
+        $data['result'][] = 0;
+    } else {
+        $data['result'][] = 1;
+    }
+
+    echo json_encode($data);
 
 } else if (isset($_REQUEST['saveTeamTask'])) {
 

@@ -784,10 +784,16 @@ function time_calculator($value) {
     return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 }
 
+function time_calculator_new($value, $format) {
 
+    if($format==1) {
 
+        $tim = explode(':', $value);
 
- 
+        $hr = ($tim[0]>0) ? $tim[0].' Hour ' : '';
+        $min = ($tim[1]>0) ? $tim[1].' Minute ' : '';
+        $sec = ($tim[2]>0) ? $tim[2].' Second ' : '';
 
-
- 
+        return $hr.$min.$sec;
+    }
+}

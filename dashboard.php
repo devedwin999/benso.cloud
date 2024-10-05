@@ -96,7 +96,7 @@ if(EMPLOYEE_DASH == 1) {  ?>
 </style>
 
 <body>
-	<div class="pre-loader">
+	<!-- <div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class="loader-logo text-center"><img src="<?= get_setting_val('APPLICATION_LOGO'); ?>" alt="" width="200"></div>
 			<div class='loader-progress' id="progress_div">
@@ -107,7 +107,7 @@ if(EMPLOYEE_DASH == 1) {  ?>
 				Dashboard Loading...
 			</div>
 		</div>
-	</div>
+	</div> -->
     
 	<?php include('includes/header.php'); ?>
 	<?php include('includes/sidebar.php'); ?>
@@ -308,7 +308,7 @@ if(EMPLOYEE_DASH == 1) {  ?>
                                                 $num_ = mysqli_num_rows($query);
                                                 if ($num_ > 0) {
                                                     $pp = 1;
-                                                    while ($sql = mysqli_fetch_array($query)) {
+                                                    while ($sql = mysqli_fetch_array($query)) { 
                                                         
                                                         print '<tr>
                                                                     <td>'. $pp .'</td>
@@ -351,8 +351,27 @@ if(EMPLOYEE_DASH == 1) {  ?>
 						</div>
                         
 						<div class="tab-pane fade cuttingdiv" id="cutting" role="tabpanel">
+
+							<div class="pd-20">
+								<hr>
+
+								<div class="row">
+									<div class="col-md-9"></div>
+									<div class="col-md-2">
+										<!-- <label for=""></label> -->
+										 <select class="form-control custom-select2" id="cutting_based" style="width:100%">
+											<option value="order">BO wise Cutting</option>
+											<option value="unit">Unit wise Cutting</option>
+										 </select>
+									</div>
+									<div class="col-md-1">
+										<a class="btn-outline-secondary btn load_data" href="#cutting"><i class="fa-filter fa"></i></a>
+									</div>
+								</div>
+							</div>
+
 							<div class="pd-20" style="overflow-y: auto;">
-								<table class="table hover multiple-select-row data-table-export nowrap">
+								<table class="table hover table-bordered data-table-export nowrap">
 									<thead>
 										<tr>
 											<th>BO NO</th>
@@ -611,14 +630,22 @@ if(EMPLOYEE_DASH == 1) {  ?>
         
         var data = {
             type : href,
+			cutting_based: $("#cutting_based").val(),
             filter_date : $("#filter_date").val(),
         }
         
         $.post('ajax_search2.php?get_daily_prodiction_status_details', data, function(msg) {
             var j = $.parseJSON(msg);
             
-            $("#overlay").fadeOut(500);
-            $("." + href +'div').find('tbody').html(j.tbody);
+			if(href=='cutting') {
+
+				$("#overlay").fadeOut(500);
+				$("." + href +'div').find('tbody').html(j.tbody);
+				$("." + href +'div').find('thead').html(j.thead);
+			} else {
+				$("#overlay").fadeOut(500);
+				$("." + href +'div').find('tbody').html(j.tbody);
+			}
         });
     });
 </script>

@@ -1391,24 +1391,19 @@ function show_total_scanned(element) {
     });
 }
 
-$(document).ready(function(){
 
-    $(".show_total_scanned").click(function(){
+function swal_processing(title) {
 
-        alert();
-
-        // var data = {
-        //     id: $(this).data('id'),
-        //     from: $(this).data('from')
-        // }
-
-        // $.post('ajax_search2.php?scanned_pcs_list', data, function(msg) {
-        //     var j = $.parseJSON(msg);
-        //     $("#scanned_pcs-tbody").html(j.tbody)
-        //     $("#scanned_pcs-modal").modal('show');
-        // });
+    swal({
+        title: title,
+        width: 200,
+        padding: 85,
+        closeOnClickOutside: false, 
+        background: '#fff url(src/logo/processing-gif.gif)'
     });
-});
+
+    $(".swal2-confirm").addClass('d-none');
+}
 
 
 
