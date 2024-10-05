@@ -797,3 +797,48 @@ function time_calculator_new($value, $format) {
         return $hr.$min.$sec;
     }
 }
+
+function city_name($value)
+{
+    global $mysqli;
+    
+    $asd = "SELECT cities_name FROM cities WHERE id = '". $value ."'";
+    $sdd = mysqli_query($mysqli, $asd);
+    $sadf = mysqli_fetch_array($sdd);
+    
+    return $sadf['cities_name'];
+}
+
+function company_address($id) {
+    
+    global $mysqli;
+    
+    $asd = "SELECT * FROM company WHERE id = '". $id ."'";
+    $sdd = mysqli_query($mysqli, $asd);
+    $dd = mysqli_fetch_assoc($sdd);
+    
+    $add = $dd['company_name'] ? '<p>'. $dd['company_name'] .'</p>' : '';
+    $add .= $dd['address1'] ? '<span>'. $dd['address1'] .'</span><br>' : '';
+    $add .= $dd['address2'] ? '<span>'. $dd['address2'] .'</span><br>' : '';
+    $add .= $dd['area'] ? '<span>'. $dd['area'] .'</span><br>' : '';
+    $add .= $dd['city'] ? '<span>'. city_name($dd['city']) .'.</span>' : '';
+    
+    return $add;
+}
+
+function supplier_address($id) {
+    
+    global $mysqli;
+    
+    $asd = "SELECT * FROM supplier WHERE id = '". $id ."'";
+    $sdd = mysqli_query($mysqli, $asd);
+    $dd = mysqli_fetch_assoc($sdd);
+    
+    $add = $dd['supplier_name'] ? '<p>'. $dd['supplier_name'] .'</p>' : '';
+    $add .= $dd['address1'] ? '<span>'. $dd['address1'] .'</span><br>' : '';
+    $add .= $dd['address2'] ? '<span>'. $dd['address2'] .'</span><br>' : '';
+    $add .= $dd['area'] ? '<span>'. $dd['area'] .'</span><br>' : '';
+    $add .= $dd['city'] ? '<span>'. city_name($dd['city']) .'.</span>' : '';
+    
+    return $add;
+}

@@ -3,7 +3,7 @@
 
 // https://benso.cloud/
 
-var base_url = 'http://127.0.0.1:8080/benso/';
+var base_url = 'http://127.0.0.1:8080/benso_cloud/';
 
 // sidebar auto show and hide functions START
 {

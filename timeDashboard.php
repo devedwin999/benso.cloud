@@ -72,9 +72,7 @@ $status_color = array(
     
     .nav-tabs.customtab .nav-item.show .nav-link, .nav-tabs.customtab .nav-link:hover {
         border-bottom: 2px solid #0e0e0e;
-    }
-    
-    
+    }    
 </style>
 
 
@@ -83,38 +81,34 @@ $status_color = array(
 	<?php include('includes/header.php'); ?>
 
 	<?php include('includes/sidebar.php'); ?>
+<style>
+	.tab-content {
+		border-right: none;
+		border-left: none;
+		border-bottom: none;
+	}
 
+	.table td {
+		/* font-size: 14px;
+		font-weight: 500;
+		padding: 3rem; */
+	}
+
+	.al-top {
+		vertical-align: top;
+		text-align: right;
+		padding: 5px;
+	}
+</style>
 
     <div class="main-container nw-cont">
 		<div class="xs-pd-20-10 pd-ltr-20">
 			<div class="page-header">
 				<div class="row">
-					<div class="col-md-6 col-sm-12">
+					<div class="col-md-12 text-center col-sm-12">
 						<div class="title dnone">
-							<h4 style="font-size: 30px;color: green;">Time Management Dashboard</h4>
+							<h4 class="u">Time Management Dashboard</h4>
 						</div>
-						<nav aria-label="breadcrumb" role="navigation">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="index.php">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Time Management Dashboard</li>
-							</ol>
-						</nav>
-					</div>
-					
-					
-					<div class="col-md-6 col-sm-12 text-right dnone">
-					    <h4 style="font-size: 30px;color: green;"><i class="icon-copy fa fa-tree" aria-hidden="true"></i> Save Paper, Save Tree</h4>
-					    
-						<!--<div class="dropdown">-->
-						<!--	<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">-->
-						<!--		January 2018-->
-						<!--	</a>-->
-						<!--	<div class="dropdown-menu dropdown-menu-right">-->
-						<!--		<a class="dropdown-item" href="#">Export List</a>-->
-						<!--		<a class="dropdown-item" href="#">Policies</a>-->
-						<!--		<a class="dropdown-item" href="#">View Assets</a>-->
-						<!--	</div>-->
-						<!--</div>-->
 					</div>
 				</div>
 			
@@ -183,12 +177,37 @@ $status_color = array(
 									</div>
 									<div class="tab-pane fade" id="orderTask" role="tabpanel">
 										<div class="pd-20">
-										    Order Task
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>Sl.No</th>
+														<th>BO</th>
+														<th>Task Date</th>
+														<th>Task</th>
+														<th>Task Duration</th>
+													</tr>
+												</thead>
+												<tbody>
+													<?php
+														$sel = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE task_for = '". $logUser ."' ORDER BY task_date ASC");
+														$p = 1;
+														if(mysqli_num_rows($sel) > 0) {
+															while($result = mysqli_fetch_assoc($sel)) {
+																?>
+																<tr>
+																	<td><?= $p++; ?></td>
+																	<td><?= sales_order_code($result['sales_order_id']); ?></td>
+																	<td><?= date('d-M, Y', strtotime($result['task_date'])); ?></td>
+																	<td><?= $result['activity']; ?></td>
+																	<td><?= time_calculator_new(time_calculator($result['task_timeing']), 1); ?></td>
+																</tr>
+													<?php } } else { print '<tr><td colspan="5" class="text-center">No tasks found!</td></tr>'; } ?>
+												</tbody>
+											</table>
 										</div>
 									</div>
 								</div>
 							</div>
-						
 					</div>
 				</div>
 				
@@ -197,7 +216,9 @@ $status_color = array(
 					<div class="card-box pd-30 height-100-p">
 						<div class="progress-box text-center newClass">
 						    <div class="calendar-wrap">
-        						<div id='calendar'></div>
+        						<!-- <div id='calendar'></div> JS Calender -->
+
+								<?php include('calendar.php'); ?>
         					</div>
 						</div>
 					</div>

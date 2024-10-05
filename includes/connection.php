@@ -26,4 +26,4 @@ $logUser = $_SESSION['login_id'];
 $logUnit = $_SESSION['loginCompany'];
 $logdept = $_SESSION['login_department'];
 
-$base_url = 'https://benso.cloud/';
+$base_url = 'http://127.0.0.1:8080/benso_cloud/';
