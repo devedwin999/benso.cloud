@@ -219,6 +219,7 @@ if($_GET['typ']=='view') {
                                             <th>Combo | Part | Color</th>
                                             <th>Process</th>
                                             <th>Output Employee</th>
+                                            <th>Billable Qty</th>
                                             <th>Bill Qty</th>
                                             <th>Rate</th>
                                             <th>Amount</th>

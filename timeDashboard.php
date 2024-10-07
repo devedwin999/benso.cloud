@@ -79,7 +79,6 @@ $status_color = array(
 <body>
 
 	<?php include('includes/header.php'); ?>
-
 	<?php include('includes/sidebar.php'); ?>
 <style>
 	.tab-content {
@@ -111,7 +110,7 @@ $status_color = array(
 						</div>
 					</div>
 				</div>
-			
+				
                 <?php if(MOD_TIME_MANAGEMENT!=1) { action_denied(); exit; } ?>
 			</div>
 			
