@@ -15,6 +15,18 @@ $manual = array(
     'budget' => 'Buddget',
     'budget_approval' => 'Buddget Approval',
 );
+
+$status = array(
+    0 => 'Not Started',
+    1 => 'In Progress',
+    2 => '<i class="fa fa-check"></i> Completed',
+);
+
+$status_color = array(
+    0 => '#ffc107',
+    1 => '#17a2b8',
+    2 => '#28a745',
+);
 ?>
 <!DOCTYPE html>
 <html>
@@ -160,12 +172,13 @@ $manual = array(
                                             <th>Activity</th>
                                             <th>Task Time</th>
                                             <th>Employee</th>
+                                            <th>Task Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                             $color = 0;
-                                            $qyy = mysqli_query($mysqli, "SELECT count(id) as id_count, task_date FROM order_tasks WHERE sales_order_id = '". $ID ."' GROUP BY task_date ASC");
+                                            $qyy = mysqli_query($mysqli, "SELECT count(id) as id_count, task_date, task_status FROM order_tasks WHERE sales_order_id = '". $ID ."' GROUP BY task_date ASC");
                                             while($resq = mysqli_fetch_assoc($qyy)) {
                                                 $act = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE sales_order_id = '". $ID ."' AND task_date = '". $resq['task_date'] ."'");
                                                 $isFirstRow = true;
@@ -177,6 +190,7 @@ $manual = array(
                                                             <td><?= $activ['activity']; ?></td>
                                                             <td><?= time_calculator_new(time_calculator($activ['task_timeing']), 1); ?></td>
                                                             <td><?= employee_name($activ['task_for']); ?></td>
+                                                            <td style="color: <?= $status_color[$activ['task_status']]; ?>"><?= $status[$activ['task_status']]; ?></td>
                                                         </tr>
                                                     <?php
                                                         $isFirstRow = false; 
@@ -186,6 +200,7 @@ $manual = array(
                                                             <td><?= $activ['activity']; ?></td>
                                                             <td><?= time_calculator_new(time_calculator($activ['task_timeing']), 1); ?></td>
                                                             <td><?= employee_name($activ['task_for']); ?></td>
+                                                            <td style="color: <?= $status_color[$activ['task_status']]; ?>"><?= $status[$activ['task_status']]; ?></td>
                                                         </tr>
                                         <?php } } } ?>
                                     </tbody>
@@ -255,12 +270,12 @@ $manual = array(
                                                 <td><?= time_calculator_new(time_calculator($res['daily_time']), 1); ?></td>
                                                 <td><?= time_calculator_new(time_calculator($res['endday_time']), 1); ?></td>
                                                 <td>
-                                                    <select class="form-control custom-select2" name="resp_a_<?= $xx; ?>[]" id="resp_a_<?= $xx; ?>" style="width:100%" multiple required>
+                                                    <select class="form-control custom-select2" name="resp_a_<?= $xx; ?>[]" id="resp_a_<?= $xx; ?>" style="width:100%" required>
                                                         <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $order['merchand_name'], ' WHERE is_active="active"', '`'); ?>
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control custom-select2" name="resp_b_<?= $xx; ?>[]" id="resp_b_<?= $xx; ?>" style="width:100%" multiple required>
+                                                    <select class="form-control custom-select2" name="resp_b_<?= $xx; ?>[]" id="resp_b_<?= $xx; ?>" style="width:100%" required>
                                                         <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $order['merchand_name'], ' WHERE is_active="active"', '`'); ?>
                                                     </select>
 

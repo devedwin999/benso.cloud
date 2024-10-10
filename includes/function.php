@@ -795,6 +795,15 @@ function time_calculator_new($value, $format) {
         $sec = ($tim[2]>0) ? $tim[2].' Second ' : '';
 
         return $hr.$min.$sec;
+    } else if($format==2) {
+
+        $tim = explode(':', $value);
+
+        $hr = ($tim[0]>0) ? $tim[0].' Hr ' : '';
+        $min = ($tim[1]>0) ? $tim[1].' Min ' : '';
+        $sec = ($tim[2]>0) ? $tim[2].' Sec ' : '';
+
+        return $hr.$min.$sec;
     }
 }
 

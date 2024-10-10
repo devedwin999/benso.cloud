@@ -573,10 +573,12 @@ $modals = array();
         searchNoti();
             
         var logUser = $("#logUser").val();
-            
+        var data = { user: logUser, };
+
         $.ajax({
             type: 'POST',
-            url: 'searchNotification.php?search_type=LoadNotification&user=' + logUser,
+            url: 'searchNotification.php?search_type=LoadNotification',
+            data: data,
                 
             success :function(msg) {
                 var j = $.parseJSON(msg);
@@ -592,10 +594,12 @@ $modals = array();
     function searchNoti() {
 
         var logUser = $("#logUser").val();
+        var data = { user: logUser, };
         
         $.ajax({
             type: 'POST',
-            url: 'searchNotification.php?search_type=teamTaskCount&user=' + logUser,
+            url: 'searchNotification.php?search_type=Notifi_counts',
+            data: data,
 
             success :function(msg) {
                 var j = $.parseJSON(msg);

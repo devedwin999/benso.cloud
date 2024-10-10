@@ -1250,7 +1250,7 @@ if(isset($_REQUEST['validate_Duplication'])) {
     $data['printing_out'][] = $printng['scanned_count'] ? $printng['scanned_count'] : 0;
     $data['checking_out'][] = $chng;
     
-    echo json_encode($data); 
+    echo json_encode($data);
 
 } else if(isset($_REQUEST['get_daily_prodiction_status_details'])) {
 

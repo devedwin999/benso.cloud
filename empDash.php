@@ -20,7 +20,7 @@ if(ADMIN_DASH == 1) { ?>
 <head>
 	<!-- Basic Page Info --> 
 	<meta charset="utf-8">
-	<title>BENSO GARMENTING - Dashboard</title>
+	<title>BENSO GARMENTING - Employee Dashboard</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -69,7 +69,7 @@ if(ADMIN_DASH == 1) { ?>
 </style>
 
 <body>
-    <div class="pre-loader">
+    <!-- <div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class="loader-logo text-center"><img src="<?= get_setting_val('APPLICATION_LOGO'); ?>" alt="" width="200"></div>
 			<div class='loader-progress' id="progress_div">
@@ -80,29 +80,33 @@ if(ADMIN_DASH == 1) { ?>
 				Dashboard Loading...
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 	<?php
     	include('includes/header.php');
     	include('includes/sidebar.php');
     	
-    	$emp = mysqli_fetch_array(mysqli_query($mysqli, "SELECT department, employee_code FROM employee_detail WHERE id = '". $logUser ."'"));
+    	$emp = mysqli_fetch_array(mysqli_query($mysqli, "SELECT department, employee_code, employee_photo, designation FROM employee_detail WHERE id = '". $logUser ."'"));
 	?>
 
 	<div class="main-container nw-cont"> 
 	<!--<div class="main-container nw-cont" style="padding: 40px 20px 0 90px !important;">-->
 		<div class="pd-ltr-20">
         <?php if(EMPLOYEE_DASH!=1) { action_denied(); exit; } ?>
-        
-            <div class="page-header" style="height: 52px;">
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="title">
-                            <h4 class="text-center text-success" style="margin-top: -7px;"><small>Welcome</small> <?= employee_name($logUser); ?>!</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            <div class="card-box pd-20 height-100-p mb-30">
+				<div class="row align-items-center">
+					<div class="col-md-4" style="text-align:right;">
+						<?= viewImage($base_url.$emp['employee_photo'], 250); ?>
+					</div>
+					<div class="col-md-8">
+						<h4 class="font-20 weight-500 mb-10 text-capitalize">
+							Welcome back <div class="weight-600 font-30 text-blue"><?= employee_name($logUser); ?>!</div>
+						</h4>
+						<p class="font-18 max-width-600">At BENSO GARMENTING, our passion for quality and innovation drives us to craft exceptional garments. Together, we empower one another to reach new heights and shape the future of fashion.</p>
+					</div>
+				</div>
+			</div>
             
             <div class="row">
                 <div class="col-md-4">

@@ -84,12 +84,12 @@ include("includes/perm.php");
 
                             <?php 
                             
-                            $ff = 10;
-$oo = range(1, $ff);
-$pa = array_map(fn($opp) => "$ff-$opp", $oo);
+                            // $ff = 10;
+                            // $oo = range(1, $ff);
+                            // $pa = array_map(fn($opp) => "$ff-$opp", $oo);
 
-print_r($oo);
-print_r($pa);
+                            // print_r($oo);
+                            // print_r($pa);
                             
                             ?>
                         </div>
