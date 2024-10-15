@@ -153,7 +153,9 @@ include("includes/perm.php");
                                                         <a class="dropdown-item" href="so_print.php?id=<?= $sql['id'] ?>" target="_blank"><i class="icon-copy fa fa-print" aria-hidden="true"></i> Print Invoive</a>
                                                     <?php if(SALES_ORDER_EDIT==1) { ?>
                                                         <a class="dropdown-item" data-id="<?= $sql['id']; ?>" href="sales_order.php?id=<?= $sql['id'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                                    <?php } 
+                                                    <?php } if(TIME_SHEET_CREATION==1) { ?>
+                                                        <a class="dropdown-item" data-id="<?= $sql['id']; ?>" href="time_sheet.php?id=<?= $sql['id'] ?>"><i class="icon-copy dw dw-sheet"></i> Time Sheet</a>
+                                                    <?php }
                                                     
                                                     if ($sql['is_approved'] != 'approved') {
                                                         if(SALES_ORDER_DELETE==1) { ?>

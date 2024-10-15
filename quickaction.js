@@ -3,7 +3,9 @@
 
 // https://benso.cloud/
 
-var base_url = 'http://127.0.0.1:8080/benso/';
+var base_url = 'http://127.0.0.1:8080/benso_cloud/';
+
+// var base_url = 'http://192.168.1.77:8080/benso_cloud/';
 
 // sidebar auto show and hide functions START
 {
@@ -270,6 +272,8 @@ $('.imagefield').change(function() {
     var file = this.files[0];
     
     var tt = $(this).closest('.image_head_tag').find('.imagename');
+
+    var width = tt.data('width');
     
     if (!file || !file.type.startsWith('image/')) {
         tt.html('Accept Images Only');
@@ -282,7 +286,7 @@ $('.imagefield').change(function() {
     
     reader.onload = function(event) {
         var imageData = event.target.result;
-        tt.html('<img src="' + imageData + '" width="">');
+        tt.html('<img src="' + imageData + '" width="'+ (width ? width : '') +'">');
     };
     
     reader.readAsDataURL(file);
@@ -1128,21 +1132,14 @@ $(".showImagePopup_wo_image").click(function() {
 
 
 function openTaskSheet(id) {
-    
-    // $.ajax({
-    //     type: 'POST',
-    //     url: 'searchNotification.php?search_type=getTaskSheet&id=' + id,
-
-    //     success: function (msg) {
-            
-            $("#modHeader").load(base_url + '/searchNotification.php?search_type=getTaskSheet&id=' + id);
-
-            // $("#taskLabel").html(json.taskLabel);
-    //     }
-    // })
-    
+    $("#modHeader").load(base_url + '/searchNotification.php?search_type=getTaskSheet&id=' + id);
     $("#notificationSheet").modal('show');
-    
+}
+
+
+function open_orderTask(id) {
+    $("#modHeader").load(base_url + '/searchNotification.php?search_type=order_task_sheet&id=' + id);
+    $("#notificationSheet").modal('show');
 }
 
 
@@ -1152,6 +1149,60 @@ function openTaskSheet_OnlyView(id) {
 
     $("#notificationSheet").modal('show');
     
+}
+
+
+function startOrderTask(taskId) {
+    
+    $(".timer_order").text('Updating..');
+    $(".timer_order").addClass("blockAll");
+
+    var data = { id: taskId, };
+    
+    $.ajax({
+        type: 'POST',
+        url: 'searchNotification.php?search_type=startOrderTask',
+        data: data,
+
+        success: function (msg) {
+            var json = $.parseJSON(msg);
+            
+            setTimeout(function() {
+                var btn = '<a class="btn btn-outline-danger timer_order" onclick="stopOrderTask('+ json.inid +')"><i class="icon-copy fa fa-clock-o" aria-hidden="true"></i> Stop Timer</a>';
+                $("#timerButton_ord").html(btn);
+                
+                $("#modTaskStatus_ord").html('<span style="color:#17a2b8;">In Progress</span>');
+                $(".compl").removeClass('d-none');
+            }, 2000);
+            
+        }
+    });
+}
+
+
+function stopOrderTask(taskId) {
+    
+    $(".timer_order").text('Updating..');
+    $(".timer_order").addClass("blockAll");
+    
+    var data = { id: taskId, };
+    $.ajax({
+        type: 'POST',
+        url: 'searchNotification.php?search_type=stopOrderTask',
+        data: data,
+
+        success: function (msg) {
+            
+            var json = $.parseJSON(msg);
+            
+            setTimeout(function() {
+                var btn = '<a class="btn btn-outline-success timer_order" onclick="startOrderTask('+ json.inid +')"><i class="icon-copy fa fa-clock-o" aria-hidden="true"></i> Start Timer</a>';
+                $("#timerButton_ord").html(btn);
+            }, 2000);
+            
+            
+        }
+    });
 }
 
 
@@ -1205,25 +1256,56 @@ function stopTeamTask(taskId) {
 }
 
 
+function save_ordertask_comment(id) {
 
-
-function saveTeamTaskComment(id) {
-    
-    var a = $("#team_task_comment").val();
+    var data = {
+        id: id,
+        comment: $("#order_task_comment").val(),
+    }
     
     $.ajax({
         type: 'POST',
-        url: 'searchNotification.php?search_type=saveTeamTaskComment&id=' + id + '&comment=' + a,
+        url: 'searchNotification.php?search_type=save_ordertask_comment',
+        data: data,
+
+        success: function (msg) {
+            var json = $.parseJSON(msg);
+            gatAllorderTaskComments(json.task_id);
+        }
+    });
+}
+
+function gatAllorderTaskComments(id) {
+    
+    $.ajax({
+        type: 'POST',
+        url: 'searchNotification.php?search_type=gatAllorderTaskComments&id=' + id,
 
         success: function (msg) {
             
-            var json = $.parseJSON(msg);
+            $(".cmtBtn_ord").addClass('d-none');
+            $("#order_task_comment").val('');
+            $("#addedComments_ord").html(msg);
             
+        }
+    });
+}
+
+function saveTeamTaskComment(id) {
+
+    var data = {
+        id: id,
+        comment: $("#team_task_comment").val(),
+    }
+    
+    $.ajax({
+        type: 'POST',
+        url: 'searchNotification.php?search_type=saveTeamTaskComment',
+        data: data,
+
+        success: function (msg) {
+            var json = $.parseJSON(msg);
             gatAllteamTaskComments(json.task_id);
-            // setTimeout(function() {
-            //     var btn = '<a class="btn btn-outline-success timerA" onclick="startTeamTask('+ json.inid +')"><i class="icon-copy fa fa-clock-o" aria-hidden="true"></i> Start Timer</a>';
-            //     $("#timerButton").html(btn);
-            // }, 2000);
         }
     });
 }
@@ -1246,16 +1328,16 @@ function gatAllteamTaskComments(id) {
 }
 
 
-function markAsComplete(id) {
+function markAsComplete(id, val) {
     
-    if($("#proof_image").val() == "") {
-        $("#proof_image").focus();
+    if($("#proof_image_" + val).val() == "") {
+        $("#proof_image_" + val).focus();
         message_noload('warning', 'Attach Proof to Complete the Task!', 1500);
         return false;
     } else {
     
         swal({
-            title: 'Mark As Complete?',
+            title: 'Mark As Complete the task?',
             text: "You won't be able to revert this!",
             type: 'warning',
             showCancelButton: true,
@@ -1269,12 +1351,12 @@ function markAsComplete(id) {
                 
                 var form = new FormData();
                 
-                var proof_image = $("#proof_image")[0].files[0];
+                var proof_image = $("#proof_image_" + val)[0].files[0];
                 form.append('proof_image', proof_image);
                 
                 $.ajax({
                     type: 'POST',
-                    url: 'searchNotification.php?search_type=markAsComplete&id=' + id,
+                    url: 'searchNotification.php?search_type=markAsComplete&id=' + id +'&type=' + val,
                     data : form,
                     contentType: false,
                     processData: false,
@@ -1291,11 +1373,7 @@ function markAsComplete(id) {
                     }
                 });
             } else {
-                swal(
-                    'Cancelled',
-                    '',
-                    'error'
-                )
+                swal( 'Cancelled', '', 'error' )
             }
         })
     }

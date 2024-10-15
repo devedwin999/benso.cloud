@@ -1250,7 +1250,7 @@ if(isset($_REQUEST['validate_Duplication'])) {
     $data['printing_out'][] = $printng['scanned_count'] ? $printng['scanned_count'] : 0;
     $data['checking_out'][] = $chng;
     
-    echo json_encode($data); 
+    echo json_encode($data);
 
 } else if(isset($_REQUEST['get_daily_prodiction_status_details'])) {
 
@@ -1849,13 +1849,32 @@ $emp = mysqli_fetch_array($emp_query);
 
     $uname = $_POST['uname'];
 
+    $duplicate = 0;
+    $fields = array();
+
     if($uname!="") {
         $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE username = '". $uname ."'"));
-        $data['found'] = $fetch;
-    } else {
-        $data['found'] = 0;
+        $fields[] = ($fetch > 0) ? 'User Name' : '';
+        $duplicate += $fetch;
     }
 
+    if($_POST['employee_code'] != "") {
+        
+        $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE employee_code = '". $_POST['employee_code'] ."'"));
+        $fields[] = ($fetch > 0) ? 'Employee Code' : '';
+        $duplicate += $fetch;
+    }
+
+    if($_POST['mobile'] != "") {
+        
+        $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE mobile = '". $_POST['mobile'] ."'"));
+        $fields[] = ($fetch > 0) ? 'Mobile Number' : '';
+        $duplicate += $fetch;
+    }
+
+    $data['duplicate'][] = $duplicate;
+    $data['fields'][] = implode(', ', array_filter($fields));
+    
     echo json_encode($data);
 
 } else if(isset($_REQUEST['scanned_pcs_list'])) {

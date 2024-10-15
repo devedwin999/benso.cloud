@@ -4752,7 +4752,7 @@ if($sql['boundle_qr']!="") {
 } else if(isset($_REQUEST['getApprovedBudProcess'])) {
     
     // $array = mysqli_query($mysqli, "SELECT b.id, b.process_name FROM budget_process a LEFT JOIN process b ON a.process = b.id WHERE a.so_id IN (". $_REQUEST['id'] .") AND a.is_approved = 'true' AND b.department IN (1,3,7,8,9,22,21) GROUP BY a.process ");
-    $array = mysqli_query($mysqli, "SELECT b.id, b.process_name FROM budget_process a LEFT JOIN process b ON a.process = b.id WHERE a.so_id IN (". $_REQUEST['id'] .") AND a.is_approved = 'true' GROUP BY a.process ");
+    $array = mysqli_query($mysqli, "SELECT b.id, b.process_name FROM budget_process a LEFT JOIN process b ON a.process = b.id WHERE a.style_id IN (". $_REQUEST['id'] .") AND a.is_approved = 'true' GROUP BY a.process ");
     
     while($row = mysqli_fetch_array($array)) {
         $result['option'][] = '<option value="'. $row['id'] .'">'. $row['process_name'] .'</option>';
@@ -4770,194 +4770,95 @@ if($sql['boundle_qr']!="") {
         while($roww = mysqli_fetch_array($sele)) {
             $foreach[] = $roww['id'];
         }
-    } else if(!isset($_REQUEST['prtN']) && !isset($_REQUEST['styleNum']) && isset($_REQUEST['boNmber'])) {
-        $sele = mysqli_query($mysqli, "SELECT id FROM sod_part WHERE sales_order_id IN (". implode(',', $_REQUEST['boNmber']) .")");
-        $foreach = array();
-        while($roww = mysqli_fetch_array($sele)) {
-            $foreach[] = $roww['id'];
-        }
+        
     }
     
     $process_id = $_REQUEST['process_name'];
     
     foreach($foreach as $key => $val) {
         
-        $sod_part = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM sod_part WHERE id= '". $val ."' "));
-        $sod = mysqli_fetch_array(mysqli_query($mysqli, "SELECT total_qty FROM sales_order_detalis WHERE id= '". $sod_part['sales_order_detail_id'] ."' "));
+        $sod_p_tot = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM sod_part WHERE id= '". $val ."' "));
         
+        $order_id = $sod_p_tot['sales_order_id'];
+        $style_id = $sod_p_tot['sales_order_detail_id'];
+        $sod_combo = $sod_p_tot['sod_combo'];
+        $sod_part = $sod_p_tot['id'];
+        
+        $part_id = $sod_p_tot['part_id'];
+        $color_id = $sod_p_tot['color_id'];
+        
+        $sod = mysqli_fetch_array(mysqli_query($mysqli, "SELECT total_qty FROM sales_order_detalis WHERE id= '". $style_id ."' "));
         $m = 1;
         foreach($process_id as $process) {
             
-            $pss = mysqli_fetch_array(mysqli_query($mysqli, "SELECT a.id, a.rate, b.process_name, b.department, b.id as process_id FROM budget_process a LEFT JOIN process b ON a.process = b.id 
-                        WHERE a.process = '". $process ."' AND a.so_id = '". $sod_part['sales_order_id'] ."' AND a.is_approved = 'true'"));
-                        
-            $al_added = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(a.bill_qty) as bill_qty FROM cost_generation_det a 
-                        WHERE a.sod_part = '". $sod_part['id'] ."' AND a.process = '". $pss['process_id'] ."'"));
-            // $al_added['bill_qty'] = 0;
-            if($pss['id']!="") {
+            $emp = $_POST['employee'];
+            
+            foreach($emp as $emp_loyee) {
+                
+                $pss = mysqli_fetch_array(mysqli_query($mysqli, "SELECT a.id, a.rate, b.process_name, b.department, b.id as process_id FROM budget_process a LEFT JOIN process b ON a.process = b.id 
+                            WHERE a.process = '". $process ."' AND a.style_id = '". $style_id ."' AND a.is_approved = 'true'"));
+
+                $department = $pss['department'];
+                
+                $al_added = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(a.bill_qty) as bill_qty FROM cost_generation_det a 
+                            WHERE a.sod_part = '". $sod_part ."' AND a.process = '". $pss['process_id'] ."'"));
                 
                 if(get_setting_val('COST_GEN_CHK')=='ORD_QTY') {
                     $max_bill = $sod['total_qty'];
                     
                 } else if(get_setting_val('COST_GEN_CHK')=='PRO_QTY') {
                     
-                    if($pss['process_id'] == 1 && $pss['department'] == 1) {
-                        
-                        $hk = mysqli_query($mysqli, "SELECT sum(b.pcs_per_bundle) as pcs_per_bundle FROM bundle_details b LEFT JOIN cutting_barcode a ON b.cutting_barcode_id = a.id 
-                                WHERE  a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-                        $nqy = mysqli_fetch_array($hk);
-                        
-                        // $hk1 = mysqli_query($mysqli, "SELECT * FROM bundle_details b LEFT JOIN cutting_barcode a ON b.cutting_barcode_id = a.id 
-                        //         WHERE  a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-                        // $nmm = mysqli_num_rows($hk1);
-                        
-                        $max_bill = $nqy['pcs_per_bundle'] ? $nqy['pcs_per_bundle'] : 0;
-                        
-                    } else if($pss['process_id'] != 1 && $pss['department'] == 1) {
-                        
-                        // here if process outward details
-                        $max_bill = 0;
-                        
-                    } else if($pss['department'] == 3) {
-                        $hk = mysqli_query($mysqli, "SELECT sum(b.pcs_per_bundle) as pcs_per_bundle FROM bundle_details b LEFT JOIN cutting_barcode a ON b.cutting_barcode_id = a.id 
-                                WHERE b.s_out_complete='yes' AND a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-                        $nqy = mysqli_fetch_array($hk);
-                        
-                        $max_bill = $nqy['pcs_per_bundle'] ? $nqy['pcs_per_bundle'] : 0;
-                        
-                    } else if($pss['department'] == 7) {
-                        $hk = mysqli_query($mysqli, "SELECT sum(b.tot_good_pcs) as pcs_per_bundle FROM bundle_details b LEFT JOIN cutting_barcode a ON b.cutting_barcode_id = a.id 
-                                WHERE a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-                        $nqy = mysqli_fetch_array($hk);
-                        
-                        $max_bill = $nqy['pcs_per_bundle'] ? $nqy['pcs_per_bundle'] : 0;
-                        
-                    } else if($pss['department'] == 8) {
-                        $hk = mysqli_query($mysqli, "SELECT sum(b.ironing_qty) as ironing_qty FROM ironing_detail a 
-                                WHERE a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-                        $nqy = mysqli_fetch_array($hk);
-                        
-                        $max_bill = $nqy['ironing_qty'] ? $nqy['ironing_qty'] : 0;
-                        
-                    } else if($pss['department'] == 9) {
-                        $hk = mysqli_query($mysqli, "SELECT sum(b.packing_qty) as packing_qty FROM packing_detail a 
-                                WHERE a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-                        $nqy = mysqli_fetch_array($hk);
-                        
-                        $max_bill = $nqy['packing_qty'] ? $nqy['packing_qty'] : 0;
-                        
-                    } else {
-                        
-                        
-                        $max_bill = 0;
+                    if($process == 1 && $department == 5) {
+                        // $process == 1 (cutting); $department == 5 (sewing output department)
+
+                            if(get_setting_val('COST_GEN_CUTTING') == 'SCAN_OUT') {
+
+                                $summ = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(scanned_count) as scanned_count FROM orbidx_sewingout WHERE sod_part = '". $sod_part ."' AND process = '". $process ."' AND device_user = '". $emp_loyee ."'"));
+                                $max_bill = $summ['scanned_count'] ? $summ['scanned_count'] : 0;
+
+                            } else if(get_setting_val('COST_GEN_CUTTING') == 'CUTT_OUT') {
+                                
+                                $ctng = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(a.pcs_per_bundle) as pcs_per_bundle FROM bundle_details a
+                                        WHERE a.order_id = '". $order_id ."' AND a.style_id = '". $style_id ."' AND a.sod_part = '". $sod_part ."' AND a.created_by = '". $emp_loyee ."'"));
+                                $max_bill = $ctng['pcs_per_bundle'] ? $ctng['pcs_per_bundle'] : 0;
+                            }
+                            
+                        } else if($department == 5 && $process != 1) {
+                            // $department == 5 (sewing output department)
+                            $summ = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(scanned_count) as scanned_count FROM orbidx_sewingout WHERE sod_part = '". $sod_part ."' AND process = '". $process ."' AND device_user = '". $emp_loyee ."'"));
+                            $max_bill = $summ['scanned_count'] ? $summ['scanned_count'] : 0;
+                            
+                        } else if($department == 6) {
+                            // $department == 6 (Checking department)
+                            $summ = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(scanned_count) as scanned_count FROM orbidx_checking WHERE sod_part = '". $sod_part ."' AND process = '". $process ."' AND device_user = '". $emp_loyee ."'"));
+                            $max_bill = $summ['scanned_count'] ? $summ['scanned_count'] : 0;
+                            
+                        } else if($department == 2) {
+                            // $department == 2 (component process department)
+                            $summ = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(scanned_count) as scanned_count FROM orbidx_component_process WHERE sod_part = '". $sod_part ."' AND process = '". $process ."' AND device_user = '". $emp_loyee ."'"));
+                            $max_bill = $summ['scanned_count'] ? $summ['scanned_count'] : 0;
+
+                        }
                     }
-                }
-                
-                $tmp_id = rand(1000, 9999);
-                $result['tbody'][] = '<tr><td>'. sales_order_code($sod_part['sales_order_id']) .'</td> <td>'. sales_order_style($sod_part['sales_order_detail_id']) .'</td> <td>'. part_name($sod_part['part_id']) .' | '. color_name($sod_part['color_id']) .'</td> <td>'. $pss['process_name'] .'</td> 
-                                            <td><input type="hidden" name="cg_id[]" value=""><input type="hidden" name="max_qty[]" id="max_qty'. $tmp_id .'" value="'. ($max_bill - $al_added['bill_qty']) .'"> <label for="bill_qty'. $tmp_id .'"></label>  <input type="number" name="bill_qty[]" id="bill_qty'. $tmp_id .'" onkeyup="validate_billQty('. $tmp_id .')" class="form-control zero_valid" placeholder="Bill Qty" required></td>
-                                            <td><input type="hidden" name="max_rate[]" id="max_rate'. $tmp_id .'" value="'. $pss['rate'] .'"> <label for="bill_rate'. $tmp_id .'"></label> <input type="text" name="bill_rate[]" id="bill_rate'. $tmp_id .'" onkeyup="validate_billRate('. $tmp_id .')" class="form-control number_input zero_valid" placeholder="Rate" required></td>
-                                            <td><input type="hidden" name="order_basic[]" value="'. $sod_part['id'] .'-'. $pss['process_id'] .'"> <label for="bill_amount'. $tmp_id .'"></label> <input type="text" name="bill_amount[]" id="bill_amount'. $tmp_id .'" class="form-control zero_valid" placeholder="Amount" required readonly></td>
-                                        </tr>';
+                    
+                    $billable = $max_bill - $al_added['bill_qty'];
+
+                    $tmp_id = rand(1000, 9999);
+                    $result['tbody'][] = '<tr><td>'. sales_order_code($order_id) .'</td> <td>'. sales_order_style($style_id) .'</td> <td>'. part_name($part_id) .' | '. color_name($color_id) .'</td> <td>'. $pss['process_name'] .'</td><td>'. employee_name($emp_loyee)  .'</td><td>'. $billable  .'</td> 
+                                                <td>
+                                                    <input type="hidden" name="cg_id[]" value="">
+                                                    <input type="hidden" name="max_qty[]" id="max_qty'. $tmp_id .'" value="'. $billable .'">
+                                                    <label for="bill_qty'. $tmp_id .'"></label> 
+                                                    <input type="number" name="bill_qty[]" id="bill_qty'. $tmp_id .'" onkeyup="validate_billQty('. $tmp_id .')" class="form-control zero_valid" placeholder="Bill Qty" required>
+                                                </td>
+                                                <td><input type="hidden" name="max_rate[]" id="max_rate'. $tmp_id .'" value="'. $pss['rate'] .'"> <label for="bill_rate'. $tmp_id .'"></label> <input type="text" name="bill_rate[]" id="bill_rate'. $tmp_id .'" onkeyup="validate_billRate('. $tmp_id .')" class="form-control number_input zero_valid" placeholder="Rate" required></td>
+                                                <td><input type="hidden" name="order_basic[]" value="'. $sod_part .'-'. $pss['process_id'] .'"> <label for="bill_amount'. $tmp_id .'"></label> <input type="text" name="bill_amount[]" id="bill_amount'. $tmp_id .'" class="form-control zero_valid" placeholder="Amount" required readonly></td>
+                                            </tr>';
             }
         $m++; }
-        
-        // $exp = explode('-', $val);
-        
-        // $qry = "SELECT a.id, a.order_id, a.style, a.part, a.color, b.order_code, c.style_no, c.total_qty, d.part_name, e.color_name ";
-        // $qry .= " FROM cutting_barcode a  ";
-        // $qry .= " LEFT JOIN sales_order b ON a.order_id = b.id ";
-        // $qry .= " LEFT JOIN sales_order_detalis c ON a.style = c.id ";
-        // $qry .= " LEFT JOIN part d ON a.part = d.id ";
-        // $qry .= " LEFT JOIN color e ON a.color = e.id ";
-        
-        // if(!isset($_REQUEST['prtN'])) {
-        //     $styleNum = isset($_REQUEST['styleNum']) ? 'AND a.style IN ('.implode(',', $_REQUEST['styleNum']).')' : '';
-            
-        //     $qry .= " WHERE a.order_id IN (". implode(',', $_REQUEST['boNmber']) .") ". $styleNum;
-        // } else {
-        //     $qry .= " WHERE a.order_id = '". $exp[0] ."' AND a.style = '". $exp[1] ."' AND a.part = '". $exp[2] ."' AND a.color = '". $exp[3] ."' ";
-        // }
-        
-        // $array = mysqli_query($mysqli, $qry);
-        
-        // while($row = mysqli_fetch_array($array)) {
-        //     $m=0;
-        //     foreach($_REQUEST['process_name'] as $process) {
-        //         $pss = mysqli_fetch_array(mysqli_query($mysqli, "SELECT a.id, a.rate, b.process_name, b.department, b.id as process_id FROM budget_process a LEFT JOIN process b ON a.process = b.id WHERE a.process = '". $process ."' AND a.so_id = '". $row['order_id'] ."' AND a.is_approved = 'true'"));
-                
-        //         $al_added = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(a.bill_qty) as bill_qty FROM cost_generation a WHERE a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."' AND a.process = '". $pss['process_id'] ."'"));
-                
-        //         if($pss['id']!="") {
-                    
-        //             if(get_setting_val('COST_GEN_CHK')=='ORD_QTY') {
-        //                 $max_bill = $row['total_qty'];
-                        
-        //             } else if(get_setting_val('COST_GEN_CHK')=='PRO_QTY') {
-                        
-        //                 if($pss['process_id'] == 1 && $pss['department'] == 1) {
-                            
-        //                     $hk = mysqli_query($mysqli, "SELECT sum(b.pcs_per_bundle) as pcs_per_bundle FROM bundle_details b LEFT JOIN cutting_barcode a ON b.cutting_barcode_id = a.id 
-        //                             WHERE  a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-        //                     $nqy = mysqli_fetch_array($hk);
-                            
-        //                     // $hk1 = mysqli_query($mysqli, "SELECT * FROM bundle_details b LEFT JOIN cutting_barcode a ON b.cutting_barcode_id = a.id 
-        //                     //         WHERE  a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-        //                     // $nmm = mysqli_num_rows($hk1);
-                            
-        //                     $max_bill = $nqy['pcs_per_bundle'] ? $nqy['pcs_per_bundle'] : 0;
-                            
-        //                 } else if($pss['process_id'] != 1 && $pss['department'] == 1) {
-                            
-        //                     // here if process outward details
-        //                     $max_bill = 0;
-                            
-        //                 } else if($pss['department'] == 3) {
-        //                     $hk = mysqli_query($mysqli, "SELECT sum(b.pcs_per_bundle) as pcs_per_bundle FROM bundle_details b LEFT JOIN cutting_barcode a ON b.cutting_barcode_id = a.id 
-        //                             WHERE b.s_out_complete='yes' AND a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-        //                     $nqy = mysqli_fetch_array($hk);
-                            
-        //                     $max_bill = $nqy['pcs_per_bundle'] ? $nqy['pcs_per_bundle'] : 0;
-                            
-        //                 } else if($pss['department'] == 7) {
-        //                     $hk = mysqli_query($mysqli, "SELECT sum(b.tot_good_pcs) as pcs_per_bundle FROM bundle_details b LEFT JOIN cutting_barcode a ON b.cutting_barcode_id = a.id 
-        //                             WHERE a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-        //                     $nqy = mysqli_fetch_array($hk);
-                            
-        //                     $max_bill = $nqy['pcs_per_bundle'] ? $nqy['pcs_per_bundle'] : 0;
-                            
-        //                 } else if($pss['department'] == 8) {
-        //                     $hk = mysqli_query($mysqli, "SELECT sum(b.ironing_qty) as ironing_qty FROM ironing_detail a 
-        //                             WHERE a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-        //                     $nqy = mysqli_fetch_array($hk);
-                            
-        //                     $max_bill = $nqy['ironing_qty'] ? $nqy['ironing_qty'] : 0;
-                            
-        //                 } else if($pss['department'] == 9) {
-        //                     $hk = mysqli_query($mysqli, "SELECT sum(b.packing_qty) as packing_qty FROM packing_detail a 
-        //                             WHERE a.order_id = '". $row['order_id'] ."' AND a.style = '". $row['style'] ."' AND a.part = '". $row['part'] ."' AND a.color = '". $row['color'] ."'");
-        //                     $nqy = mysqli_fetch_array($hk);
-                            
-        //                     $max_bill = $nqy['packing_qty'] ? $nqy['packing_qty'] : 0;
-                            
-        //                 } else {
-                            
-                            
-        //                     $max_bill = 0;
-        //                 }
-        //             }
-                    
-        //             $tmp_id = $row['id'].$m;
-        //             $result['tbody'][] = '<tr><td>'. $row['order_code'] .'</td> <td>'. $row['style_no'] .'</td> <td>'. $row['part_name'] .' - '. $row['color_name'] .'</td> <td>'. $pss['process_name'] .'</td> 
-        //                                         <td><input type="hidden" name="cg_id[]" value=""><input type="hidden" name="max_qty[]" id="max_qty'. $tmp_id .'" value="'. ($max_bill - $al_added['bill_qty']) .'"> <label for="bill_qty'. $tmp_id .'"></label>  <input type="number" name="bill_qty[]" id="bill_qty'. $tmp_id .'" onkeyup="validate_billQty('. $tmp_id .')" class="form-control" placeholder="Bill Qty"></td>
-        //                                         <td><input type="hidden" name="max_rate[]" id="max_rate'. $tmp_id .'" value="'. $pss['rate'] .'"> <label for="bill_rate'. $tmp_id .'"></label> <input type="text" name="bill_rate[]" id="bill_rate'. $tmp_id .'" onkeyup="validate_billRate('. $tmp_id .')" class="form-control" placeholder="Rate"></td>
-        //                                         <td><input type="hidden" name="order_basic[]" value="'. $row['order_id'] .'-'. $row['style'] .'-'. $row['part'] .'-'. $row['color'] .'-'. $pss['process_id'] .'"> <label for="bill_amount'. $tmp_id .'"></label> <input type="text" name="bill_amount[]" id="bill_amount'. $tmp_id .'" class="form-control" placeholder="Amount" readonly></td>
-        //                                     </tr>';
-        //         }
-        //     $m++; }
-        // }
     }
     echo json_encode($result);
+
 } else if(isset($_REQUEST['not_receipted_Cost'])) {
     
     $array = mysqli_query($mysqli, "SELECT b.id, b.cg_name FROM cost_generation a LEFT JOIN employee_detail b ON a.employee = b.id WHERE a.is_receipted = 'no' GROUP BY a.employee ");

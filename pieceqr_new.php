@@ -43,8 +43,10 @@ if (!file_exists($qr_path)) {
             ?>
                     
             <div style="text-align:center;">
-                <span style="position: relative;left: 2px;top: -5px;font-size:8px;"><?= sales_order_code($sql['order_id']).' | '. $sql['lay_length'] .' | '. variation_value($sql['variation_value']) .' | '. $sql['bundle_number'].' | '. $tty[$p]; ?></span>
-                <!--<span style="margin-left:7px"><?= sales_order_code($sql['order_id']).' | '. $sql['lay_length'] .' | '. variation_value($sql['variation_value']) .' | '. $sql['bundle_number'].' | '. $p; ?></span>-->
+                <span style="position: relative;left: 2px;top: -5px;font-size:8px;"><?= sales_order_code($sql['order_id']).' | '. $sql['lay_length'] .' | '. variation_value($sql['variation_value']); ?></span>
+            </div>
+            <div style="text-align:center;">
+                <span style="position: relative;left: 2px;top: -5px;font-size:8px;"><?= $sql['bundle_number'].' | '. $tty[$p]; ?></span>
             </div>
             <br>
             

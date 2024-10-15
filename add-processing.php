@@ -222,6 +222,7 @@ if (isset($_GET['id'])) {
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                            <th>Sl.No</th>
                                             <th>BO.No</th>
                                             <th>Ref Code</th>
                                             <th>Style No</th>
@@ -237,10 +238,11 @@ if (isset($_GET['id'])) {
                                     </thead>
                                     <tbody id="tableBody"></tbody>
                                     <tfoot>
-                                        <?php if($sql['boundle_id']!="") { foreach(explode(',', $sql['boundle_id']) as $bundle) {
+                                        <?php if($sql['boundle_id']!="") { $p=1; foreach(explode(',', $sql['boundle_id']) as $bundle) {
                                             $bk = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM bundle_details WHERE id = '". $bundle ."' "));
                                         ?>
                                             <tr id="trr_new<?= $bundle; ?>" class="old_tr">
+                                                <td><?= $p++; ?></td>
                                                 <td><?= sales_order_code($bk['order_id']); ?></td>
                                                 <td><?= cutting_entry_number($bk['cutting_barcode_id']); ?></td>
                                                 <td><?= sales_order_style($bk['style_id']); ?></td>

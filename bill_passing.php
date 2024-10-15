@@ -107,14 +107,17 @@ include("includes/perm.php");
                             <tbody>
                                 <?php
                                 
-                                $qry = "SELECT *, sum(bill_amount) as bill_amount ";
+                                $qry = "SELECT * ";
                                 $qry .= " FROM bill_passing a ";
-                                $qry .= " LEFT JOIN bill_passing_det b ON b.bill_passing_id = a.id ";
+                                // $qry .= " LEFT JOIN bill_passing_det b ON b.bill_passing_id = a.id ";
+                                // $qry .= " WHERE a.bill_status = 'Passed' ";
                                 $qry .= " ORDER BY a.id DESC ";
                                 
                                 $query = mysqli_query($mysqli, $qry);
                                 $x = 1;
                                 while ($sql = mysqli_fetch_array($query)) {
+
+                                    $sql_lite = mysqli_fetch_array(mysqli_query($mysqli, "SELECT sum(bill_amount) as bill_amount FROM bill_passing_det WHERE bill_passing_id = ". $sql['id']));
                                     
                                     $bord = array('Passed' => 'warning', 'Approved' => 'success');
                                     $stat = array('Passed' => 'warning', 'Approved' => 'success');
@@ -139,7 +142,7 @@ include("includes/perm.php");
                                         <td><?= $bill_number; ?></td>
                                         <td><?= date('d-m-Y', strtotime($bill_date)); ?></td>
                                         <td><?= $supplier; ?></td>
-                                        <td><?= $sql['bill_amount']; ?></td>
+                                        <td><?= $sql_lite['bill_amount']; ?></td>
                                         <td><?php if($sql['bill_image']=="") { print '-'; } else { ?><a href="download.php?f=<?= $sql['bill_image']; ?>" class="f-12" style="color:#a5a5a5"><i class="icon-copy fa fa-cloud-download" aria-hidden="true"></i> Download</a><?php } ?></td>
                                         <td><?php if($sql['approved_image']=="") { print '-'; } else { ?><a href="download.php?f=<?= $sql['approved_image']; ?>" class="f-12" style="color:#a5a5a5"><i class="icon-copy fa fa-cloud-download" aria-hidden="true"></i> Download</a><?php } ?></td>
                                         <td><?= $sql['comments'] ?  $sql['comments'] : '-'; ?></td>

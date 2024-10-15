@@ -9,11 +9,23 @@ $ID = $_GET['id'];
 $order = mysqli_fetch_array(mysqli_query($mysqli, "SELECT a.*, b.merchand_name FROM sales_order a LEFT JOIN merchand_detail b ON a.merchandiser=b.id WHERE a.id = ". $ID));
 
 $manual = array(
-    'so_approval' => 'Sales Order',
-    'fab_program' => 'Fabric Program',
-    'access_program' => 'Accessories Program',
-    'budget' => 'Buddget',
+    'so_approval' => 'Sales Order Approval',
+    'fab_program' => 'Fabric Program Creation',
+    'access_program' => 'Accessories Program Creation',
+    'budget' => 'Buddget Creation',
     'budget_approval' => 'Buddget Approval',
+);
+
+$status = array(
+    0 => 'Not Started',
+    1 => 'In Progress',
+    2 => '<i class="fa fa-check"></i> Completed',
+);
+
+$status_color = array(
+    0 => '#ffc107',
+    1 => '#17a2b8',
+    2 => '#28a745',
 );
 ?>
 <!DOCTYPE html>
@@ -80,11 +92,11 @@ $manual = array(
 
                     <div class="pd-20">                        
                         <div class="btn-group mr-2" role="group" aria-label="First group" style="float: right;">
-                            <a href="sales_order.php?id=<?= $_GET['id']; ?>" class="btn btn-outline-info timesheerBtn">BO: <?= sales_order_code($_GET['id']); ?></a>
+                            <a href="sales_order.php?id=<?= $ID; ?>" class="btn btn-outline-info timesheerBtn">BO: <?= sales_order_code($ID); ?></a>
                             <a class="btn btn-outline-primary" href="sales_order_list.php" style="float: right;"><i class="fa fa-list" aria-hidden="true"></i> Order List</a>
                         </div>
 
-                        <h4 class="text-blue h4">Time Sheet for the order <span class="u" style="color:red;"><?= sales_order_code($_GET['id']); ?></span></h4>
+                        <h4 class="text-blue h4">Time Sheet for the order <span class="u" style="color:red;"><?= sales_order_code($ID); ?></span></h4>
                     </div>
 
                     <?php if($order['template_id']==0) { ?>
@@ -92,7 +104,7 @@ $manual = array(
                             <span style="color:red;font-size: 50px;"><i class="fa fa-exclamation-circle"></i></span></br>                            
                             <h4 style="color: #0058ff;">Template Not Found!</h4> <br>
                             <p>Select a valid <b>Time Sheet Template</b> in the sales order.</p>
-                            <a href="sales_order.php?id=<?= $_GET['id']; ?>" style="text-decoration: underline;color: #a686ff;">BO: <?= sales_order_code($_GET['id']); ?></a>
+                            <a href="sales_order.php?id=<?= $ID; ?>" style="text-decoration: underline;color: #a686ff;">BO: <?= sales_order_code($ID); ?></a>
                         </div>
                     <?php } else { 
                         
@@ -102,74 +114,103 @@ $manual = array(
                         if($num>0) {
                     ?>
                         <div class="pd-20">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Sl.No</th>
-                                        <th>Activity</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Task Days</th>
-                                        <th>Task Daily Time</th>
-                                        <th>Task Closing Day Time</th>
-                                        <th>Responsible A</th>
-                                        <th>Responsible B</th>
-                                        <!-- <th>Responsible C</th>
-                                        <th>Responsible D</th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                        $q=1;
-                                        while($fetch = mysqli_fetch_array($sql)) { 
-                                            $start = new DateTime($fetch['start_date']);
-                                            $end = new DateTime($fetch['end_date']);
-                                            $diff = $start->diff($end);
-                                            
-                                            $daysDiff = $diff->days;
-                                    ?>
+                            <div class="btn-group mr-2" role="group" aria-label="First group" style="float: right;">
+                                <a href="<?= $base_url; ?>time_sheet.php?id=<?= $ID ?>&rep=sm" class="btn <?= (!isset($_GET['rep']) || $_GET['rep']=='sm') ? 'btn-dark' : 'btn-outline-dark'; ?> ">Summary</a>
+                                <a href="<?= $base_url; ?>time_sheet.php?id=<?= $ID ?>&rep=dw" class="btn <?= ($_GET['rep']=='dw') ? 'btn-dark' : 'btn-outline-dark'; ?>">Date Wise</a>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="pd-20">
+                            <?php if(!isset($_GET['rep']) || $_GET['rep']=='sm') { ?>
+                                <p class="text-black-50 u">Time Sheet Summary:-</p>
+                                <table class="table table-bordered">
+                                    <thead>
                                         <tr>
-                                            <td><?= $q++; ?></td>
-                                            <td><?= $fetch['activity']; ?></td>
-                                            <td><?= date('d-M, Y', strtotime($fetch['start_date'])); ?></td>
-                                            <td><?= date('d-M, Y', strtotime($fetch['end_date'])); ?></td>
-                                            <td><?= $daysDiff; ?> Days</td>
-                                            <td><?= time_calculator_new(time_calculator($fetch['daily_time']), 1); ?></td>
-                                            <td><?= time_calculator_new(time_calculator($fetch['endday_time']), 1); ?></td>
-                                            <td><?= implode(', ', emp_name($fetch['resp_a'])); ?></td>
-                                            <td><?= implode(', ', emp_name($fetch['resp_b'])); ?></td>
-                                            <!-- <td>-</td>
-                                            <td>-</td> -->
+                                            <th>Sl.No</th>
+                                            <th>Activity</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Task Days</th>
+                                            <th>Task Daily Time</th>
+                                            <th>Task Closing Day Time</th>
+                                            <th>Responsible A</th>
+                                            <th>Responsible B</th>
                                         </tr>
-                                    <?php } 
-                                    
-                                        $qry = mysqli_query($mysqli, "SELECT * FROM sod_time_sheet WHERE sales_order_id = 334");
-                                        while($result = mysqli_fetch_array($qry)) {
-
-                                            $start_date = $result['start_date'];
-                                            $end_date = $result['end_date'];
-                                            
-                                            $start_timestamp = strtotime($start_date);
-                                            $end_timestamp = strtotime($end_date);
-                                            
-                                            $dates = [];
-                                            for ($current = $start_timestamp; $current <= $end_timestamp; $current += 86400) {
-                                                $dates[] = date('d-m-Y', $current);
-                                            }
-                                            
-                                            foreach ($dates as $date) {
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                            $q=1;
+                                            while($fetch = mysqli_fetch_array($sql)) { 
+                                                $start = new DateTime($fetch['start_date']);
+                                                $end = new DateTime($fetch['end_date']);
+                                                $diff = $start->diff($end);
                                                 
-                                                
-                                            }
-                                        }
-                                    ?>
-                                </tbody>
-                            </table>
+                                                $daysDiff = $diff->days;
+                                        ?>
+                                            <tr>
+                                                <td><?= $q++; ?></td>
+                                                <td><?= $fetch['activity']; ?></td>
+                                                <td><?= date('d-M, Y', strtotime($fetch['start_date'])); ?></td>
+                                                <td><?= date('d-M, Y', strtotime($fetch['end_date'])); ?></td>
+                                                <td><?= $daysDiff; ?> Days</td>
+                                                <td><?= time_calculator_new(time_calculator($fetch['daily_time']), 1); ?></td>
+                                                <td><?= time_calculator_new(time_calculator($fetch['endday_time']), 1); ?></td>
+                                                <td><?= implode(', ', emp_name($fetch['resp_a'])); ?></td>
+                                                <td><?= implode(', ', emp_name($fetch['resp_b'])); ?></td>
+                                                <!-- <td>-</td>
+                                                <td>-</td> -->
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            <?php } else if($_GET['rep']=='dw') { ?>
+                                <p class="text-black-50 u">Time Sheet Date Wise:-</p>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Activity</th>
+                                            <th>Task Time</th>
+                                            <th>Employee</th>
+                                            <th>Task Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                            $color = 0;
+                                            $qyy = mysqli_query($mysqli, "SELECT count(id) as id_count, task_date, task_status FROM order_tasks WHERE sales_order_id = '". $ID ."' GROUP BY task_date ASC");
+                                            while($resq = mysqli_fetch_assoc($qyy)) {
+                                                $act = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE sales_order_id = '". $ID ."' AND task_date = '". $resq['task_date'] ."'");
+                                                $isFirstRow = true;
+                                                $color++;
+                                                while($activ = mysqli_fetch_assoc($act)) {
+                                                    if ($isFirstRow) { ?>
+                                                        <tr style="background-color: <?= ($color % 2) ? '#f4f4f4' :''; ?>">
+                                                            <td rowspan="<?= $resq['id_count']; ?>"><?= date('d-M, Y', strtotime($resq['task_date'])); ?></td>
+                                                            <td><?= $activ['activity']; ?></td>
+                                                            <td><?= time_calculator_new(time_calculator($activ['task_timeing']), 1); ?></td>
+                                                            <td><?= employee_name($activ['task_for']); ?></td>
+                                                            <td style="color: <?= $status_color[$activ['task_status']]; ?>"><?= $status[$activ['task_status']]; ?></td>
+                                                        </tr>
+                                                    <?php
+                                                        $isFirstRow = false; 
+                                                        } else {
+                                                    ?>
+                                                        <tr style="background-color: <?= ($color % 2) ? '#f4f4f4' :''; ?>">
+                                                            <td><?= $activ['activity']; ?></td>
+                                                            <td><?= time_calculator_new(time_calculator($activ['task_timeing']), 1); ?></td>
+                                                            <td><?= employee_name($activ['task_for']); ?></td>
+                                                            <td style="color: <?= $status_color[$activ['task_status']]; ?>"><?= $status[$activ['task_status']]; ?></td>
+                                                        </tr>
+                                        <?php } } } ?>
+                                    </tbody>
+                                </table>
+                            <?php } ?>
                         </div>
                     <?php } else { ?>
 
                         <form method="POST" id="timesheet-form">
-                            <input type="hidden" name="sales_order_id" id="sales_order_id" value="<?= $_GET['id']; ?>">
+                            <input type="hidden" name="sales_order_id" id="sales_order_id" value="<?= $ID; ?>">
                             <div class="pd-20">
                                 <table class="table table-bordered hover">
                                     <thead>
@@ -229,12 +270,12 @@ $manual = array(
                                                 <td><?= time_calculator_new(time_calculator($res['daily_time']), 1); ?></td>
                                                 <td><?= time_calculator_new(time_calculator($res['endday_time']), 1); ?></td>
                                                 <td>
-                                                    <select class="form-control custom-select2" name="resp_a_<?= $xx; ?>[]" id="resp_a_<?= $xx; ?>" style="width:100%" multiple required>
+                                                    <select class="form-control custom-select2" name="resp_a_<?= $xx; ?>[]" id="resp_a_<?= $xx; ?>" style="width:100%" required>
                                                         <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $order['merchand_name'], ' WHERE is_active="active"', '`'); ?>
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control custom-select2" name="resp_b_<?= $xx; ?>[]" id="resp_b_<?= $xx; ?>" style="width:100%" multiple required>
+                                                    <select class="form-control custom-select2" name="resp_b_<?= $xx; ?>[]" id="resp_b_<?= $xx; ?>" style="width:100%" required>
                                                         <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $order['merchand_name'], ' WHERE is_active="active"', '`'); ?>
                                                     </select>
 

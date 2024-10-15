@@ -72,52 +72,45 @@ $status_color = array(
     
     .nav-tabs.customtab .nav-item.show .nav-link, .nav-tabs.customtab .nav-link:hover {
         border-bottom: 2px solid #0e0e0e;
-    }
-    
-    
+    }    
 </style>
 
 
 <body>
 
 	<?php include('includes/header.php'); ?>
-
 	<?php include('includes/sidebar.php'); ?>
+<style>
+	.tab-content {
+		border-right: none;
+		border-left: none;
+		border-bottom: none;
+	}
 
+	.table td {
+		/* font-size: 14px;
+		font-weight: 500;
+		padding: 3rem; */
+	}
+
+	.al-top {
+		vertical-align: top;
+		text-align: right;
+		padding: 5px;
+	}
+</style>
 
     <div class="main-container nw-cont">
 		<div class="xs-pd-20-10 pd-ltr-20">
 			<div class="page-header">
 				<div class="row">
-					<div class="col-md-6 col-sm-12">
+					<div class="col-md-12 text-center col-sm-12">
 						<div class="title dnone">
-							<h4 style="font-size: 30px;color: green;">Time Management Dashboard</h4>
+							<h4 class="u">Time Management Dashboard</h4>
 						</div>
-						<nav aria-label="breadcrumb" role="navigation">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="index.php">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Time Management Dashboard</li>
-							</ol>
-						</nav>
-					</div>
-					
-					
-					<div class="col-md-6 col-sm-12 text-right dnone">
-					    <h4 style="font-size: 30px;color: green;"><i class="icon-copy fa fa-tree" aria-hidden="true"></i> Save Paper, Save Tree</h4>
-					    
-						<!--<div class="dropdown">-->
-						<!--	<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">-->
-						<!--		January 2018-->
-						<!--	</a>-->
-						<!--	<div class="dropdown-menu dropdown-menu-right">-->
-						<!--		<a class="dropdown-item" href="#">Export List</a>-->
-						<!--		<a class="dropdown-item" href="#">Policies</a>-->
-						<!--		<a class="dropdown-item" href="#">View Assets</a>-->
-						<!--	</div>-->
-						<!--</div>-->
 					</div>
 				</div>
-			
+				
                 <?php if(MOD_TIME_MANAGEMENT!=1) { action_denied(); exit; } ?>
 			</div>
 			
@@ -126,78 +119,246 @@ $status_color = array(
 					<div class="card-box pd-30 height-100-p">
 						<h5 class="h4 text-blue mb-20">To Do List</h5>
 						
-							<div class="tab">
-								<ul class="nav nav-tabs customtab" role="tablist">
-									<li class="nav-item">
-										<a class="nav-link active" data-toggle="tab" href="#teamTask" role="tab" aria-selected="true">Team Task</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" data-toggle="tab" href="#orderTask" role="tab" aria-selected="false">Order Task</a>
-									</li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane fade show active" id="teamTask" role="tabpanel">
-										<div class="pd-20" style="overflow-y:auto">
-										    <?php
-										        $qry = "SELECT a.*, b.created_by, b.task_msg, b.end_date, b.task_type ";
-                                                $qry .= " FROM team_tasks_for a ";
-                                                $qry .= " LEFT JOIN team_tasks b ON b.id=a.task_id ";
-                                                $qry .= " WHERE a.employee_id = '".$logUser."' AND b.task_complete IS NULL";
-                                                $qry .= " ORDER BY id DESC";
-                                                
-                                                $m=1;
-                                                $num = mysqli_query($mysqli, $qry);
-                                                if(mysqli_num_rows($num)>0) {
-										    ?>
-    										    <table class="table">
-    										        <thead>
-    										            <tr>
-    										                <th>#</th>
-    										                <th style="min-width:150px;">Name</th>
-    										                <th>Status</th>
-    										                <th>End Date</th>
-    										            </tr>
-    										        </thead>
-    										        <tbody>
-        										    <?php
-        										    $m = 1;
-                                                        while($task = mysqli_fetch_array($num)) {
-                                                            $created = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE id = '". $task['created_by'] ."'"));
-                                                            $sml = ($task['type']=='assigned_toB') ? '<small>(You As Follower)</small>' : '';
-                                                            
-                                                    ?>
-                                                        <tr>
-                                                            <td><?= $m; ?></td>
-                                                            <td>
-                                                                <a href="javascript:;" style="color: #87c9ef !important;" onclick="openTaskSheet(<?= $task['task_id']; ?>)"><?= $task['task_type'] . ' '.$sml; ?></a>
-                                                                <p style="color:gray"><?= $task['task_msg']; ?></p>
-                                                            </td>
-                                                            <td style="color:<?= $status_color[$task['task_status']]; ?>"><?= $status[$task['task_status']]; ?></td>
-                                                            <td><?= date('d M, Y - h:i A', strtotime($task['end_date'])); ?></td>
-                                                        </tr>
-                                                    <?php $m++; } ?>
-                                                    </tbody>
-                                                </table>
-                                            <?php } else { print '<p>No Active Tasks Available</p>'; } ?>
-										</div>
+						<div class="tab">
+							<ul class="nav nav-tabs customtab" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" data-toggle="tab" href="#teamTask" role="tab" aria-selected="true">Team Task</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" href="#orderTask" role="tab" aria-selected="false">Order Task</a>
+								</li>
+
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" href="#todayTask" role="tab" aria-selected="false">Today Task</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" href="#todayComplete" role="tab" aria-selected="false">Today Completed Task</a>
+								</li>
+							</ul>
+
+							<div class="tab-content">
+
+								<div class="tab-pane fade show active" id="teamTask" role="tabpanel">
+									<div class="pd-20" style="overflow-y:auto">
+										<table class="table">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th style="min-width:150px;">Name</th>
+													<th>Status</th>
+													<th>End Date</th>
+												</tr>
+											</thead>
+											<tbody>
+											<?php
+												$qry = "SELECT a.*, b.created_by, b.task_msg, b.end_date, b.task_type ";
+												$qry .= " FROM team_tasks_for a ";
+												$qry .= " LEFT JOIN team_tasks b ON b.id=a.task_id ";
+												$qry .= " WHERE a.employee_id = '".$logUser."' AND b.task_complete IS NULL";
+												$qry .= " ORDER BY id DESC";
+												
+												$m=1;
+												$num = mysqli_query($mysqli, $qry);
+												
+												$m = 1;
+												if(mysqli_num_rows($num)>0) {
+													while($task = mysqli_fetch_array($num)) {
+														$created = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE id = '". $task['created_by'] ."'"));
+														$sml = ($task['type']=='assigned_toB') ? '<small>(You As Follower)</small>' : '';
+												?>
+												<tr>
+													<td><?= $m; ?></td>
+													<td>
+														<a href="javascript:;" style="color: #87c9ef !important;" onclick="openTaskSheet(<?= $task['task_id']; ?>)"><?= $task['task_type'] . ' '.$sml; ?></a>
+														<p style="color:gray"><?= $task['task_msg']; ?></p>
+													</td>
+													<td style="color:<?= $status_color[$task['task_status']]; ?>"><?= $status[$task['task_status']]; ?></td>
+													<td><?= date('d M, Y - h:i A', strtotime($task['end_date'])); ?></td>
+												</tr>
+											<?php $m++; } } else { print '<tr><td colspan="4" class="text-center">No Tasks Found!</td></tr>'; } ?>
+											</tbody>
+										</table>
 									</div>
-									<div class="tab-pane fade" id="orderTask" role="tabpanel">
-										<div class="pd-20">
-										    Order Task
-										</div>
+								</div>
+
+								<div class="tab-pane fade" id="orderTask" role="tabpanel">
+									<div class="pd-20">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Sl.No</th>
+													<th>BO</th>
+													<th>Task Date</th>
+													<th>Task</th>
+													<th>Task Duration</th>
+													<th>Task Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													$sel = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE task_for = '". $logUser ."' AND task_status != 2 ORDER BY task_date ASC");
+													$p = 1;
+													if(mysqli_num_rows($sel) > 0) {
+														while($result = mysqli_fetch_assoc($sel)) {
+															?>
+															<tr>
+																<td><?= $p++; ?></td>
+																<td><?= sales_order_code($result['sales_order_id']); ?></td>
+																<td><?= date('d-M, Y', strtotime($result['task_date'])); ?></td>
+																<td><a href="javascript:;" style="color: #87c9ef !important;" onclick="open_orderTask(<?= $result['id']; ?>)"><?= $result['activity']; ?></a> <small>(Order Task)</small></td>
+																<td><?= time_calculator_new(time_calculator($result['task_timeing']), 1); ?></td>
+																<td style="color: <?= $status_color[$result['task_status']] ?>"><?= $status[$result['task_status']]; ?></td>
+															</tr>
+												<?php } } else { print '<tr><td colspan="6" class="text-center">No tasks found!</td></tr>'; } ?>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<div class="tab-pane fade" id="todayTask" role="tabpanel">
+									<div class="pd-20">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Sl.No</th>
+													<th>BO</th>
+													<th>Task Date</th>
+													<th>Task</th>
+													<th>Task Duration</th>
+													<th>Task Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													$today_task_count = 0;
+													$today_task_time = 0;
+
+													$sel = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE task_for = '". $logUser ."' AND task_status != 2 AND task_date = '". date('Y-m-d') ."' ORDER BY task_date ASC");
+													$or_nuum = mysqli_num_rows($sel);
+													if($or_nuum > 0) {
+														while($result = mysqli_fetch_assoc($sel)) {
+															$today_task_count++;
+															$today_task_time += $result['task_timeing'];
+															?>
+															<tr>
+																<td><?= $today_task_count; ?></td>
+																<td><?= sales_order_code($result['sales_order_id']); ?></td>
+																<td><?= date('d-M, Y', strtotime($result['task_date'])); ?></td>
+																<td><a href="javascript:;" style="color: #87c9ef !important;" onclick="open_orderTask(<?= $result['id']; ?>)"><?= $result['activity']; ?></a> <small>(Order Task)</small></td>
+																<td><?= time_calculator_new(time_calculator($result['task_timeing']), 1); ?></td>
+																<td style="color: <?= $status_color[$result['task_status']] ?>"><?= $status[$result['task_status']]; ?></td>
+															</tr>
+												<?php } } ?>
+
+												<?php
+													$qry = "SELECT a.*, b.created_by, b.task_msg, b.end_date, b.task_type, b.allowed_time, b.start_date ";
+													$qry .= " FROM team_tasks_for a ";
+													$qry .= " LEFT JOIN team_tasks b ON b.id=a.task_id ";
+													$qry .= " WHERE a.employee_id = '".$logUser."' AND b.task_complete IS NULL";
+													$qry .= " ORDER BY id DESC";
+													
+													$num = mysqli_query($mysqli, $qry);
+													$tem_num = mysqli_num_rows($num);
+													if($tem_num > 0) {
+														while($task = mysqli_fetch_array($num)) {
+															$created = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE id = '". $task['created_by'] ."'"));
+															$sml = ($task['type']=='assigned_toB') ? '<small>(You As Follower)</small>' : '';
+
+															$today_task_count++;
+															$today_task_time += $task['allowed_time'];
+													?>
+													<tr>
+														<td><?= $today_task_count; ?></td>
+														<td>Team Task</td>
+														<td><?= date('d-M, Y', strtotime($task['start_date'])); ?></td>
+														<td>
+															<a href="javascript:;" style="color: #87c9ef !important;" onclick="openTaskSheet(<?= $task['task_id']; ?>)"><?= $task['task_type'] . ' '.$sml; ?></a>
+															<p style="color:gray"><?= $task['task_msg']; ?></p>
+														</td>
+														<td><?= time_calculator_new(time_calculator($task['allowed_time']), 1); ?></td>
+														<td style="color:<?= $status_color[$task['task_status']]; ?>"><?= $status[$task['task_status']]; ?></td>
+													</tr>
+												<?php $m++; } } if(($tem_num + $or_nuum) == 0 ) { print '<tr><td colspan="4" class="text-center">No Tasks Found!</td></tr>'; } ?>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<div class="tab-pane fade" id="todayComplete" role="tabpanel">
+									<div class="pd-20">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Sl.No</th>
+													<th>BO</th>
+													<th>Task Date</th>
+													<th>Task</th>
+													<th>Task Duration</th>
+													<th>Actual Time</th>
+													<th>Task Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													$comp_count = 0;
+													$task_close_time = 0;
+													
+													$sel = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE task_for = '". $logUser ."' AND task_status = 2 ORDER BY task_date ASC");
+													if(mysqli_num_rows($sel) > 0) {
+														while($result = mysqli_fetch_assoc($sel)) {
+															$tot_ord_time = mysqli_fetch_array(mysqli_query($mysqli, "SELECT SUM(total_time) as total_time FROM order_task_timer WHERE task_id = '". $result['id'] ."' AND employee_id = '". $logUser ."' "));
+															$comp_count++;
+															$task_close_time += $tot_ord_time['total_time'];
+															?>
+															<tr>
+																<td><?= $comp_count; ?></td>
+																<td><?= sales_order_code($result['sales_order_id']); ?></td>
+																<td><?= date('d-M, Y', strtotime($result['task_date'])); ?></td>
+																<td><a href="javascript:;" style="color: #87c9ef !important;" onclick="open_orderTask(<?= $result['id']; ?>)"><?= $result['activity']; ?></a></td>
+																<td><?= time_calculator_new(time_calculator($result['task_timeing']), 1); ?></td>
+																<td><?= time_calculator_new(time_calculator($tot_ord_time['total_time']), 1); ?></td>
+																<td style="color: <?= $status_color[$result['task_status']] ?>"><?= $status[$result['task_status']]; ?></td>
+															</tr>
+												<?php } } ?>
+
+												<?php
+													$sel = mysqli_query($mysqli, "SELECT * FROM team_tasks WHERE completed_by = '". $logUser ."' AND task_complete = 'yes' AND completed_date LIKE '%". date('Y-m-d') ."%' ORDER BY id ASC");
+													
+													if(mysqli_num_rows($sel) > 0) {
+														while($result = mysqli_fetch_assoc($sel)) {
+															$tot_task_time = mysqli_fetch_array(mysqli_query($mysqli, "SELECT SUM(total_time) as total_time FROM team_task_timer WHERE task_id = '". $result['id'] ."' AND employee_id = '". $logUser ."' "));
+															$comp_count++;
+															$task_close_time += $tot_task_time['total_time'];
+															?>
+															<tr>
+																<td><?= $comp_count; ?></td>
+																<td>Team Task</td>
+																<td><?= date('d-M, Y', strtotime($result['start_date'])); ?></td>
+																<td>
+																	<a href="javascript:;" style="color: #87c9ef !important;" onclick="openTaskSheet(<?= $result['id']; ?>)"><?= $result['task_type'] . ' '.$sml; ?></a>
+																	<p style="color:gray"><?= $result['task_msg']; ?></p>
+																</td>
+																<td><?= time_calculator_new(time_calculator($result['allowed_time']), 1); ?></td>
+																<td><?= time_calculator_new(time_calculator($tot_task_time['total_time']), 1); ?></td>
+																<td style="color:<?= $status_color[2]; ?>"><?= $status[2]; ?></td>
+															</tr>
+												<?php } } if($comp_count == 0) { print '<tr><td colspan="6" class="text-center">No tasks found!</td></tr>'; } ?>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
-						
+						</div>
 					</div>
 				</div>
 				
-				
+
 				<div class="col-lg-6 col-md-6 col-sm-12 mb-30">
 					<div class="card-box pd-30 height-100-p">
 						<div class="progress-box text-center newClass">
 						    <div class="calendar-wrap">
-        						<div id='calendar'></div>
+        						<!-- <div id='calendar'></div> JS Calender -->
+								<?php include('calendar.php'); ?>
         					</div>
 						</div>
 					</div>
@@ -245,6 +406,10 @@ $status_color = array(
 					</div>
 				</div>
 			</div>
+
+			<?php
+				$followup_task = mysqli_fetch_array(mysqli_query($mysqli, "SELECT count(id) as tot_task, sum(task_timeing) as task_timeing FROM order_tasks WHERE resp_b = '". $logUser ."' AND task_status != 2 AND task_date = '". date('Y-m-d') ."'"));
+			?>
 			
 			<div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-12 mb-30">
@@ -254,28 +419,28 @@ $status_color = array(
 							<ul>
 								<li class="d-flex flex-wrap align-items-center" style="width: calc(70% - 100px);">
 									<div class="browser-name text-success"  style="font-size: 24px;"><i class="icon-copy fa fa-user-secret" aria-hidden="true"></i> Daily Task Visit</div>
-									<div class="visit"><span class="badge badge-pill badge-success">50</span></div>
-									<div class="visit"><span class="badge badge-pill badge-success" style="margin-left: 100%;">3 Hr</span></div>
+									<div class="visit"><span class="badge badge-pill badge-success"><?= $today_task_count; ?></span></div>
+									<div class="visit"><span class="badge badge-pill badge-success" style="margin-left: 100%;"><?= time_calculator_new(time_calculator($today_task_time), 2); ?></span></div>
 								</li>
 								<li class="d-flex flex-wrap align-items-center"  style="width: calc(70% - 100px);">
 									<div class="browser-name text-danger"  style="font-size: 24px;"><i class="icon-copy dw dw-analytics-5"></i> Not Reviewed</div>
-									<div class="visit"><span class="badge badge-pill badge-danger">40</span></div>
-									<div class="visit"><span class="badge badge-pill badge-danger" style="margin-left: 100%;">10 Min</span></div>
+									<div class="visit"><span class="badge badge-pill badge-danger">0</span></div>
+									<div class="visit"><span class="badge badge-pill badge-danger" style="margin-left: 100%;">0 Min</span></div>
 								</li>
 								<li class="d-flex flex-wrap align-items-center"  style="width: calc(70% - 100px);">
 									<div class="browser-name text-warning"  style="font-size: 24px;"><i class="icon-copy dw dw-analytics-211"></i> Followups</div>
-									<div class="visit"><span class="badge badge-pill badge-warning">20</span></div>
-									<div class="visit"><span class="badge badge-pill badge-warning" style="margin-left: 100%;">2 Hr 50 Min</span></div>
+									<div class="visit"><span class="badge badge-pill badge-warning"><?= $followup_task['tot_task']; ?></span></div>
+									<div class="visit"><span class="badge badge-pill badge-warning" style="margin-left: 100%;"><?= time_calculator_new(time_calculator($followup_task['task_timeing']), 2); ?></span></div>
 								</li>
 								<li class="d-flex flex-wrap align-items-center"  style="width: calc(70% - 100px);">
 									<div class="browser-name text-success"  style="font-size: 24px;"><i class="icon-copy dw dw-analytics-211"></i> Management Tasks</div>
-									<div class="visit"><span class="badge badge-pill badge-success">20</span></div>
-									<div class="visit"><span class="badge badge-pill badge-success" style="margin-left: 100%;">5 Hr 06 Min</span></div>
+									<div class="visit"><span class="badge badge-pill badge-success">0</span></div>
+									<div class="visit"><span class="badge badge-pill badge-success" style="margin-left: 100%;">0 Min</span></div>
 								</li>
 								<li class="d-flex flex-wrap align-items-center"  style="width: calc(70% - 100px);">
 									<div class="browser-name text-secondary"  style="font-size: 24px;"><i class="icon-copy dw dw-tick"></i> Done</div>
-									<div class="visit"><span class="badge badge-pill badge-secondary">40</span></div>
-									<div class="visit"><span class="badge badge-pill badge-secondary" style="margin-left: 100%;">10 Min</span></div>
+									<div class="visit"><span class="badge badge-pill badge-secondary"><?= $comp_count; ?></span></div>
+									<div class="visit"><span class="badge badge-pill badge-secondary" style="margin-left: 100%;"><?= time_calculator_new(time_calculator($task_close_time), 2); ?></span></div>
 								</li>
 							</ul>
 						</div>
@@ -303,35 +468,181 @@ $status_color = array(
         					</ul>
         
         					<div class="tab-content">
-        
         						<div class="tab-pane fade show active" id="daily_task" role="tabpanel">
         							<div class="pd-20">
-        							    Daily Task Visit
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Sl.No</th>
+													<th>BO</th>
+													<th>Task Date</th>
+													<th>Task</th>
+													<th>Task Duration</th>
+													<th>Task Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													$today_task_count = 0;
+													$today_task_time = 0;
+
+													$sel = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE task_for = '". $logUser ."' AND task_status != 2 AND task_date = '". date('Y-m-d') ."' ORDER BY task_date ASC");
+													$or_nuum = mysqli_num_rows($sel);
+													if($or_nuum > 0) {
+														while($result = mysqli_fetch_assoc($sel)) {
+															$today_task_count++;
+															// $today_task_time += $result['task_timeing'];
+															?>
+															<tr>
+																<td><?= $today_task_count; ?></td>
+																<td><?= sales_order_code($result['sales_order_id']); ?></td>
+																<td><?= date('d-M, Y', strtotime($result['task_date'])); ?></td>
+																<td><a href="javascript:;" style="color: #87c9ef !important;" onclick="open_orderTask(<?= $result['id']; ?>)"><?= $result['activity']; ?></a> <small>(Order Task)</small></td>
+																<td><?= time_calculator_new(time_calculator($result['task_timeing']), 1); ?></td>
+																<td style="color: <?= $status_color[$result['task_status']] ?>"><?= $status[$result['task_status']]; ?></td>
+															</tr>
+												<?php } } ?>
+
+												<?php
+													$qry = "SELECT a.*, b.created_by, b.task_msg, b.end_date, b.task_type, b.allowed_time, b.start_date ";
+													$qry .= " FROM team_tasks_for a ";
+													$qry .= " LEFT JOIN team_tasks b ON b.id=a.task_id ";
+													$qry .= " WHERE a.employee_id = '".$logUser."' AND b.task_complete IS NULL";
+													$qry .= " ORDER BY id DESC";
+													
+													$num = mysqli_query($mysqli, $qry);
+													$tem_num = mysqli_num_rows($num);
+													if($tem_num > 0) {
+														while($task = mysqli_fetch_array($num)) {
+															$created = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE id = '". $task['created_by'] ."'"));
+															$sml = ($task['type']=='assigned_toB') ? '<small>(You As Follower)</small>' : '';
+
+															$today_task_count++;
+															// $today_task_time += $task['allowed_time'];
+													?>
+													<tr>
+														<td><?= $today_task_count; ?></td>
+														<td>Team Task</td>
+														<td><?= date('d-M, Y', strtotime($task['start_date'])); ?></td>
+														<td>
+															<a href="javascript:;" style="color: #87c9ef !important;" onclick="openTaskSheet(<?= $task['task_id']; ?>)"><?= $task['task_type'] . ' '.$sml; ?></a>
+															<p style="color:gray"><?= $task['task_msg']; ?></p>
+														</td>
+														<td><?= time_calculator_new(time_calculator($task['allowed_time']), 1); ?></td>
+														<td style="color:<?= $status_color[$task['task_status']]; ?>"><?= $status[$task['task_status']]; ?></td>
+													</tr>
+												<?php $m++; } } if(($tem_num + $or_nuum) == 0 ) { print '<tr><td colspan="4" class="text-center">No Tasks Found!</td></tr>'; } ?>
+											</tbody>
+										</table>
         							</div>
         						</div>
         						
         						<div class="tab-pane fade" id="managementTasks" role="tabpanel">
-        							<div class="pd-20" style="overflow-y: auto;">
-        							    Management Tasks
-        							</div>
+        							<div class="pd-20" style="overflow-y: auto;">Management Tasks</div>
         						</div>
         						
         						<div class="tab-pane fade" id="not_reviewed" role="tabpanel">
-        							<div class="pd-20" style="overflow-y: auto;">
-        							    Not Reviewed
-        							</div>
+        							<div class="pd-20" style="overflow-y: auto;">Not Reviewed</div>
         						</div>
         						
         						<div class="tab-pane fade" id="followups" role="tabpanel">
         							<div class="pd-20" style="overflow-y: auto;">
-        							    Followups
-        							</div>
+										
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Sl.No</th>
+													<th>BO</th>
+													<th>Task Date</th>
+													<th>Task</th>
+													<th>Task Duration</th>
+													<th>Task Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													$pp = 1;
+													$sel = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE resp_b = '". $logUser ."' AND task_status != 2 AND task_date = '". date('Y-m-d') ."' ORDER BY task_date ASC");
+													$or_nuum = mysqli_num_rows($sel);
+													if($or_nuum > 0) {
+														while($result = mysqli_fetch_assoc($sel)) {
+															?>
+															<tr>
+																<td><?= $pp++; ?></td>
+																<td><?= sales_order_code($result['sales_order_id']); ?></td>
+																<td><?= date('d-M, Y', strtotime($result['task_date'])); ?></td>
+																<td><a href="javascript:;" style="color: #87c9ef !important;" onclick="open_orderTask(<?= $result['id']; ?>)"><?= $result['activity']; ?></a> <small>(Order Task)</small></td>
+																<td><?= time_calculator_new(time_calculator($result['task_timeing']), 1); ?></td>
+																<td style="color: <?= $status_color[$result['task_status']] ?>"><?= $status[$result['task_status']]; ?></td>
+															</tr>
+												<?php } } else { print '<tr><td colspan="4" class="text-center">No Followup Tasks Found!</td></tr>'; } ?>
+											</tbody>
+										</table>
+									</div>
         						</div>
         						
         						<div class="tab-pane fade" id="done_" role="tabpanel">
         							<div class="pd-20" style="overflow-y: auto;">
-        							    Done
-        							</div>
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Sl.No</th>
+													<th>BO</th>
+													<th>Task Date</th>
+													<th>Task</th>
+													<th>Task Duration</th>
+													<th>Actual Time</th>
+													<th>Task Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+													$comp_count = 0;
+													$task_close_time = 0;
+													
+													$sel = mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE task_for = '". $logUser ."' AND task_status = 2 ORDER BY task_date ASC");
+													if(mysqli_num_rows($sel) > 0) {
+														while($result = mysqli_fetch_assoc($sel)) {
+															$tot_ord_time = mysqli_fetch_array(mysqli_query($mysqli, "SELECT SUM(total_time) as total_time FROM order_task_timer WHERE task_id = '". $result['id'] ."' AND employee_id = '". $logUser ."' "));
+															$comp_count++;
+															$task_close_time += $tot_ord_time['total_time'];
+															?>
+															<tr>
+																<td><?= $comp_count; ?></td>
+																<td><?= sales_order_code($result['sales_order_id']); ?></td>
+																<td><?= date('d-M, Y', strtotime($result['task_date'])); ?></td>
+																<td><a href="javascript:;" style="color: #87c9ef !important;" onclick="open_orderTask(<?= $result['id']; ?>)"><?= $result['activity']; ?></a></td>
+																<td><?= time_calculator_new(time_calculator($result['task_timeing']), 1); ?></td>
+																<td><?= time_calculator_new(time_calculator($tot_ord_time['total_time']), 1); ?></td>
+																<td style="color: <?= $status_color[$result['task_status']] ?>"><?= $status[$result['task_status']]; ?></td>
+															</tr>
+												<?php } } ?>
+
+												<?php
+													$sel = mysqli_query($mysqli, "SELECT * FROM team_tasks WHERE completed_by = '". $logUser ."' AND task_complete = 'yes' AND completed_date LIKE '%". date('Y-m-d') ."%' ORDER BY id ASC");
+													
+													if(mysqli_num_rows($sel) > 0) {
+														while($result = mysqli_fetch_assoc($sel)) {
+															$tot_task_time = mysqli_fetch_array(mysqli_query($mysqli, "SELECT SUM(total_time) as total_time FROM team_task_timer WHERE task_id = '". $result['id'] ."' AND employee_id = '". $logUser ."' "));
+															$comp_count++;
+															$task_close_time += $tot_task_time['total_time'];
+															?>
+															<tr>
+																<td><?= $comp_count; ?></td>
+																<td>Team Task</td>
+																<td><?= date('d-M, Y', strtotime($result['start_date'])); ?></td>
+																<td>
+																	<a href="javascript:;" style="color: #87c9ef !important;" onclick="openTaskSheet(<?= $result['id']; ?>)"><?= $result['task_type'] . ' '.$sml; ?></a>
+																	<p style="color:gray"><?= $result['task_msg']; ?></p>
+																</td>
+																<td><?= time_calculator_new(time_calculator($result['allowed_time']), 1); ?></td>
+																<td><?= time_calculator_new(time_calculator($tot_task_time['total_time']), 1); ?></td>
+																<td style="color:<?= $status_color[2]; ?>"><?= $status[2]; ?></td>
+															</tr>
+												<?php } } if($comp_count == 0) { print '<tr><td colspan="6" class="text-center">No tasks found!</td></tr>'; } ?>
+											</tbody>
+										</table>
+									</div>
         						</div>
         					</div>
         				</div>

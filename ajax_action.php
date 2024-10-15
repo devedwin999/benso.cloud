@@ -2387,6 +2387,49 @@ if (isset($_REQUEST['delete_salesOrder'])) {
     }
     timeline_history('Insert', 'sod_time_sheet', $_POST['sales_order_id'], 'Time Sheet Created. Ref:'. sales_order_code($_POST['sales_order_id']) .'');
 
+    if($ins) {
+
+        $qry = mysqli_query($mysqli, "SELECT * FROM sod_time_sheet WHERE sales_order_id = '". $_POST['sales_order_id'] ."'");
+        while($result = mysqli_fetch_array($qry)) {
+
+            $start_date = $result['start_date'];
+            $end_date = $result['end_date'];
+            
+            $start_timestamp = strtotime($start_date);
+            $end_timestamp = strtotime($end_date);
+            
+            $dates = [];
+            for ($current = $start_timestamp; $current <= $end_timestamp; $current += 86400) {
+                $dates[] = date('d-m-Y', $current);
+            }
+
+            $last_date = end($dates);
+            
+            foreach ($dates as $date) {
+
+                if ($date === $last_date) {
+                    $task_timing = $result['endday_time'];
+                } else {
+                    $task_timing = $result['daily_time'];
+                }
+
+                $resp = explode(',', $result['resp_a']);
+
+                foreach($resp as $reA) {
+                    $arrray = array(
+                        'sales_order_id' => $result['sales_order_id'],
+                        'time_management_template_det' => $result['time_management_template_det'],
+                        'activity' => $result['activity'],
+                        'task_date' => date('Y-m-d', strtotime($date)),
+                        'task_timeing' => $task_timing,
+                        'task_for' => $reA,
+                        'resp_b ' => $result['resp_b'],
+                    );
+                    $ins = Insert('order_tasks', $arrray);
+                }
+            }
+        }
+    }
 
     if($ins) {
         $data['result'][] = 0;
