@@ -9,10 +9,10 @@ $ID = $_GET['id'];
 $order = mysqli_fetch_array(mysqli_query($mysqli, "SELECT a.*, b.merchand_name FROM sales_order a LEFT JOIN merchand_detail b ON a.merchandiser=b.id WHERE a.id = ". $ID));
 
 $manual = array(
-    'so_approval' => 'Sales Order',
-    'fab_program' => 'Fabric Program',
-    'access_program' => 'Accessories Program',
-    'budget' => 'Buddget',
+    'so_approval' => 'Sales Order Approval',
+    'fab_program' => 'Fabric Program Creation',
+    'access_program' => 'Accessories Program Creation',
+    'budget' => 'Buddget Creation',
     'budget_approval' => 'Buddget Approval',
 );
 

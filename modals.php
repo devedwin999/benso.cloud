@@ -823,19 +823,16 @@ if (in_array('pack-add-modal', $modals)) { ?>
 
 <?php }
 if (in_array('employeeNew-add-modal', $modals)) { ?>
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
-        id="employeeNew-add-modal">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="employeeNew-add-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myLargeModalLabel">New Employee</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
-                <form method="post" id="employeeForm" action="ajax_action.php?save_employee" autocomplete="off"
-                    enctype="multipart/form-data">
+                <form method="post" id="employeeForm" action="ajax_action.php?save_employee" autocomplete="off" enctype="multipart/form-data">
                     <input type="hidden" name="insType" id="insType" value="add">
                     <div class="modal-body">
-
                         <div class="tab">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
@@ -1454,7 +1451,6 @@ if (in_array('employeeNew-add-modal', $modals)) { ?>
 
                             </div>
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

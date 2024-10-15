@@ -272,6 +272,8 @@ $('.imagefield').change(function() {
     var file = this.files[0];
     
     var tt = $(this).closest('.image_head_tag').find('.imagename');
+
+    var width = tt.data('width');
     
     if (!file || !file.type.startsWith('image/')) {
         tt.html('Accept Images Only');
@@ -284,7 +286,7 @@ $('.imagefield').change(function() {
     
     reader.onload = function(event) {
         var imageData = event.target.result;
-        tt.html('<img src="' + imageData + '" width="">');
+        tt.html('<img src="' + imageData + '" width="'+ (width ? width : '') +'">');
     };
     
     reader.readAsDataURL(file);

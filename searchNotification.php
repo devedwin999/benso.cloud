@@ -63,7 +63,7 @@ if($search_type == 'Notifi_counts') {
         $num_row2 = 0;
     }
 
-    $oorder_task = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE task_for = '". $logUser ."' AND task_status != 2"));
+    $oorder_task = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM order_tasks WHERE task_for = '". $logUser ."' AND task_date = '". date('Y-m-d') ."' AND task_status != 2"));
     
     
     
@@ -143,7 +143,7 @@ if($search_type == 'Notifi_counts') {
 
     $qry1 = "SELECT a.* ";
     $qry1 .= " FROM order_tasks a ";
-    $qry1 .= " WHERE a.task_for = '".$logUser."' AND a.task_status != 2";
+    $qry1 .= " WHERE a.task_for = '".$logUser."' AND task_date = '". date('Y-m-d') ."' AND a.task_status != 2";
     $qry1 .= " ORDER BY id DESC";
     
     $num1 = mysqli_query($mysqli, $qry1);
@@ -499,6 +499,7 @@ if($search_type == 'Notifi_counts') {
                         </div>
                         <div style="width:30%" id="timerButton">
                             <?php
+                            if($task['task_complete'] != 'yes') {
                                 $po = mysqli_query($mysqli, "SELECT id FROM team_task_timer WHERE task_id = '". $task['id'] ."' AND employee_id = '". $logUser ."' AND end_time IS NULL");
                                 $ftch = mysqli_fetch_array($po);
                                 $H = mysqli_num_rows($po);
@@ -508,7 +509,7 @@ if($search_type == 'Notifi_counts') {
                                 <a class="btn btn-outline-danger timerA" onclick="stopTeamTask(<?= $ftch['id']; ?>)"><i class="icon-copy fa fa-clock-o" aria-hidden="true"></i> Stop Timer</a>
                             <?php } else { ?>
                                 <a class="btn btn-outline-success timerA" onclick="startTeamTask(<?= $task['id']; ?>)"><i class="icon-copy fa fa-clock-o" aria-hidden="true"></i> Start Timer</a>
-                            <?php } ?>
+                            <?php } } ?>
                         </div>
                     </div>
                     
@@ -660,14 +661,13 @@ if($search_type == 'Notifi_counts') {
                                     </tr>
                             <?php } ?>
                         </table>
-                    <?php } //if($logUser==102) { ?>
-                    <form id="ImageForm" onsubmit="return false">
-                        <input type="file" class="form-control" style="border:none; background-color: #f0f5f7;" name="proof_image_team_task" id="proof_image_team_task">
-                        <br>
-                        <button style="position: relative; left:20%;" type="button" class="btn btn-outline-info <?= ($task['task_status']==1 || $task['type']=='assigned_toB') ? 'd-block' : 'd-none' ?> compl" onclick="markAsComplete(<?= $task['id']; ?>, 'team_task')"><i class="icon-copy ion-ios-checkmark-outline"></i> Mark As Complete</button>
-                    </form>
-                    
-                    <?php //} ?>
+                    <?php } if($task['task_complete'] != 'yes') { ?>
+                        <form id="ImageForm" onsubmit="return false">
+                            <input type="file" class="form-control" style="border:none; background-color: #f0f5f7;" name="proof_image_team_task" id="proof_image_team_task">
+                            <br>
+                            <button style="position: relative; left:20%;" type="button" class="btn btn-outline-info <?= ($task['task_status']==1 || $task['type']=='assigned_toB') ? 'd-block' : 'd-none' ?> compl" onclick="markAsComplete(<?= $task['id']; ?>, 'team_task')"><i class="icon-copy ion-ios-checkmark-outline"></i> Mark As Complete</button>
+                        </form>
+                    <?php } else { print '<p class="text-center" style="color:'. $status_color[$task['task_status']] .'"><small>Task '. $status[$task['task_status']] .'!</small></p>'; print '<a href="download.php?f='. $task['task_proof'] .'" class="f-12" style="color:#a5a5a5"><i class="icon-copy fa fa-cloud-download" aria-hidden="true"></i> Download Proof</a>'; } ?>
                         <br>
                 </div>
             </div>
@@ -697,11 +697,12 @@ if($search_type == 'Notifi_counts') {
     
     $qry = "SELECT a.* ";
     $qry .= " FROM order_tasks a ";
-    $qry .= " WHERE a.id = '".$_REQUEST['id']."' AND a.task_for = '". $logUser ."'";
+    $qry .= " WHERE a.id = '".$_REQUEST['id']."' AND (a.task_for = '". $logUser ."' OR resp_b = '". $logUser ."')";
 
     $num = mysqli_query($mysqli, $qry);
     $task = mysqli_fetch_array($num);
     
+    $can_start_stop = ($task['task_for'] == $logUser) ? true : false;
     ?>
 
     <div class="modal-header">
@@ -724,7 +725,7 @@ if($search_type == 'Notifi_counts') {
                         <td style="border: none;" class="float-right" id="timerButton_ord">
                             <?php
 
-                                if($task['task_status'] != 2) {
+                                if($task['task_status'] != 2 && $can_start_stop == true) {
                                     $po = mysqli_query($mysqli, "SELECT id FROM order_task_timer WHERE task_id = '". $task['id'] ."' AND employee_id = '". $logUser ."' AND end_time IS NULL");
                                     $ftch = mysqli_fetch_array($po);
                                     $H = mysqli_num_rows($po);

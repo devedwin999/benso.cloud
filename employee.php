@@ -157,7 +157,8 @@ if (isset($_REQUEST['updateForm'])) {
                     
                     <div class="pd-20">
                         <?php if(UP_EMPLOYEE_ADD==1) { ?>
-                            <a class="btn btn-outline-primary showmodal-new" href="javascript:void(0)" style="float: right;"><i class="fa fa-plus"></i> Create</a>
+                            <a class="btn btn-outline-primary" href="add-employee.php" style="float: right;"><i class="fa fa-plus"></i> New Employee</a>
+                            <!-- <a class="btn btn-outline-primary showmodal-new" href="javascript:void(0)" style="float: right;"><i class="fa fa-plus"></i> Create</a> -->
                         <?php } ?>
                         <h4 class="text-blue h4">Manage Employee
                             <p class="mb-30 text-danger">
@@ -203,7 +204,8 @@ if (isset($_REQUEST['updateForm'])) {
                                                 
                                             <div class="btn-group mr-2" role="group" aria-label="First group">
                                                 <?php if(UP_EMPLOYEE_EDIT==1) { ?>
-                                                    <a class="btn btn-outline-secondary editEmployee" data-id="<?= $sql['id']; ?>" href="javascript:void(0)"> <small><i class="dw dw-edit2"></i></small></a>
+                                                    <a class="btn btn-outline-secondary" data-id="<?= $sql['id']; ?>" href="add-employee.php?id=<?= $sql['id']; ?>"> <small><i class="dw dw-edit2"></i></small></a>
+                                                    <!-- <a class="btn btn-outline-secondary editEmployee" data-id="<?= $sql['id']; ?>" href="javascript:void(0)"> <small><i class="dw dw-edit2"></i></small></a> -->
                                                 <?php } if(UP_EMPLOYEE_DELETE==1) { ?>
                                                     <a class="btn btn-outline-secondary" onclick="delete_data(<?= $sql['id']; ?>, 'employee_detail')"><small><i class="dw dw-delete-3"></i></small></a>
                                                 <?php } ?>
