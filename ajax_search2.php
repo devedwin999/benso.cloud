@@ -1852,22 +1852,28 @@ $emp = mysqli_fetch_array($emp_query);
     $duplicate = 0;
     $fields = array();
 
+    if($_POST['employee_id'] != '') {
+        $wh = " AND id !=  '". $_POST['employee_id'] ."' ";
+    } else {
+        $wh = "";
+    }
+
     if($uname!="") {
-        $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE username = '". $uname ."'"));
+        $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE username = '". $uname ."' $wh"));
         $fields[] = ($fetch > 0) ? 'User Name' : '';
         $duplicate += $fetch;
     }
 
     if($_POST['employee_code'] != "") {
         
-        $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE employee_code = '". $_POST['employee_code'] ."'"));
+        $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE employee_code = '". $_POST['employee_code'] ."' $wh"));
         $fields[] = ($fetch > 0) ? 'Employee Code' : '';
         $duplicate += $fetch;
     }
 
     if($_POST['mobile'] != "") {
         
-        $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE mobile = '". $_POST['mobile'] ."'"));
+        $fetch = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE mobile = '". $_POST['mobile'] ."' $wh"));
         $fields[] = ($fetch > 0) ? 'Mobile Number' : '';
         $duplicate += $fetch;
     }

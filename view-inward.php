@@ -14,7 +14,7 @@ $sql = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM processing_list W
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Processing List
+    <title>BENSO - Processing List
     </title>
 
     <!-- Site favicon -->

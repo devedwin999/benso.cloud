@@ -49,7 +49,7 @@ if (isset($_REQUEST['updateForm'])) {
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Tax Sub</title>
+    <title>BENSO - Tax Sub</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">

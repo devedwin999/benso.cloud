@@ -508,7 +508,9 @@ $modals = array();
 			<div class="dropdown">
 				<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 					<span class="user-icon">
-						<img src="<?= $smp['employee_photo']; ?>" alt=""  style="width:50px;height:50px">
+                        <!-- <a href="view-employee.php?id=<?= $logUser; ?>"> -->
+                            <img src="<?= $smp['employee_photo']; ?>" alt=""  style="width:50px;height:50px">
+                        <!-- </a> -->
 					</span>
 					<span class="user-name">
 						<?php echo $smp['employee_name']; ?>

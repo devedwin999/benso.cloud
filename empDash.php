@@ -20,7 +20,7 @@ if(ADMIN_DASH == 1) { ?>
 <head>
 	<!-- Basic Page Info --> 
 	<meta charset="utf-8">
-	<title>BENSO GARMENTING - Employee Dashboard</title>
+	<title>BENSO - Employee Dashboard</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -97,13 +97,13 @@ if(ADMIN_DASH == 1) { ?>
             <div class="card-box pd-20 height-100-p mb-30">
 				<div class="row align-items-center">
 					<div class="col-md-4" style="text-align:right;">
-						<?= viewImage($base_url.$emp['employee_photo'], 250); ?>
+						<?= viewImage($emp['employee_photo'], 250); ?>
 					</div>
 					<div class="col-md-8">
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
 							Welcome back <div class="weight-600 font-30 text-blue"><?= employee_name($logUser); ?>!</div>
 						</h4>
-						<p class="font-18 max-width-600">At BENSO GARMENTING, our passion for quality and innovation drives us to craft exceptional garments. Together, we empower one another to reach new heights and shape the future of fashion.</p>
+						<p class="font-18 max-width-600">At BENSO, our passion for quality and innovation drives us to craft exceptional garments. Together, we empower one another to reach new heights and shape the future of fashion.</p>
 					</div>
 				</div>
 			</div>

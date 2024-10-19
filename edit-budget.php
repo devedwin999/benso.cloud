@@ -91,7 +91,7 @@ if (isset($_GET['id'])) {
     </style>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Add Budget
+    <title>BENSO - Add Budget
     </title>
 
     <!-- Site favicon -->

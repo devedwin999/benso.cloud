@@ -39,7 +39,7 @@
                             <td style="border: 1px solid gray;" colspan="4">
                                 <table>
                                     <tr><td style="font-weight:bold"> From : </td></tr>
-                                    <tr><td> Benso Garmenting </td></tr>
+                                    <tr><td> BENSO </td></tr>
                                     <tr><td> Tirpur </td></tr>
                                 </table>
                             </td>

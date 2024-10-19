@@ -146,7 +146,7 @@ $ID = $_GET['id'];
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Fabric Process DC Inward</title>
+    <title>BENSO - Fabric Process DC Inward</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">

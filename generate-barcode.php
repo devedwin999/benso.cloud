@@ -53,7 +53,7 @@ if (isset($_POST['saveBarcode1'])) {
     </style>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Generate Barcode</title>
+    <title>BENSO - Generate Barcode</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -257,7 +257,7 @@ if (isset($_POST['saveBarcode1'])) {
                                             <td><?= part_name($row['part']); ?></td>
                                             <td><?= color_name($row['color']); ?></td>
                                             <td><?= $row['bundle_number']; ?></td>
-                                            <td><?= $row['pcs_per_bundle'] ?></td>
+                                            <td><?= $pcs[] = $row['pcs_per_bundle'] ?></td>
                                             <td>
                                                 <input type="hidden" value="<?= $row['boundle_qr']; ?>" name="" id="dsff<?= $row['id']; ?>"> 
 
@@ -275,6 +275,14 @@ if (isset($_POST['saveBarcode1'])) {
                                         </tr>
                                     <?php } ?>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="text-right" colspan="5">Total</td>
+                                        <td><?= count($pcs); ?></td>
+                                        <td><?= array_sum($pcs); ?></td>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                         <div style="text-align:center;margin-top: 70px;">

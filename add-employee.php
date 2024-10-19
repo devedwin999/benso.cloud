@@ -69,11 +69,11 @@ if (isset($_POST['employee_id'])) {
         'created_unit' => $logUnit,
     );
     
-    if ($_POST['insType'] == 'edit') {
-        Update('employee_detail', $data, ' WHERE id = ' . intval($_POST['updId']));
-        timeline_history('Update', 'employee_detail', intval($_POST['updId']), 'Employee Detail Updated. Ref: ' . $employee_name);
+    if ($_POST['employee_id'] != '') {
+        Update('employee_detail', $data, ' WHERE id = ' . intval($_POST['employee_id']));
+        timeline_history('Update', 'employee_detail', intval($_POST['employee_id']), 'Employee Detail Updated. Ref: ' . $employee_name);
         $_SESSION['msg'] = "updated";
-        $ins_idd = intval($_POST['updId']);
+        $ins_idd = intval($_POST['employee_id']);
     } else {
         $qry = Insert('employee_detail', $data);
         $ins_idd = mysqli_insert_id($mysqli);
@@ -100,7 +100,7 @@ if (isset($_POST['employee_id'])) {
     }
     
     if ($_POST['insType'] == 'move') {
-        $sqlly = mysqli_fetch_array(mysqli_query($mysqli, "SELECT aadhar_card, pan_card, license, employee_photo FROM employee_detail_temp WHERE id = " . intval($_POST['updId'])));
+        $sqlly = mysqli_fetch_array(mysqli_query($mysqli, "SELECT aadhar_card, pan_card, license, employee_photo FROM employee_detail_temp WHERE id = " . intval($_POST['employee_id'])));
     } else {
         $sqlly = mysqli_fetch_array(mysqli_query($mysqli, "SELECT aadhar_card, pan_card, license, employee_photo FROM employee_detail WHERE id = " . $ins_idd));
     }
@@ -126,12 +126,12 @@ if (isset($_POST['employee_id'])) {
 
 
 if (isset($_GET['id'])) {
-	$id = $_GET['id'];
+	$ID = $_GET['id'];
 	$comp = 'Edit Employee';
-	$sql = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM company WHERE id=" . $id));
+	$sql = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM employee_detail WHERE id=" . $ID));
 } else {
 	$comp = 'Add Employee';
-	$id = '';
+	$ID = '';
 }
 
 ?>
@@ -141,7 +141,7 @@ if (isset($_GET['id'])) {
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>BENSO GARMENTING - <?= $comp; ?></title>
+	<title>BENSO - <?= $comp; ?></title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -243,103 +243,101 @@ if (isset($_GET['id'])) {
                                             <div class="row">
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Employee Type <span
-                                                            class="text-danger">*</span></label>
+                                                    <label for=""type class="col-form-label fieldrequired">Employee Type<?= $sql['employee']; ?></label>
                                                     <div class="form-group">
-                                                        <select class="form-control custom-select2" name="type" id="type"
-                                                            style="width:100%">
+                                                        <select class="form-control custom-select2" name="type" id="type" style="width:100%" required>
                                                             <option value="user">Staff</option>
-                                                            <option value="employee">Worker</option>
+                                                            <option value="employee" <?= (isset($_GET['id']) && $sql['employee'] == 'employee') ? 'selected' : ''; ?>>Worker</option>
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Employee Name</label>
+                                                    <label for="employee_name" class="col-form-label fieldrequired">Employee Name</label>
                                                     <div class="form-group">
-                                                        <input class="form-control d-cursor" type="text" name="employee_name" required id="employee_name" placeholder="Employee Name">
+                                                        <input class="form-control d-cursor" type="text" name="employee_name" required id="employee_name" placeholder="Employee Name" value="<?= isset($_GET['id']) ? $sql['employee_name'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Employee Photo</label>
+                                                    <label for="" class="col-form-label fieldrequired">Employee Photo</label>
                                                     <div class="form-group row image_head_tag">
                                                         <div class="col-md-6">
-                                                            <input class="form-control imagefield" accept="image/*" type="file" name="employee_photo" id="employee_photo" required>
+                                                            <input class="form-control imagefield" accept="image/*" type="file" name="employee_photo" id="employee_photo" <?= (!isset($_GET['id']) ? 'required' : '') ?>>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <small class="imagename" data-width="50">Accept Images Only</small>
+                                                            <small class="imagename" data-width="50"><?= isset($_GET['id']) ? viewImage($sql['employee_photo'], 50) : 'Accept Only Images'; ?></small>
                                                         </div>
-                                                        <input class="form-control" type="hidden" name="employee_photo_old" id="employee_photo_old">
+                                                        <input class="form-control" type="hidden" name="employee_photo_old" id="employee_photo_old" value="<?= isset($_GET['id']) ? $sql['employee_photo'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Employee Code</label>
+                                                    <label for="employee_code" class="col-form-label fieldrequired">Employee Code</label>
                                                     <div class="form-group">
-                                                        <input class="form-control valid_employee_code" type="text" required name="employee_code" id="employee_code" placeholder="Employee Code">
+                                                        <input class="form-control valid_employee_code" type="text" required name="employee_code" id="employee_code" placeholder="Employee Code" value="<?= isset($_GET['id']) ? $sql['employee_code'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">DOB </label>
+                                                    <label for="dob" class="col-form-label fieldrequired">DOB </label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="date" name="dob" id="dob" required placeholder="Date Of Birth">
+                                                        <input class="form-control" type="date" name="dob" id="dob" required placeholder="Date Of Birth" value="<?= isset($_GET['id']) ? $sql['dob'] : ''; ?>">
                                                     </div>
                                                 </div>
                                                 <!--date-picker-->
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Age</label>
+                                                    <label for="age" class="col-form-label fieldrequired">Age</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="age" id="age" placeholder="Age Will be calculated Automatically" readonly required style="background-color:#fff">
+                                                        <input class="form-control" type="text" name="age" id="age" placeholder="Age Will be calculated Automatically" readonly required style="background-color:#fff" value="<?= isset($_GET['id']) ? $sql['age'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Gender</label>
+                                                    <label for="" class="col-form-label fieldrequired">Gender</label>
                                                     <div class="form-group">
-                                                        <input style="min-width:20px !important" type="radio" name="gender" id="Male" value="Male" checked> <label for="Male">Male</label>
-                                                        <input style="min-width:20px !important" type="radio" name="gender" id="Female" value="Female"> <label for="Female">Female</label>
+                                                        <input style="min-width:20px !important" type="radio" name="gender" id="Male" value="Male" checked> <label for="Male" for="Male">Male</label>
+                                                        <input style="min-width:20px !important" type="radio" name="gender" id="Female" value="Female"> <label for="Female" for="Female">Female</label>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Email</label>
+                                                    <label for="email" class="col-form-label">Email</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="email" name="email" id="email" placeholder="Email">
+                                                        <input class="form-control" type="email" name="email" id="email" placeholder="Email" value="<?= isset($_GET['id']) ? $sql['email'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Mobile Number</label>
+                                                    <label for="mobile" class="col-form-label fieldrequired">Mobile Number</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="mobile" id="mobile" required placeholder="Mobile Number">
+                                                        <input class="form-control" type="text" name="mobile" id="mobile" required placeholder="Mobile Number" value="<?= isset($_GET['id']) ? $sql['mobile'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Department</label>
+                                                    <label for="department" class="col-form-label fieldrequired">Department</label>
                                                     <div class="form-group">
                                                         <select class="form-control custom-select2" name="department" required id="department" style="width:100%">
-                                                            <?= select_dropdown('department', array('id', 'department_name'), 'id ASC', '', '', ''); ?>
+                                                            <?= select_dropdown('department', array('id', 'department_name'), 'id ASC', (isset($_GET['id']) ? $sql['department'] : ''), '', ''); ?>
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Designation</label>
+                                                    <label for="designation" class="col-form-label fieldrequired">Designation</label>
                                                     <div class="form-group">
                                                         <select class="form-control custom-select2" name="designation" required id="designation" style="width:100%">
-                                                            <?= select_dropdown('mas_designation', array('id', 'desig_name'), 'id ASC', '', '', ''); ?>
+                                                            <?= select_dropdown('mas_designation', array('id', 'desig_name'), 'id ASC', (isset($_GET['id']) ? $sql['designation'] : ''), '', ''); ?>
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label fieldrequired">Working Place</label>
+                                                    <label for="company" class="col-form-label fieldrequired">Working Place</label>
                                                     <div class="form-group">
                                                         <select class="form-control custom-select2" name="company" id="company" required style="width:100%">
-                                                            <?= select_dropdown('company', array('id', 'company_name'), 'id ASC', '', '', ''); ?>
+                                                            <?= select_dropdown('company', array('id', 'company_name'), 'id ASC', (isset($_GET['id']) ? $sql['company'] : ''), '', ''); ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -356,50 +354,44 @@ if (isset($_GET['id'])) {
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Address 1</label>
+                                                    <label for="address1_com" class="col-form-label">Address 1</label>
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" name="address1_com"
-                                                            id="address1_com" placeholder="Address 1">
+                                                        <input type="text" class="form-control" name="address1_com" id="address1_com" placeholder="Address 1"  value="<?= isset($_GET['id']) ? $sql['address1_com'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Address 2</label>
+                                                    <label for="address2_com" class="col-form-label">Address 2</label>
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" name="address2_com"
-                                                            id="address2_com" placeholder="Address 2">
+                                                        <input type="text" class="form-control" name="address2_com" id="address2_com" placeholder="Address 2"  value="<?= isset($_GET['id']) ? $sql['address2_com'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Area</label>
+                                                    <label for="area_com" class="col-form-label">Area</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="area_com" id="area_com"
-                                                            placeholder="Area">
+                                                        <input class="form-control" type="text" name="area_com" id="area_com" placeholder="Area"  value="<?= isset($_GET['id']) ? $sql['area_com'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Pincode</label>
+                                                    <label for="pincode_com" class="col-form-label">Pincode</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="pincode_com"
-                                                            id="pincode_com" placeholder="Pincode">
+                                                        <input class="form-control" type="text" name="pincode_com" id="pincode_com" placeholder="Pincode"  value="<?= isset($_GET['id']) ? $sql['pincode_com'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <label for="">Country</label>
                                                     <div class="form-group">
-                                                        <select name="country_com" id="country_com"
-                                                            class="custom-select2 form-control" onchange="getState('_com')"
-                                                            style="width:100%">
+                                                        <select name="country_com" id="country_com" class="custom-select2 form-control" onchange="getState('_com')" style="width:100%">
                                                             <?= select_dropdown('master_country', array('auto_number', 'country'), 'country ASC', $sql['country'] ? $sql['country'] : 101, '', ''); ?>
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">State</label>
+                                                    <label for="" class="col-form-label">State</label>
                                                     <div class="form-group">
                                                         <select class="custom-select2 form-control" name="state_com"
                                                             id="state_com" onchange="getCity('_com')" style="width:100%">
@@ -430,7 +422,7 @@ if (isset($_GET['id'])) {
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">City</label>
+                                                    <label for="" class="col-form-label">City</label>
                                                     <div class="form-group">
                                                         <select class="custom-select2 form-control" name="city_com"
                                                             id="city_com" style="width:100%">
@@ -457,54 +449,48 @@ if (isset($_GET['id'])) {
                                                 </div>
 
                                                 <div class="col-md-12">
-                                                    <h4 style="text-decoration:underline;">Permanaent Address</h4>
+                                                    <h4 style="text-decoration:underline;">Permanent Address</h4>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Address 1</label>
+                                                    <label for="address1_per" class="col-form-label">Address 1</label>
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" name="address1_per"
-                                                            id="address1_per" placeholder="Address 1">
+                                                        <input type="text" class="form-control" name="address1_per" id="address1_per" placeholder="Address 1" value="<?= isset($_GET['id']) ? $sql['address1_per'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Address 2</label>
+                                                    <label for="address2_per" class="col-form-label">Address 2</label>
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" name="address2_per"
-                                                            id="address2_per" placeholder="Address 2">
+                                                        <input type="text" class="form-control" name="address2_per" id="address2_per" placeholder="Address 2" value="<?= isset($_GET['id']) ? $sql[''] : 'address2_per'; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Area</label>
+                                                    <label for="area_per" class="col-form-label">Area</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="area_per" id="area_per"
-                                                            placeholder="Area">
+                                                        <input class="form-control" type="text" name="area_per" id="area_per" placeholder="Area" value="<?= isset($_GET['id']) ? $sql['area_per'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Pincode</label>
+                                                    <label for="pincode_per" class="col-form-label">Pincode</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="pincode_per"
-                                                            id="pincode_per" placeholder="Pincode">
+                                                        <input class="form-control" type="text" name="pincode_per" id="pincode_per" placeholder="Pincode" value="<?= isset($_GET['id']) ? $sql['pincode_per'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <label for="">Country</label>
                                                     <div class="form-group">
-                                                        <select name="country_per" id="country_per"
-                                                            class="custom-select2 form-control" onchange="getState('_per')"
-                                                            style="width:100%">
+                                                        <select name="country_per" id="country_per" class="custom-select2 form-control" onchange="getState('_per')" style="width:100%">
                                                             <?= select_dropdown('master_country', array('auto_number', 'country'), 'country ASC', $sql['country'] ? $sql['country'] : 101, '', ''); ?>
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">State</label>
+                                                    <label for="" class="col-form-label">State</label>
                                                     <div class="form-group">
                                                         <select class="custom-select2 form-control" name="state_per"
                                                             id="state_per" onchange="getCity('_per')" style="width:100%">
@@ -535,7 +521,7 @@ if (isset($_GET['id'])) {
                                                 </div>
 
                                                 <div class="col-md-12">
-                                                    <label class="col-form-label">City</label>
+                                                    <label for="" class="col-form-label">City</label>
                                                     <div class="form-group">
                                                         <select class="custom-select2 form-control" name="city_per"
                                                             id="city_per" style="width:100%">
@@ -566,28 +552,28 @@ if (isset($_GET['id'])) {
                                             <div class="row">
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Aadhar Card</label>
+                                                    <label for="" class="col-form-label">Aadhar Card</label>
                                                     <div class="form-group">
                                                         <input class="form-control" type="file" name="aadhar_card" id="aadhar_card">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Pan Card</label>
+                                                    <label for="" class="col-form-label">Pan Card</label>
                                                     <div class="form-group">
                                                         <input class="form-control" type="file" name="pan_card" id="pan_card">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">License</label>
+                                                    <label for="" class="col-form-label">License</label>
                                                     <div class="form-group">
                                                         <input class="form-control" type="file" name="license" id="license">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Other Documents</label>
+                                                    <label for="" class="col-form-label">Other Documents</label>
                                                     <div class="form-group">
                                                         <input class="form-control" type="file" name="other_docs" id="other_docs">
                                                     </div>
@@ -602,37 +588,37 @@ if (isset($_GET['id'])) {
                                             <div class="row">
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Account Holder Name</label>
+                                                    <label for="acc_holder_name" class="col-form-label">Account Holder Name</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="acc_holder_name" id="acc_holder_name" placeholder="Account Holder Name">
+                                                        <input class="form-control" type="text" name="acc_holder_name" id="acc_holder_name" placeholder="Account Holder Name" value="<?= isset($_GET['id']) ? $sql['acc_holder_name'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Account Number</label>
+                                                    <label for="acc_num" class="col-form-label">Account Number</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="acc_num" id="acc_num" placeholder="Account Number">
+                                                        <input class="form-control" type="number" name="acc_num" id="acc_num" placeholder="Account Number" value="<?= isset($_GET['id']) ? $sql['acc_num'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">IFSC Code</label>
+                                                    <label for="ifsc" class="col-form-label">IFSC Code</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="ifsc" id="ifsc" placeholder="IFSC Code">
+                                                        <input class="form-control" type="text" name="ifsc" id="ifsc" placeholder="IFSC Code" value="<?= isset($_GET['id']) ? $sql['ifsc'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Bank Name</label>
+                                                    <label for="bank_name" class="col-form-label">Bank Name</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="bank_name" id="bank_name" placeholder="Bank Name">
+                                                        <input class="form-control" type="text" name="bank_name" id="bank_name" placeholder="Bank Name" value="<?= isset($_GET['id']) ? $sql['bank_name'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Branch</label>
+                                                    <label for="bank_branch" class="col-form-label">Branch</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="bank_branch" id="bank_branch" placeholder="Branch">
+                                                        <input class="form-control" type="text" name="bank_branch" id="bank_branch" placeholder="Branch" value="<?= isset($_GET['id']) ? $sql['bank_branch'] : ''; ?>">
                                                     </div>
                                                 </div>
 
@@ -649,37 +635,37 @@ if (isset($_GET['id'])) {
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Basic Salary</label>
+                                                    <label for="basic_salary" class="col-form-label">Basic Salary</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="basic_salary" id="basic_salary" placeholder="Basic Salary">
+                                                        <input class="form-control" type="number" name="basic_salary" id="basic_salary" placeholder="Basic Salary" value="<?= isset($_GET['id']) ? $sql['basic_salary'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">House Rent Allowance</label>
+                                                    <label for="house_rent" class="col-form-label">House Rent Allowance</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="house_rent" id="house_rent" placeholder="House Rent Allowance">
+                                                        <input class="form-control" type="number" name="house_rent" id="house_rent" placeholder="House Rent Allowance" value="<?= isset($_GET['id']) ? $sql['house_rent'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">PF</label>
+                                                    <label for="pf" class="col-form-label">PF</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="pf" id="pf" placeholder="PF">
+                                                        <input class="form-control" type="number" name="pf" id="pf" placeholder="PF" value="<?= isset($_GET['id']) ? $sql['pf'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">ESI</label>
+                                                    <label for="esi" class="col-form-label">ESI</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="esi" id="esi" placeholder="ESI">
+                                                        <input class="form-control" type="number" name="esi" id="esi" placeholder="ESI" value="<?= isset($_GET['id']) ? $sql['esi'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12">
-                                                    <label class="col-form-label">Total Salary</label>
+                                                    <label for="salary_total" class="col-form-label">Total Salary</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="salary_total" id="salary_total" placeholder="Total Salary">
+                                                        <input class="form-control" type="number" name="salary_total" id="salary_total" placeholder="Total Salary" value="<?= isset($_GET['id']) ? $sql['salary_total'] : ''; ?>">
                                                     </div>
                                                 </div>
 
@@ -688,37 +674,37 @@ if (isset($_GET['id'])) {
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Basic Salary</label>
+                                                    <label for="basic_salary_cmpl" class="col-form-label">Basic Salary</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="basic_salary_cmpl" id="basic_salary_cmpl" placeholder="Basic Salary">
+                                                        <input class="form-control" type="number" name="basic_salary_cmpl" id="basic_salary_cmpl" placeholder="Basic Salary" value="<?= isset($_GET['id']) ? $sql['basic_salary_cmpl'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">House Rent Allowance</label>
+                                                    <label for="house_rent_cmpl" class="col-form-label">House Rent Allowance</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="house_rent_cmpl" id="house_rent_cmpl" placeholder="House Rent Allowance">
+                                                        <input class="form-control" type="number" name="house_rent_cmpl" id="house_rent_cmpl" placeholder="House Rent Allowance" value="<?= isset($_GET['id']) ? $sql['house_rent_cmpl'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">PF</label>
+                                                    <label for="pf_cmpl" class="col-form-label">PF</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="pf_cmpl" id="pf_cmpl" placeholder="PF">
+                                                        <input class="form-control" type="number" name="pf_cmpl" id="pf_cmpl" placeholder="PF" value="<?= isset($_GET['id']) ? $sql['pf_cmpl'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">ESI</label>
+                                                    <label for="esi_cmpl" class="col-form-label">ESI</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="esi_cmpl" id="esi_cmpl" placeholder="ESI">
+                                                        <input class="form-control" type="number" name="esi_cmpl" id="esi_cmpl" placeholder="ESI" value="<?= isset($_GET['id']) ? $sql['esi_cmpl'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12">
-                                                    <label class="col-form-label">Total Salary</label>
+                                                    <label for="salary_total_cmpl" class="col-form-label">Total Salary</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="number" name="salary_total_cmpl" id="salary_total_cmpl" placeholder="Total Salary">
+                                                        <input class="form-control" type="number" name="salary_total_cmpl" id="salary_total_cmpl" placeholder="Total Salary" value="<?= isset($_GET['id']) ? $sql['salary_total_cmpl'] : ''; ?>">
                                                     </div>
                                                 </div>
 
@@ -731,30 +717,30 @@ if (isset($_GET['id'])) {
                                             <div class="row">
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">User Name</label> <label class="uname_found_msg"></label>
+                                                    <label for="username" class="col-form-label">User Name</label> <label for="" class="uname_found_msg"></label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="username" id="username" placeholder="User Name">
+                                                        <input class="form-control" type="text" name="username" id="username" placeholder="User Name" value="<?= isset($_GET['id']) ? $sql['username'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Password</label>
+                                                    <label for="password" class="col-form-label">Password</label>
                                                     <div class="form-group">
-                                                        <input class="form-control" type="text" name="password" id="password" placeholder="Password">
+                                                        <input class="form-control" type="text" name="password" id="password" placeholder="Password" value="<?= isset($_GET['id']) ? $sql['password'] : ''; ?>">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">App Permission</label>
+                                                    <label for="user_group" class="col-form-label">App Permission</label>
                                                     <div class="form-group">
                                                         <select class="form-control custom-select2" name="user_group" id="user_group" style="width:100%">
-                                                            <?= select_dropdown('user_group', array('id', 'group_name'), 'id ASC', 3, '', '`'); ?>
+                                                            <?= select_dropdown('user_group', array('id', 'group_name'), 'id ASC', (isset($_GET['id']) ? $sql['user_group'] : '3'), ' WHERE type IS NULL', '`'); ?>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Remainder Category</label>
+                                                    <label for="" class="col-form-label">Remainder Category</label>
                                                     <div class="form-group">
                                                         <select class="form-control custom-select2" name="task_remainder_level"
                                                             id="task_remainder_level" style="width:100%">
@@ -767,15 +753,15 @@ if (isset($_GET['id'])) {
                                                 </div>
 
                                                 <div class="col-md-3">
-                                                    <label class="col-form-label">Is Cost Generator </label>
+                                                    <label for="" class="col-form-label">Is Cost Generator </label>
                                                     <div class="form-group">
-                                                        <input style="min-width:20px !important" type="radio" name="cost_generator" id="cg_yes" value="Yes" onclick="show_cgName('yes')"> <label for="cg_yes">Yes</label>
-                                                        <input style="min-width:20px !important" type="radio" name="cost_generator" id="cg_no" value="No" checked onclick="show_cgName('no')"> <label for="cg_no">No</label>
+                                                        <input style="min-width:20px !important" type="radio" name="cost_generator" id="cg_yes" value="Yes" onclick="show_cgName('yes')"> <label for="" for="cg_yes">Yes</label>
+                                                        <input style="min-width:20px !important" type="radio" name="cost_generator" id="cg_no" value="No" checked onclick="show_cgName('no')"> <label for="" for="cg_no">No</label>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-9 cg_nameDiv d-none">
-                                                    <label class="col-form-label">Cost Generating Name </label>
+                                                    <label for="" class="col-form-label">Cost Generating Name </label>
                                                     <div class="form-group">
                                                         <input class="form-control" type="text" name="cg_name" id="cg_name" placeholder="Cost Generating Name">
                                                     </div>
@@ -791,7 +777,7 @@ if (isset($_GET['id'])) {
                             <div class="spinner-border m-5 d-none spinCls" role="status">
                                 <span class="visually-hidden"></span>
                             </div>
-                            <button type="button" onclick="validation()" class="btn btn-outline-primary"><i class="fa-save fa"></i> Save Employee</button>
+                            <button type="button" onclick="validation()" class="btn btn-outline-primary"><i class="fa-save fa"></i> <?= isset($_GET['id']) ? 'Update' : 'Save'; ?> Employee</button>
                             <!-- <button type="button" onclick="save_employee('add')" class="btn btn-outline-primary scbtn"><i class="fa-save fa"></i> Save Employee</button> -->
                         </div>
                     </form>
@@ -810,7 +796,7 @@ if (isset($_GET['id'])) {
         // var uname = $("#username").val();
         var data = {
             uname : $("#username").val(),
-            emp_id : $("#emp_id").val(),
+            employee_id : $("#employee_id").val(),
             employee_code : $("#employee_code").val(),
             mobile : $("#mobile").val(),
         };

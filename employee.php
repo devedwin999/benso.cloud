@@ -35,7 +35,7 @@ if (isset($_REQUEST['updateForm'])) {
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Employee</title>
+    <title>BENSO - Employee</title>
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
 
@@ -203,9 +203,9 @@ if (isset($_REQUEST['updateForm'])) {
                                         <td>
                                                 
                                             <div class="btn-group mr-2" role="group" aria-label="First group">
+                                                    <a class="btn btn-outline-secondary" href="view-employee.php?id=<?= $sql['id']; ?>"> <small><i class="fa fa-eye"></i></small></a>
                                                 <?php if(UP_EMPLOYEE_EDIT==1) { ?>
-                                                    <a class="btn btn-outline-secondary" data-id="<?= $sql['id']; ?>" href="add-employee.php?id=<?= $sql['id']; ?>"> <small><i class="dw dw-edit2"></i></small></a>
-                                                    <!-- <a class="btn btn-outline-secondary editEmployee" data-id="<?= $sql['id']; ?>" href="javascript:void(0)"> <small><i class="dw dw-edit2"></i></small></a> -->
+                                                    <a class="btn btn-outline-secondary" href="add-employee.php?id=<?= $sql['id']; ?>"> <small><i class="dw dw-edit2"></i></small></a>
                                                 <?php } if(UP_EMPLOYEE_DELETE==1) { ?>
                                                     <a class="btn btn-outline-secondary" onclick="delete_data(<?= $sql['id']; ?>, 'employee_detail')"><small><i class="dw dw-delete-3"></i></small></a>
                                                 <?php } ?>

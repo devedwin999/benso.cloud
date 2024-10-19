@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
     </style>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - View Budget
+    <title>BENSO - View Budget
     </title>
 
     <!-- Site favicon -->

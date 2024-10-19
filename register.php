@@ -15,7 +15,7 @@ if(isset($_SESSION['login_id']))
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>BENSO GARMENTING - Login Register</title>
+	<title>BENSO - Login Register</title>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
@@ -76,7 +76,7 @@ if(isset($_SESSION['login_id']))
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
 				<a href="index.php">
-					<h4>BENSO GARMENTING</h4>
+					<h4>BENSO</h4>
 				</a>
 			</div>
 		</div>

@@ -110,7 +110,7 @@ include('includes/sidebar.php');
                     <div id="divToPrint" class="pd-20 text-center">                        
                         <?php if(FABRIC_PROG_PRINT!=1) { action_denied(); exit; } ?>                
                         <div class="row">
-                            <div class="col-md-6 text-left"><h4>Benso Garmenting Pvt Ltd</h4></div>
+                            <div class="col-md-6 text-left"><h4>BENSO Pvt Ltd</h4></div>
                             <div class="col-md-6"><h4 style="color:blue">Fabric Requirement</h4></div>
                             <div class="col-md-12"><br></div>
                         </div>

@@ -2,9 +2,9 @@
 include ("includes/connection.php");
 include ("includes/function.php");
 
-// if (!isset($_SESSION['login_id'])) {
-// 	header('Location:index.php');
-// }
+if (!isset($_SESSION['login_id'])) {
+	header('Location:index.php');
+}
 
 if (isset($_REQUEST['delete_salesOrder'])) {
     // echo '<pre>', print_r($_REQUEST, 1);
@@ -2441,53 +2441,85 @@ if (isset($_REQUEST['delete_salesOrder'])) {
 
 } else if (isset($_REQUEST['saveTeamTask'])) {
 
-    $ndt = array(
-        'task_type' => $_REQUEST['task_type'],
-        'task_msg' => $_REQUEST['task_msg'],
-        'assigned_to' => implode(',', $_REQUEST['assigned_to']),
-        'assigned_toB' => implode(',', $_REQUEST['assigned_toB']),
-        'task_duration' =>$_REQUEST['task_duration'],
-        'allowed_time' => ($_REQUEST['totTime'] * 60),
-        'start_date' => date('Y-m-d H:i:s', strtotime($_REQUEST['start_date'] . $_REQUEST['start_time'])),
-        'end_date' => date('Y-m-d H:i:s', strtotime($_REQUEST['end_date'] . $_REQUEST['end_time'])),
-        'created_by' => $logUser,
-        'created_unit' => $logUnit,
-        'created_date' => date('Y-m-d H:i:s'),
-    );
+    $start_d = ($_POST['type'] == 'remainder_task') ? $_POST['remainder_from'].' 00:00:00' : $_POST['start_date'] . $_POST['start_time'];
+    $end_d = ($_POST['type'] == 'remainder_task') ? $_POST['remainder_from'].' 23:59:59' : $_POST['end_date'] . $_POST['end_time'];
 
-    $i = Insert('team_tasks', $ndt);
+    $start_timestamp = strtotime($start_d);
+    $end_timestamp = strtotime($end_d);
+    $task_duration = $end_timestamp - $start_timestamp;
 
-    if ($i) {
+    if($_POST['type'] == 'team_task' || ($_POST['type'] == 'remainder_task' && $_POST['remainder_from'] == date('Y-m-d'))) {
 
+        $ndt = array(
+            'type' => $_POST['type'],
+            'task_type' => $_POST['task_type'],
+            'task_msg' => $_POST['task_msg'],
+            'assigned_to' => implode(',', $_POST['assigned_to']),
+            'assigned_toB' => implode(',', $_POST['assigned_toB']),
+            'task_duration' =>$task_duration,
+            'allowed_time' => ($_POST['totTime'] * 60),
+            'start_date' => date('Y-m-d H:i:s', $start_timestamp),
+            'end_date' => date('Y-m-d H:i:s', $end_timestamp),
+            'created_by' => $logUser,
+            'created_unit' => $logUnit,
+            'created_date' => date('Y-m-d H:i:s'),
+        );
+
+        $i = Insert('team_tasks', $ndt);
         $inid = mysqli_insert_id($mysqli);
+        timeline_history('Insert', 'team_tasks', $inid, 'Team Task Created. Task: '. $_POST['task_type']);
 
-        for ($i = 0; $i < count($_REQUEST['assigned_to']); $i++) {
-            $ar = array(
-                'task_id' => $inid,
-                'type' => 'assigned_to',
-                'employee_id' => $_REQUEST['assigned_to'][$i],
-            );
+        if ($i) {
 
-            Insert('team_tasks_for', $ar);
+            for ($i = 0; $i < count($_POST['assigned_to']); $i++) {
+                $ar = array(
+                    'task_id' => $inid,
+                    'type' => 'assigned_to',
+                    'employee_id' => $_POST['assigned_to'][$i],
+                );
+                Insert('team_tasks_for', $ar);
+            }
+
+            for ($i = 0; $i < count($_POST['assigned_toB']); $i++) {
+                $ar = array(
+                    'task_id' => $inid,
+                    'type' => 'assigned_toB',
+                    'employee_id' => $_POST['assigned_toB'][$i],
+                );
+                Insert('team_tasks_for', $ar);
+            }
+
+            $data['res'][] = 0;
+        } else {
+            $data['res'][] = 1;
         }
-
-        for ($i = 0; $i < count($_REQUEST['assigned_toB']); $i++) {
-            $ar = array(
-                'task_id' => $inid,
-                'type' => 'assigned_toB',
-                'employee_id' => $_REQUEST['assigned_toB'][$i],
-            );
-
-            Insert('team_tasks_for', $ar);
-        }
-
-        timeline_history('Insert', 'team_tasks', $inid, 'New Team Task Created.');
-
-        $data['res'][] = 0;
     } else {
-        $data['res'][] = 1;
+
+        $arr = array(
+            'type' => $_POST['type'],
+            'task_type' => $_POST['task_type'],
+            'task_msg' => $_POST['task_msg'],
+            'assigned_to' => implode(',', $_POST['assigned_to']),
+            'assigned_toB' => implode(',', $_POST['assigned_toB']),
+            'task_duration' =>$task_duration,
+            'allowed_time' => ($_POST['totTime'] * 60),
+            'remainder_from' => $_POST['remainder_from'],
+            'remainder_days' => $_POST['remainder_days'],
+            'created_by' => $logUser,
+            'created_unit' => $logUnit,
+            'created_date' => date('Y-m-d H:i:s'),
+        );
+
+        $ins = Insert('reminder_tasks', $arr);
+        timeline_history('Insert', 'reminder_tasks', mysqli_insert_id($mysqli), 'Reminder Task Created. Task: '. $_POST['task_type']);
+
+        if($ins) {
+            $data['res'][] = 0;
+        }
     }
 
+    $data['mess'][] = ($_POST['type'] == 'remainder_task') ? 'Reminder' : 'Team';
+    
     echo json_encode($data);
 
 } else if (isset($_REQUEST['get_AddedColorVia_select'])) {

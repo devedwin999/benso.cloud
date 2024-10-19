@@ -31,7 +31,7 @@ $sql_main = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM fabric_po WH
     </style>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Add Budget
+    <title>BENSO - Add Budget
     </title>
 
     <!-- Site favicon -->

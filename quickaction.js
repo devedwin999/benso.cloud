@@ -44,7 +44,7 @@ var base_url = 'http://127.0.0.1:8080/benso_cloud/';
     
             // $(".mtn1").show();
             $(".mtn1").removeClass('d-none');
-            $(".nw-min-head").html('BENSO GARMENTING');
+            $(".nw-min-head").html('BENSO');
         } else {
             hidesidebar();
         }
@@ -91,7 +91,7 @@ var base_url = 'http://127.0.0.1:8080/benso_cloud/';
             $(".ti-view-list").hide();
             $(".ovWindow").hide();
     
-            $(".nw-min-head").html('BENSO GARMENTING');
+            $(".nw-min-head").html('BENSO');
         }
     }
 }

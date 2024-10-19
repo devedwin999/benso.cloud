@@ -104,6 +104,28 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="image-modal">
+    <div class="modal-dialog modal-dialog-top">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Image View</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form method="post" id="var_modalform" enctype="multipart/form-data">
+
+                <div class="modal-body">
+                    <div class="text-center" id="img_spacerrrr">
+                        Loading..
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <?php if (in_array('report_filter-modal', $modals)) { ?>
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
         id="report_filter-modal">
@@ -487,32 +509,7 @@ if (in_array('attendance-detail-list-modal', $modals)) { ?>
         </div>
     </div>
 
-<?php }
-if (in_array('image-modal', $modals)) { ?>
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
-        id="image-modal">
-        <div class="modal-dialog modal-dialog-top">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myLargeModalLabel">Image View</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <form method="post" id="var_modalform" enctype="multipart/form-data">
-
-                    <div class="modal-body">
-                        <div class="text-center" id="img_spacerrrr">
-                            Loading..
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-<?php }
+<?php } 
 if (in_array('fabric-add-modal', $modals)) { ?>
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
         id="fabric-add-modal">
@@ -1045,25 +1042,25 @@ if (in_array('employeeNew-add-modal', $modals)) { ?>
                                                         id="state_com" onchange="getCity('_com')" style="width:100%">
                                                         <option value="">Select State</option>
                                                         <?php
-                                                        if (isset($_GET['id']) && !empty($sql['country'])) {
-                                                            $where = "country_id='" . $sql['country'] . "'";
-                                                        } else {
-                                                            $where = "country_id='101'";
-                                                        }
+                                                        // if (isset($_GET['id']) && !empty($sql['country'])) {
+                                                        //     $where = "country_id='" . $sql['country'] . "'";
+                                                        // } else {
+                                                        //     $where = "country_id='101'";
+                                                        // }
 
-                                                        $qryd = mysqli_query($mysqli, "SELECT * FROM states WHERE $where ORDER BY state_name ASC ");
-                                                        while ($stt = mysqli_fetch_array($qryd)) {
-                                                            if (isset($_GET['id']) && !empty($sql['state'])) {
-                                                                if ($stt['id'] == $sql['state']) {
-                                                                    $sell = 'selected';
-                                                                } else {
-                                                                    $sell = '';
-                                                                }
-                                                            } else {
-                                                                $sell = '';
-                                                            }
-                                                            print '<option value="' . $stt['id'] . '" ' . $sell . '>' . $stt['state_name'] . '</option>';
-                                                        }
+                                                        // $qryd = mysqli_query($mysqli, "SELECT * FROM states WHERE $where ORDER BY state_name ASC ");
+                                                        // while ($stt = mysqli_fetch_array($qryd)) {
+                                                        //     if (isset($_GET['id']) && !empty($sql['state'])) {
+                                                        //         if ($stt['id'] == $sql['state']) {
+                                                        //             $sell = 'selected';
+                                                        //         } else {
+                                                        //             $sell = '';
+                                                        //         }
+                                                        //     } else {
+                                                        //         $sell = '';
+                                                        //     }
+                                                        //     print '<option value="' . $stt['id'] . '" ' . $sell . '>' . $stt['state_name'] . '</option>';
+                                                        // }
                                                         ?>
                                                     </select>
                                                 </div>
@@ -1150,25 +1147,25 @@ if (in_array('employeeNew-add-modal', $modals)) { ?>
                                                         id="state_per" onchange="getCity('_per')" style="width:100%">
                                                         <option value="">Select State</option>
                                                         <?php
-                                                        if (isset($_GET['id']) && !empty($sql['country'])) {
-                                                            $where = "country_id='" . $sql['country'] . "'";
-                                                        } else {
-                                                            $where = "country_id='101'";
-                                                        }
+                                                        // if (isset($_GET['id']) && !empty($sql['country'])) {
+                                                        //     $where = "country_id='" . $sql['country'] . "'";
+                                                        // } else {
+                                                        //     $where = "country_id='101'";
+                                                        // }
 
-                                                        $qryd = mysqli_query($mysqli, "SELECT * FROM states WHERE $where ORDER BY state_name ASC ");
-                                                        while ($stt = mysqli_fetch_array($qryd)) {
-                                                            if (isset($_GET['id']) && !empty($sql['state'])) {
-                                                                if ($stt['id'] == $sql['state']) {
-                                                                    $sell = 'selected';
-                                                                } else {
-                                                                    $sell = '';
-                                                                }
-                                                            } else {
-                                                                $sell = '';
-                                                            }
-                                                            print '<option value="' . $stt['id'] . '" ' . $sell . '>' . $stt['state_name'] . '</option>';
-                                                        }
+                                                        // $qryd = mysqli_query($mysqli, "SELECT * FROM states WHERE $where ORDER BY state_name ASC ");
+                                                        // while ($stt = mysqli_fetch_array($qryd)) {
+                                                        //     if (isset($_GET['id']) && !empty($sql['state'])) {
+                                                        //         if ($stt['id'] == $sql['state']) {
+                                                        //             $sell = 'selected';
+                                                        //         } else {
+                                                        //             $sell = '';
+                                                        //         }
+                                                        //     } else {
+                                                        //         $sell = '';
+                                                        //     }
+                                                        //     print '<option value="' . $stt['id'] . '" ' . $sell . '>' . $stt['state_name'] . '</option>';
+                                                        // }
                                                         ?>
                                                     </select>
                                                 </div>

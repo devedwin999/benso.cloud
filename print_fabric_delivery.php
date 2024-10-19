@@ -13,7 +13,7 @@ $sql_main = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM fabric_deliv
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Fabric Delivery Print</title>
+    <title>BENSO - Fabric Delivery Print</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">

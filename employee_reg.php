@@ -35,7 +35,7 @@ if (isset($_REQUEST['updateForm'])) {
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Registered Employees</title>
+    <title>BENSO - Registered Employees</title>
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
 

@@ -289,7 +289,7 @@ if(isset($_POST['img_btn'])) {
                                                                                                             <span class="ashow <?= $c_id; ?>_show"><? //= get_setting_val($c_ref); ?>**********</span>
                                                                                                             
                                                                                                             <span class="ahide <?= $c_id; ?>_hide">
-                                                                                                                <input type="text" name="" id="<?= $c_id; ?>_valueVal" class="form-control" placeholder="Enter Password" value="<?= get_setting_val($c_ref); ?>">
+                                                                                                                <input type="password" name="" id="<?= $c_id; ?>_valueVal" class="form-control" placeholder="Enter Password" value="<?= get_setting_val($c_ref); ?>">
                                                                                                             </span>
                                                                                                         </td>
                                                                                                         <td style="font-size: 20px;width: 10%;">
@@ -950,22 +950,22 @@ if(isset($_POST['img_btn'])) {
                                                                                                                     <td><input type="number" class="form-control endday_time" name="endday_time_<?= $p; ?>" id="" placeholder="Closing Day Time"></td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respA" name="resp_A_<?= $p; ?>[]" id="FP_res_dept<?= $rowFab['id'].'APP'; ?>" style="width:100%" required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $logUser, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respB" name="resp_B_<?= $p; ?>[]" id="FP_resp_B<?= $rowFab['id'].'APP'; ?>" style="width:100%" required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $logUser, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respC" name="resp_C_<?= $p; ?>[]" id="FP_resp_C<?= $rowFab['id'].'APP'; ?>" style="width:100%" required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $logUser, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respD" name="resp_D_<?= $p; ?>[]" id="FP_resp_D<?= $rowFab['id'].'APP'; ?>" style="width:100%" required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $logUser, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
@@ -1008,22 +1008,22 @@ if(isset($_POST['img_btn'])) {
                                                                                                                     <td><input type="number" class="form-control endday_time" name="endday_time_<?= $p; ?>" id="" placeholder="Closing Day Time"></td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respDept" name="resp_A_<?= $p; ?>[]" id="res_dept<?= $p; ?>" style="width:100%" required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $logUser, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respDept" name="resp_B_<?= $p; ?>[]" id="resp_B<?= $p; ?>" style="width:100%" required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $logUser, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respDept" name="resp_C_<?= $p; ?>[]" id="resp_C<?= $p; ?>" style="width:100%" required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $logUser, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <select class="form-control custom-select2 respDept" name="resp_D_<?= $p; ?>[]" id="resp_D<?= $p; ?>" style="width:100%" required>
-                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', 102, ' WHERE is_active="active"', ''); ?>
+                                                                                                                            <?= select_dropdown_multiple('employee_detail', array('id', 'employee_name'), 'employee_name ASC', $logUser, ' WHERE is_active="active"', ''); ?>
                                                                                                                         </select>
                                                                                                                     </td>
                                                                                                                     <td>-</td>

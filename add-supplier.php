@@ -77,7 +77,7 @@ if (isset($_GET['id'])) {
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING -
+    <title>BENSO -
         <?= $comp; ?>
     </title>
 
@@ -140,68 +140,84 @@ if (isset($_GET['id'])) {
                     </div>
                     <form id="add-supplier" method="post" autocomplete="off">
                         <div class="row">
+                            
+                            <?php
+                                if (isset($_GET['id'])) {
+                                    $code = $sql['supplier_code'];
+                                } else {
+                                    $qryz = mysqli_query($mysqli, "SELECT * FROM supplier WHERE supplier_code LIKE '%SUP-%' ORDER BY id DESC");
+                                    $sqql = mysqli_fetch_array($qryz);
+                                    $numm = mysqli_num_rows($qryz);
+                                    if ($numm == 0) {
+                                        $code = 'SUP-1';
+                                    } else {
+                                        $ex = explode('-', $sqql['supplier_code']);
+                                        
+                                        $value = $ex[1];
+                                        $intValue = (int) $value;
+                                        $newValue = $intValue + 1;
+                                        
+                                        $code = $ex[0] . '-' . $newValue;
+                                    }
+                                }
+                            ?>
+                            
+                            <div class="col-md-4">
+                                <label class="col-form-label fieldrequired">Supplier Code </label>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="supplier_code" id="supplier_code" placeholder="Supplier Code" value="<?= $code; ?>" readonly>
+                                </div>
+                            </div>
+                            
                             <div class="col-md-4">
                                 <label class="col-form-label">Supplier Name <span class="text-danger">*</span></label>
                                 <div class="form-group">
-                                    <input class="form-control d-cursor" type="text" name="supplier_name"
-                                        id="supplier_name" placeholder="Supplier Name"
-                                        value="<?= $sql['supplier_name'] ? $sql['supplier_name'] : ''; ?>">
+                                    <input class="form-control d-cursor" type="text" name="supplier_name" id="supplier_name" placeholder="Supplier Name" value="<?= $sql['supplier_name'] ? $sql['supplier_name'] : ''; ?>">
                                 </div>
                             </div>
 
-                            <?php
-                            if (isset($_GET['id'])) {
-                                $code = $sql['supplier_code'];
-                            } else {
-                                $qryz = mysqli_query($mysqli, "SELECT * FROM supplier WHERE supplier_code LIKE '%SUP-%' ORDER BY id DESC");
-                                $sqql = mysqli_fetch_array($qryz);
-                                $numm = mysqli_num_rows($qryz);
-                                if ($numm == 0) {
-                                    $code = 'SUP-1';
-                                } else {
-                                    $ex = explode('-', $sqql['supplier_code']);
-
-                                    $value = $ex[1];
-                                    $intValue = (int) $value;
-                                    $newValue = $intValue + 1;
-                                    // $nnum = str_pad($newValue, strlen($value), '0', STR_PAD_LEFT);
-                            
-                                    $code = $ex[0] . '-' . $newValue;
-                                }
-                            }
-                            ?>
-
                             <div class="col-md-4">
-                                <label class="col-form-label">Supplier Code </label>
+                                <label class="col-form-label">Address</label>
                                 <div class="form-group">
-                                    <input class="form-control" type="text" name="supplier_code" id="supplier_code"
-                                        placeholder="Supplier Code" value="<?= $code; ?>">
+                                    <textarea class="form-control" name="address1" id="address1" placeholder="Address 1" style="height: 100px;"><?= $sql['address1'] ? $sql['address1'] : ''; ?></textarea>
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
-                                <label class="col-form-label">Address 1</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="address1" id="address1"
-                                        placeholder="Address 1"
-                                        value="<?= $sql['address1'] ? $sql['address1'] : ''; ?>">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
+                            <div class="col-md-4 d-none">
                                 <label class="col-form-label">Address 2</label>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="address2" id="address2"
-                                        placeholder="Address 2"
-                                        value="<?= $sql['address2'] ? $sql['address2'] : ''; ?>">
+                                    <input type="text" class="form-control" name="address2" id="address2" placeholder="Address 2" value="<?= $sql['address2'] ? $sql['address2'] : ''; ?>">
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-4 d-none">
                                 <label class="col-form-label">Area</label>
                                 <div class="form-group">
-                                    <input class="form-control" type="text" name="area" id="area" placeholder="Area"
-                                        value="<?= $sql['area'] ? $sql['area'] : ''; ?>">
+                                    <input class="form-control" type="text" name="area" id="area" placeholder="Area" value="<?= $sql['area'] ? $sql['area'] : ''; ?>">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="col-form-label">Mobile No</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="mobile_no" id="mobile_no"
+                                        placeholder="Mobile No" value="<?= $sql['mobile'] ? $sql['mobile'] : ''; ?>">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="col-form-label">Email Id</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="emailid" id="emailid"
+                                        placeholder="emailid" value="<?= $sql['emailid'] ? $sql['emailid'] : ''; ?>">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="col-form-label">GST No</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="gst_no" id="gst_no"
+                                        placeholder="GST No" value="<?= $sql['gst_no'] ? $sql['gst_no'] : ''; ?>">
                                 </div>
                             </div>
 
@@ -213,7 +229,7 @@ if (isset($_GET['id'])) {
                                     </select>
                                 </div>
                             </div>
-
+                            
                             <div class="col-md-4">
                                 <label class="col-form-label">State</label>
                                 <div class="form-group">
@@ -234,6 +250,8 @@ if (isset($_GET['id'])) {
                                                 } else {
                                                     $sell = '';
                                                 }
+                                            } else if($stt['id'] == 35) {
+                                                $sell = 'selected';
                                             } else {
                                                 $sell = '';
                                             }
@@ -243,7 +261,7 @@ if (isset($_GET['id'])) {
                                     </select>
                                 </div>
                             </div>
-
+                            
                             <div class="col-md-4">
                                 <label class="col-form-label">City</label>
                                 <div class="form-group">
@@ -263,51 +281,30 @@ if (isset($_GET['id'])) {
                                                 }
                                                 print '<option value="' . $stt1['id'] . '" ' . $citt . '>' . $stt1['cities_name'] . '</option>';
                                             }
-                                        } ?>
+                                        } else {
+                                            print select_dropdown('cities', array('id', 'cities_name'), 'cities_name ASC', $sql['city'] ? $sql['city'] : 4328, 'WHERE state_id = 35', '');
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-md-4">
-                                <label class="col-form-label">Mobile No</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="mobile_no" id="mobile_no"
-                                        placeholder="Mobile No" value="<?= $sql['mobile'] ? $sql['mobile'] : ''; ?>">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
+                            
+                            <div class="col-md-4 d-none">
                                 <label class="col-form-label">Phone No 1</label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="phone_no1" id="phone_no1"
                                         placeholder="Phone No 1" value="<?= $sql['phone1'] ? $sql['phone1'] : ''; ?>">
                                 </div>
                             </div>
-
-                            <div class="col-md-4">
+                            
+                            <div class="col-md-4 d-none">
                                 <label class="col-form-label">Phone No 2</label>
                                 <div class="form-group">
                                     <input class="form-control" type="text" name="phone_no2" id="phone_no2"
                                         placeholder="Phone No 2" value="<?= $sql['phone2'] ? $sql['phone2'] : ''; ?>">
                                 </div>
                             </div>
-
-                            <div class="col-md-4">
-                                <label class="col-form-label">Email Id</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="emailid" id="emailid"
-                                        placeholder="emailid" value="<?= $sql['emailid'] ? $sql['emailid'] : ''; ?>">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="col-form-label">GST No</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="gst_no" id="gst_no"
-                                        placeholder="GST No" value="<?= $sql['gst_no'] ? $sql['gst_no'] : ''; ?>">
-                                </div>
-                            </div>
-
+                            
                             <div class="col-md-4 d-none">
                                 <label class="col-form-label">Birth Date</label>
                                 <div class="form-group">
@@ -316,7 +313,7 @@ if (isset($_GET['id'])) {
                                         value="<?= $sql['birthdate'] ? $sql['birthdate'] : ''; ?>">
                                 </div>
                             </div>
-
+                            
                             <div class="col-md-4 d-none">
                                 <label class="col-form-label">Wedding Date</label>
                                 <div class="form-group">
@@ -325,7 +322,7 @@ if (isset($_GET['id'])) {
                                         value="<?= $sql['wedd_date'] ? $sql['wedd_date'] : ''; ?>">
                                 </div>
                             </div>
-
+                            
                         </div>
                         <div class="row">
                             <div class="col-md-12">

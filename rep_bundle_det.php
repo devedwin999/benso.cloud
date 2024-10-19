@@ -8,7 +8,7 @@ include ("includes/perm.php");
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Cutting Lay Register Report</title>
+    <title>BENSO - Cutting Lay Register Report</title>
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">

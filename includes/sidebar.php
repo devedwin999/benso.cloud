@@ -6,7 +6,7 @@
 		<img src="vendors/images/deskapp-logo-white.svg" alt="" class="light-logo"> -->
 			<h5 style="color: #fff;" class="nw-min-head">
 				<img src="vendors/images/favicon-32x32.png" style="width:40px">
-				<!-- BENSO GARMENTING -->
+				<!-- BENSO -->
 			</h5>
 		</a>
 		<div class="close-sidebar" data-toggle="left-sidebar-close">

@@ -606,6 +606,30 @@ function stockgroup_name($value)
     return $sadf['groupname'];
 }
 
+// table country
+function country_name($value)
+{
+    global $mysqli;
+    
+    $asd = "SELECT country FROM master_country WHERE id = '". $value ."'";
+    $sdd = mysqli_query($mysqli, $asd);
+    $sadf = mysqli_fetch_array($sdd);
+    
+    return $sadf['country'];
+}
+
+// table designation
+function designation_name($value)
+{
+    global $mysqli;
+    
+    $asd = "SELECT desig_name FROM mas_designation WHERE id = '". $value ."'";
+    $sdd = mysqli_query($mysqli, $asd);
+    $sadf = mysqli_fetch_array($sdd);
+    
+    return $sadf['desig_name'];
+}
+
 // table company
 function company_code($value)
 {
@@ -816,6 +840,22 @@ function city_name($value)
     $sadf = mysqli_fetch_array($sdd);
     
     return $sadf['cities_name'];
+}
+
+function employee_address($id) {
+    
+    global $mysqli;
+    
+    $asd = "SELECT * FROM employee_detail WHERE id = '". $id ."'";
+    $sdd = mysqli_query($mysqli, $asd);
+    $dd = mysqli_fetch_assoc($sdd);
+
+    $add .= $dd['address1_com'] ? ''. $dd['address1_com'] .'<br>' : '';
+    $add .= $dd['address2_com'] ? ''. $dd['address2_com'] .'<br>' : '';
+    $add .= $dd['area_com'] ? ''. $dd['area_com'] .'<br>' : '';
+    $add .= $dd['pincode_com'] ? ''. $dd['pincode_com'] .'.' : '';
+    
+    return $add;
 }
 
 function company_address($id) {

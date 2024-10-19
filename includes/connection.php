@@ -10,7 +10,7 @@ header("Content-Type: text/html;charset=UTF-8");
 DEFINE ('DB_USER', 'root');
 DEFINE ('DB_PASSWORD', '');
 DEFINE ('DB_HOST', 'localhost'); 
-DEFINE ('DB_NAME', 'benso_cloud');
+DEFINE ('DB_NAME', 'benso_apps');
 
 $mysqli =mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
 

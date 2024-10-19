@@ -16,7 +16,7 @@ include ("includes/perm.php");
     </style>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - FABRIC DC Print
+    <title>BENSO - FABRIC DC Print
     </title>
 
     <!-- Site favicon -->

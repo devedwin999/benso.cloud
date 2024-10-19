@@ -11,7 +11,7 @@ include("includes/perm.php");
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Supplier</title>
+    <title>BENSO - Supplier</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -113,21 +113,11 @@ include("includes/perm.php");
                                 while ($sql = mysqli_fetch_array($query)) {
                                     ?>
                                     <tr>
-                                        <td>
-                                            <?= $x; ?>
-                                        </td>
-                                        <td>
-                                            <?= $sql['supplier_name']; ?>
-                                        </td>
-                                        <td>
-                                            <?= $sql['supplier_code']; ?>
-                                        </td>
-                                        <td>
-                                            <?= $sql['mobile']; ?>
-                                        </td>
-                                        <td>
-                                            <?= $sql['gst_no']; ?>
-                                        </td>
+                                        <td><?= $x; ?></td>
+                                        <td><?= $sql['supplier_name'] ? $sql['supplier_name'] : '-'; ?></td>
+                                        <td><?= $sql['supplier_code'] ? $sql['supplier_code'] : '-'; ?></td>
+                                        <td><?= $sql['mobile'] ? $sql['mobile'] : '-'; ?></td>
+                                        <td><?= $sql['gst_no'] ? $sql['gst_no'] : '-'; ?></td>
                                         <td>
                                             <?php if ($sql['is_active'] == 'active') { ?>
                                                 <span class="badge badge-success" onclick="changeStatus(<?= $sql['id']; ?>,'supplier','inactive')">Active</span>

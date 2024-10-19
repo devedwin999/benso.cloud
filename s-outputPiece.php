@@ -46,7 +46,7 @@ if (isset($_GET['id'])) {
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Sewing Output Piece Scanning
+    <title>BENSO - Sewing Output Piece Scanning
         <?= $comp; ?>
     </title>
 

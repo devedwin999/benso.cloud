@@ -46,7 +46,7 @@
         <?php if(FABRIC_PROG_PRINT!=1) { action_denied(); exit; } ?>
 
         <div style="width:800px;display: flex;justify-content: space-between;">
-            <h3>Benso Garmenting Pvt Ltd</h3>
+            <h3>BENSO Pvt Ltd</h3>
             <h4 style="color:blue">Fabric Requirement</h4>
         </div>
         

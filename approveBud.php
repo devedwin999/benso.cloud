@@ -21,7 +21,7 @@ $sql = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM sales_order_detal
     </style>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Budget Approval
+    <title>BENSO - Budget Approval
     </title>
 
     <!-- Site favicon -->

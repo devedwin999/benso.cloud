@@ -26,7 +26,7 @@ $status_color = array(
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>BENSO GARMENTING - Time Management Dashboard</title>
+	<title>BENSO - Time Management Dashboard</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -278,7 +278,7 @@ $status_color = array(
 														<td><?= time_calculator_new(time_calculator($task['allowed_time']), 1); ?></td>
 														<td style="color:<?= $status_color[$task['task_status']]; ?>"><?= $status[$task['task_status']]; ?></td>
 													</tr>
-												<?php $m++; } } if(($tem_num + $or_nuum) == 0 ) { print '<tr><td colspan="4" class="text-center">No Tasks Found!</td></tr>'; } ?>
+												<?php $m++; } } if(($tem_num + $or_nuum) == 0 ) { print '<tr><td colspan="6" class="text-center">No Tasks Found!</td></tr>'; } ?>
 											</tbody>
 										</table>
 									</div>
@@ -342,7 +342,7 @@ $status_color = array(
 																<td><?= time_calculator_new(time_calculator($tot_task_time['total_time']), 1); ?></td>
 																<td style="color:<?= $status_color[2]; ?>"><?= $status[2]; ?></td>
 															</tr>
-												<?php } } if($comp_count == 0) { print '<tr><td colspan="6" class="text-center">No tasks found!</td></tr>'; } ?>
+												<?php } } if($comp_count == 0) { print '<tr><td colspan="7" class="text-center">No tasks found!</td></tr>'; } ?>
 											</tbody>
 										</table>
 									</div>
@@ -400,7 +400,7 @@ $status_color = array(
 					<div class="card-box pd-30 height-100-p">
 						<div class="progress-box text-center">
 							 <input type="text" class="knob dial4" value="0" data-width="120" data-height="120" data-linecap="round" data-thickness="0.12" data-bgColor="#fff" data-fgColor="#a683eb" data-angleOffset="180" readonly>
-							<h5 class="text-light-purple padding-top-10 h5">Panding Orders</h5>
+							<h5 class="text-light-purple padding-top-10 h5">Pending Orders</h5>
 							<span class="d-block">65% Average <i class="fa text-light-purple fa-line-chart"></i></span>
 						</div>
 					</div>
@@ -420,7 +420,7 @@ $status_color = array(
 								<li class="d-flex flex-wrap align-items-center" style="width: calc(70% - 100px);">
 									<div class="browser-name text-success"  style="font-size: 24px;"><i class="icon-copy fa fa-user-secret" aria-hidden="true"></i> Daily Task Visit</div>
 									<div class="visit"><span class="badge badge-pill badge-success"><?= $today_task_count; ?></span></div>
-									<div class="visit"><span class="badge badge-pill badge-success" style="margin-left: 100%;"><?= time_calculator_new(time_calculator($today_task_time), 2); ?></span></div>
+									<div class="visit"><span class="badge badge-pill badge-success" style="margin-left: 100%;"><?= $today_task_time ? time_calculator_new(time_calculator($today_task_time), 2) : '0 Min'; ?></span></div>
 								</li>
 								<li class="d-flex flex-wrap align-items-center"  style="width: calc(70% - 100px);">
 									<div class="browser-name text-danger"  style="font-size: 24px;"><i class="icon-copy dw dw-analytics-5"></i> Not Reviewed</div>
@@ -430,7 +430,7 @@ $status_color = array(
 								<li class="d-flex flex-wrap align-items-center"  style="width: calc(70% - 100px);">
 									<div class="browser-name text-warning"  style="font-size: 24px;"><i class="icon-copy dw dw-analytics-211"></i> Followups</div>
 									<div class="visit"><span class="badge badge-pill badge-warning"><?= $followup_task['tot_task']; ?></span></div>
-									<div class="visit"><span class="badge badge-pill badge-warning" style="margin-left: 100%;"><?= time_calculator_new(time_calculator($followup_task['task_timeing']), 2); ?></span></div>
+									<div class="visit"><span class="badge badge-pill badge-warning" style="margin-left: 100%;"><?= $followup_task['task_timeing'] ? time_calculator_new(time_calculator($followup_task['task_timeing']), 2) : '0 Min'; ?></span></div>
 								</li>
 								<li class="d-flex flex-wrap align-items-center"  style="width: calc(70% - 100px);">
 									<div class="browser-name text-success"  style="font-size: 24px;"><i class="icon-copy dw dw-analytics-211"></i> Management Tasks</div>
@@ -440,7 +440,7 @@ $status_color = array(
 								<li class="d-flex flex-wrap align-items-center"  style="width: calc(70% - 100px);">
 									<div class="browser-name text-secondary"  style="font-size: 24px;"><i class="icon-copy dw dw-tick"></i> Done</div>
 									<div class="visit"><span class="badge badge-pill badge-secondary"><?= $comp_count; ?></span></div>
-									<div class="visit"><span class="badge badge-pill badge-secondary" style="margin-left: 100%;"><?= time_calculator_new(time_calculator($task_close_time), 2); ?></span></div>
+									<div class="visit"><span class="badge badge-pill badge-secondary" style="margin-left: 100%;"><?= $task_close_time ? time_calculator_new(time_calculator($task_close_time), 2) : '0 Min'; ?></span></div>
 								</li>
 							</ul>
 						</div>
@@ -531,7 +531,7 @@ $status_color = array(
 														<td><?= time_calculator_new(time_calculator($task['allowed_time']), 1); ?></td>
 														<td style="color:<?= $status_color[$task['task_status']]; ?>"><?= $status[$task['task_status']]; ?></td>
 													</tr>
-												<?php $m++; } } if(($tem_num + $or_nuum) == 0 ) { print '<tr><td colspan="4" class="text-center">No Tasks Found!</td></tr>'; } ?>
+												<?php $m++; } } if(($tem_num + $or_nuum) == 0 ) { print '<tr><td colspan="6" class="text-center">No Tasks Found!</td></tr>'; } ?>
 											</tbody>
 										</table>
         							</div>
@@ -575,7 +575,7 @@ $status_color = array(
 																<td><?= time_calculator_new(time_calculator($result['task_timeing']), 1); ?></td>
 																<td style="color: <?= $status_color[$result['task_status']] ?>"><?= $status[$result['task_status']]; ?></td>
 															</tr>
-												<?php } } else { print '<tr><td colspan="4" class="text-center">No Followup Tasks Found!</td></tr>'; } ?>
+												<?php } } else { print '<tr><td colspan="6" class="text-center">No Tasks Found!</td></tr>'; } ?>
 											</tbody>
 										</table>
 									</div>
@@ -639,7 +639,7 @@ $status_color = array(
 																<td><?= time_calculator_new(time_calculator($tot_task_time['total_time']), 1); ?></td>
 																<td style="color:<?= $status_color[2]; ?>"><?= $status[2]; ?></td>
 															</tr>
-												<?php } } if($comp_count == 0) { print '<tr><td colspan="6" class="text-center">No tasks found!</td></tr>'; } ?>
+												<?php } } if($comp_count == 0) { print '<tr><td colspan="7" class="text-center">No tasks found!</td></tr>'; } ?>
 											</tbody>
 										</table>
 									</div>

@@ -83,7 +83,7 @@ if (isset($_POST['editBarcode'])) {
     </style>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Add Budget</title>
+    <title>BENSO - Add Budget</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">

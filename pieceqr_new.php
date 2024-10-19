@@ -22,6 +22,8 @@ if (!file_exists($qr_path)) {
         foreach(explode(',', $dta) as $value) {
             
         $sql = mysqli_fetch_array(mysqli_query($mysqli, "SELECT a.* FROM bundle_details a WHERE a.id=" . $value));
+        
+        print '<p style="text-align:center;padding: 7px;">Bundle No <br> '. $sql['bundle_number'] .'</p><br>';
         if($sql['boundle_qr']!="") {
             for ($p = 0; $p < $sql['pcs_per_bundle']; $p++) {
                 
@@ -50,7 +52,7 @@ if (!file_exists($qr_path)) {
             </div>
             <br>
             
-    <?php } } } ?>
+    <?php } } else { print '<div class="col-md-12 text-center"><h5 style="margin-top: 100px">Barcode Not Generated..</h5></div>';} } ?>
 </div>
 
 <?php

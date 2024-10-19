@@ -30,7 +30,7 @@ if (isset($_REQUEST['updateForm'])) {
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Team Task</title>
+    <title>BENSO - Team Task</title>
     
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -230,6 +230,16 @@ if (isset($_REQUEST['updateForm'])) {
     													<ul>
     														<li>
 																<div class="form-group row">
+																	<label class="col-md-4 fieldrequired">Task Type</label>
+																	<div class="col-md-8">
+																		<select class="custom-select2 form-control" name="type" id="type" style="width:100% !important;" required>
+																			<option value="team_task">Team Task</option>
+																			<option value="remainder_task">Remainder Task</option>
+																		</select>
+																	</div>
+																</div>
+
+																<div class="form-group row">
 																	<label class="col-md-4 fieldrequired">Task</label>
 																	<div class="col-md-8">
 																	    <input type="text" name="task_type" id="task_type" class="form-control" placeholder="Enter Task">
@@ -248,7 +258,8 @@ if (isset($_REQUEST['updateForm'])) {
 																	<label class="col-md-4 fieldrequired">Assigned to (A)</label>
 																	<div class="col-md-8">
 																		<select class="custom-select2 form-control" name="assigned_to[]" id="assigned_to" style="width:100% !important;" multiple required>
-																		    <?= select_dropdown('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', '`'); ?>
+																			<!-- <option value=""  data-image="http://127.0.0.1:8080/benso_cloud/uploads/employeeDet/102/employee_494063.jpg">ertet</option> -->
+																		    <?= select_dropdown('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
 																		</select>
 																	</div>
 																</div>
@@ -256,23 +267,36 @@ if (isset($_REQUEST['updateForm'])) {
 																	<label class="col-md-4 fieldrequired">Assigned to (B)</label>
 																	<div class="col-md-8">
 																		<select class="custom-select2 form-control" name="assigned_toB[]" id="assigned_toB" style="width:100% !important;" multiple required>
-																		    <?= select_dropdown('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', '`'); ?>
+																		    <?= select_dropdown('employee_detail', array('id', 'employee_name'), 'employee_name ASC', '', ' WHERE is_active="active"', ''); ?>
 																		</select>
 																	</div>
 																</div>
-																<div class="form-group row">
+
+																<div class="form-group row d-none remain_r">
+																	<label class="col-md-4 fieldrequired">Remainder From</label>
+																	<div class="col-md-8">
+																	    <input type="date" name="remainder_from" id="remainder_from" class="form-control" value="<?= date('Y-m-d'); ?>">
+																	</div>
+																</div>
+
+																<div class="form-group row d-none remain_r">
+																	<label class="col-md-4 fieldrequired">Remainder Days</label>
+																	<div class="col-md-8">
+																	    <input type="number" name="remainder_days" id="remainder_days" class="form-control" placeholder="Remainder Days" value="1">
+																	</div>
+																</div>
+																
+																<div class="form-group row task_r">
 																	<label class="col-md-4 fieldrequired">Start Date & Time</label>
 																	<div class="col-md-8 d-flex">
 																	    <input class="form-control" name="start_date" id="start_date" type="date" required style="width:50%" value="<?= date('Y-m-d'); ?>" onchange="calculateWorking()">
 																	    <input class="form-control" name="start_time" id="start_time" type="time" required style="width:50%" value="<?= date('h:i') ?>" onchange="calculateWorking()">
 
-																		<!-- <input class="form-control datetimepicker" placeholder="Start Date & time" type="text" onchange="calculateWorking()"> -->
-																	    
-																	    
+																		<!-- <input class="form-control datetimepicker" placeholder="Start Date & time" type="text" onchange="calculateWorking()"> -->																    
 																	    <!--<input class="form-control datetimepicker" name="start_date" id="start_date" type="text" required>-->
 																	</div>
 																</div>
-																<div class="form-group row">
+																<div class="form-group row task_r">
 																	<label class="col-md-4 fieldrequired">End Date & Time</label>
 																	<div class="col-md-8 d-flex">
 																	    <input class="form-control" name="end_date" id="end_date" type="date" required style="width:50%" onchange="calculateWorking()">
@@ -282,16 +306,16 @@ if (isset($_REQUEST['updateForm'])) {
 																	</div>
 																</div>
 																
-																<div class="form-group row">
+																<div class="form-group row task_r">
 																	<label class="col-md-4">Task Duration</label>
 																	<div class="col-md-8">
-																	    <input class="form-control" id="totTime" placeholder="" type="text" readonly>
+																	    <input class="form-control" id="tot_duration" placeholder="" type="text" readonly>
 																		<input type="hidden" name="task_duration" id="task_duration">
 																	</div>
 																</div>
 																
 																<div class="form-group row">
-																	<label class="col-md-4">Task working time in minutes</label>
+																	<label class="col-md-4 fieldrequired">Task working time in minutes</label>
 																	<div class="col-md-8">
 																	    <input class="form-control" name="totTime" id="totTime" placeholder="Task working time in minutes" type="number">
 																	</div>
@@ -328,18 +352,16 @@ if (isset($_REQUEST['updateForm'])) {
     </div>
     <!-- js -->
     <?php include('includes/end_scripts.php'); ?>
-    <!--<script src="vendors/scripts/core.js"></script>-->
- <!--   <script src="vendors/scripts/script.min.js"></script>-->
-	<!--<script src="vendors/scripts/process.js"></script>-->
-	<!--<script src="vendors/scripts/layout-settings.js"></script>-->
-	<!--<script src="src/plugins/cropperjs/dist/cropper.js"></script>-->
+	
     
     <script>
         function saveTask() {
+
+			var type = $("#type").val();
             
             if($("#task_type").val()=="") {
                 $("#task_type").focus();
-                message_noload('error', 'Select Task!', 1500);
+                message_noload('error', 'Task Required!', 1500);
                 return false;
             } else if($("#task_msg").val()=="") {
                 $("#task_msg").focus();
@@ -353,26 +375,30 @@ if (isset($_REQUEST['updateForm'])) {
                 $("#assigned_toB").focus();
                 message_noload('error', 'Assigned (B) To Required!', 1500);
                 return false;
-            } else if($("#start_date").val()=="") {
+            } else if($("#start_date").val()=="" && type =='team_task') {
                 $("#start_date").focus();
                 message_noload('error', 'Start Date Required!', 1500);
                 return false;
-            } else if($("#end_date").val()=="") {
+            } else if($("#end_date").val()=="" && type =='team_task') {
                 $("#end_date").focus();
                 message_noload('error', 'End Date Required!', 1500);
+                return false;
+            } else if($("#totTime").val()=="") {
+                $("#totTime").focus();
+                message_noload('error', 'Task working time in minutes Required!', 1500);
                 return false;
             } else {
                 var form = $("#taskForm").serialize();
                 
                 $.ajax({
                     type: 'POST',
-                    url: 'ajax_action.php?saveTeamTask=1',
+                    url: 'ajax_action.php?saveTeamTask',
                     data: form,
                     success :function(msg) {
                         var j = $.parseJSON(msg);
                         
                         if(j.res==0) {
-                            message_reload('success', 'Task Assigned!', 1500);
+                            message_reload('success', ''+ j.mess +' Task Assigned!', 1500);
                         } else {
                             message_noload('error', 'Something Went Wrong!', 1500);
                         }
@@ -383,29 +409,7 @@ if (isset($_REQUEST['updateForm'])) {
     </script>
     
     <script>
-        // function calculateWorking() {
-        //     var st = $("#start_date").val() + ' ' + $("#start_time").val();
-        //     var en = $("#end_date").val() + ' ' + $("#end_time").val();
-        //     var end = new Date(en);
-        //     var std = new Date(st);
-            
-        //     // hour calculation
-        //     var milliseconds = end.getTime() - std.getTime();
-        //     var hours = Math.floor(milliseconds / (60 * 60 * 1000));
-            
-        //     var stDy = moment($("#start_date").val());
-        //     var enDy = moment($("#end_date").val());
-        //     // end.diff(start, "days");
-            
-            
-        //     // day calculation
-        //     var days = enDy.diff(stDy, "days");
-            
-                
-        //     $("#totTime").val(days + ' Days OR ' + hours + ' Hours');
-                
-        // }
-
+		
 		function calculateWorking() {
 			var st = $("#start_date").val() + ' ' + $("#start_time").val();
 			var en = $("#end_date").val() + ' ' + $("#end_time").val();
@@ -431,16 +435,57 @@ if (isset($_REQUEST['updateForm'])) {
 			var remainingMinutes = Math.floor(remainingMilliseconds / (60 * 1000));
 
 			$("#task_duration").val(totalSeconds);
-			$("#totTime").val(dayDifference + ' Days OR ' + hours + ' Hours And ' + minutes + ' Minutes');
+			$("#tot_duration").val(dayDifference + ' Days OR ' + hours + ' Hours And ' + minutes + ' Minutes');
 		}
     </script>
 
+	<script>
+		$(document).ready(function() {
+			$("#type").change(function(){
+
+				var typ = $(this).val();
+
+				(typ == 'remainder_task') ? $(".remain_r").removeClass('d-none') : $(".remain_r").addClass('d-none') ;
+				(typ == 'team_task') ? $(".task_r").removeClass('d-none') : $(".task_r").addClass('d-none') ;
+			});
+
+
+			$("#remainder_days").keyup(function() {
+				var a = $(this).val();
+
+				(a<1) ? $(this).val(1) : $(this).val(a);
+			});
+
+
+			$('#task-add').on('shown.bs.modal', function (e) {
+				$("#assigned_to, #assigned_toB").each(function() {
+					$(this).select2({
+						dropdownParent: $("#task-add"),
+					})
+				});
+			});
+			
+		});
+
+
+		// $(document).ready(function() {
+		// 	function formatOption(option) {
+		// 		if (!option.id) {
+		// 			return option.text; // optgroup or placeholder
+		// 		}
+		// 		const imgSrc = $(option.element).data('image');
+		// 		return $('<span><img src="' + imgSrc + '" style="width: 20px; height: 20px; margin-right: 10px;" /> ' + option.text + '</span>');
+		// 	}
+
+		// 	function formatSelection(option) {
+		// 		const imgSrc = $(option.element).data('image');
+		// 		return $('<span><img src="' + imgSrc + '" style="width: 20px; height: 20px; margin-right: 10px;" /> ' + option.text + '</span>');
+		// 	}
+
+		// 	$('#assigned_to').select2({
+		// 		templateResult: formatOption,
+		// 		templateSelection: formatSelection
+		// 	});
+		// });
+	</script>
 </html>
-
-
-
-
-
-
-
-

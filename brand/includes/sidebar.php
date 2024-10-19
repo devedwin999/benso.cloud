@@ -4,7 +4,7 @@
 		<a href="dashboard.php">
 			<!-- <img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
 		<img src="vendors/images/deskapp-logo-white.svg" alt="" class="light-logo"> -->
-			<h5 style="color: #fff;" class="nw-min-head">BENSO GARMENTING</h5>
+			<h5 style="color: #fff;" class="nw-min-head">BENSO</h5>
 		</a>
 		<div class="close-sidebar" data-toggle="left-sidebar-close">
 			<i class="ion-close-round"></i>

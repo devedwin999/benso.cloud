@@ -16,7 +16,7 @@ if(EMPLOYEE_DASH == 1) {  ?>
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>BENSO GARMENTING - Dashboard</title>
+	<title>BENSO - Dashboard</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">

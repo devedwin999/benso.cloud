@@ -101,7 +101,7 @@ if (isset($_REQUEST['updateHist'])) {
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8">
-    <title>BENSO GARMENTING - Sub Process</title>
+    <title>BENSO - Sub Process</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">

@@ -40,7 +40,7 @@
             <tr>
                 <td>
                     <div style="width:100%">
-                        <h3>BENSO GARMENTING</h3>
+                        <h3>BENSO</h3>
                     </div>
                     <div
                         style="width:100%;display: flex;flex-wrap: nowrap;justify-content: space-between;border-bottom: 1px solid gray;">
